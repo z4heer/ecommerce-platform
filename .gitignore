@@ -1,0 +1,21 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+
+# Angular
+node_modules/
+dist/
+
+# Docker
+postgres_data/
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
