@@ -3,11 +3,16 @@ from fastapi import FastAPI
 from app.core.database import check_database
 from app.core.redis_client import check_redis
 
+from app.modules.auth.routers.auth_router import (
+    router as auth_router
+)
+
 app = FastAPI(
     title="E-Commerce Platform API",
     version="1.0.0"
 )
 
+app.include_router(auth_router)
 
 @app.get("/")
 def root():
@@ -39,6 +44,6 @@ def health_check():
     return {
         "api": "UP",
         "postgres": postgres_status,
-        "redis": redis_status,
-        "postgres_error": postgres_error
+        "redis": redis_status
+        ##,"postgres_error": postgres_error
     }
