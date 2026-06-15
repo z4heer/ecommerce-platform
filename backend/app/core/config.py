@@ -14,6 +14,16 @@ class Settings(BaseSettings):
     REDIS_HOST: str
     REDIS_PORT: int
 
+    @property
+    def database_url(self) -> str:
+        return (
+            f"postgresql://"
+            f"{self.POSTGRES_USER}:"
+            f"{self.POSTGRES_PASSWORD}@"
+            f"{self.POSTGRES_HOST}:"
+            f"{self.POSTGRES_PORT}/"
+            f"{self.POSTGRES_DB}"
+        )
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore"
