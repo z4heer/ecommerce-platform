@@ -1,0 +1,99 @@
+from sqlalchemy import select
+
+from app.modules.catalog.models.product import Product
+
+
+class ProductRepository:
+
+    def create(
+        self,
+        db,
+        product: Product
+    ):
+        db.add(product)
+        db.flush()
+        db.refresh(product)
+        return product
+
+    def get_by_id(
+        self,
+        db,
+        product_id
+    ):
+        return (
+            db.query(Product)
+            .filter(
+                Product.id == product_id,
+                Product.is_active.is_(True)
+            )
+            .first()
+        )
+
+    def get_products(
+        self,
+        db,
+        category=None,
+        min_price=None,
+        max_price=None,
+        search=None,
+        page=1,
+        size=20
+    ):
+
+        query = db.query(Product)
+
+        query = query.filter(
+            Product.is_active.is_(True)
+        )
+
+        if category:
+            query = query.filter(
+                Product.category == category
+            )
+
+        if search:
+            query = query.filter(
+                Product.name.ilike(
+                    f"%{search}%"
+                )
+            )
+
+        if min_price is not None:
+            query = query.filter(
+                Product.price >= min_price
+            )
+
+        if max_price is not None:
+            query = query.filter(
+                Product.price <= max_price
+            )
+
+        offset = (page - 1) * size
+
+        return (
+            query
+            .offset(offset)
+            .limit(size)
+            .all()
+        )
+
+    def update(
+        self,
+        db,
+        product
+    ):
+        db.add(product)
+        db.flush()
+        db.refresh(product)
+        return product
+
+    def soft_delete(
+        self,
+        db,
+        product
+    ):
+        product.is_active = False
+
+        db.add(product)
+
+        return product

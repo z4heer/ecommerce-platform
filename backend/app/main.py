@@ -1,10 +1,13 @@
 from fastapi import FastAPI
 
-from app.core.database import check_database
+from app.core.health import check_database
 from app.core.redis_client import check_redis
 
 from app.modules.auth.routers.auth_router import (
     router as auth_router
+)
+from app.modules.catalog.routers.product_router import (
+    router as product_router
 )
 
 app = FastAPI(
@@ -13,6 +16,8 @@ app = FastAPI(
 )
 
 app.include_router(auth_router)
+app.include_router(product_router)
+
 
 @app.get("/")
 def root():

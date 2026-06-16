@@ -1,10 +1,7 @@
+import app.database.models
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, Session
-
 from app.core.config import settings
-# Import models so SQLAlchemy registers them
-from app.modules.auth.models.user import User
-from app.modules.auth.models.roles import Role
 
 DATABASE_URL = (
     f"postgresql://"
