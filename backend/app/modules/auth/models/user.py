@@ -38,3 +38,7 @@ class User(Base):
         "Role",
         back_populates="users"
     )
+    orders = relationship(
+        "Order",
+        back_populates="user"
+    )

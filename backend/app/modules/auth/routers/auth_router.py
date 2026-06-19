@@ -25,6 +25,8 @@ from app.modules.auth.repositories.auth_repository import (
 from app.modules.auth.services.auth_service import (
     AuthService
 )
+from app.modules.auth.dependencies import get_current_user, require_admin, require_customer
+
 
 router = APIRouter(
     prefix="/api/v1/auth",
@@ -94,3 +96,35 @@ async def login(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=str(ex)
         )
+
+@router.get("/whoami")
+def who_am_i(
+    current_user=Depends(
+        get_current_user
+    )
+):
+    return {
+        "id": str(current_user.id),
+        "email": current_user.email,
+        "role": current_user.role.name
+    }
+
+@router.get("/admin-only")
+def admin_only(
+    current_user=Depends(
+        require_admin
+    )
+):
+    return {
+        "message": "success"
+    }
+
+@router.get("/customer-only")
+def customer_only(
+    current_user=Depends(
+        require_customer
+    )
+):
+    return {
+        "message": "success"
+    }
