@@ -18,11 +18,9 @@ class ProductService:
 
     CACHE_KEY = "all_products"
 
-    def __init__(self):
-
-        self.product_repo = ProductRepository()
-
-        self.inventory_repo = InventoryRepository()
+    def __init__(self,product_repo: ProductRepository, inventory_repo: InventoryRepository):
+        self.product_repo = product_repo
+        self.inventory_repo = inventory_repo
 
     def create_product(
         self,

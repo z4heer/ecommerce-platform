@@ -1,9 +1,14 @@
 from sqlalchemy import select
-
+from sqlalchemy.ext.asyncio import AsyncSession
 from app.modules.catalog.models.product import Product
-
+from app.core.logger import logger
 
 class ProductRepository:
+    def __init__(
+        self,
+        db: AsyncSession
+    ):
+        self.db = db
 
     def create(
         self,
@@ -20,6 +25,7 @@ class ProductRepository:
         db,
         product_id
     ):
+        logger.info(f"Fetching product with ID: {product_id}")    
         return (
             db.query(Product)
             .filter(
@@ -28,6 +34,7 @@ class ProductRepository:
             )
             .first()
         )
+        logger.info(f"Product fetched: {product}")  # Log the fetched product
 
     def get_products(
         self,

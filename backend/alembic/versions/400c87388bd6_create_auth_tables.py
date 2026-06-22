@@ -9,7 +9,7 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
-
+import uuid
 
 # revision identifiers, used by Alembic.
 revision: str = '400c87388bd6'
@@ -36,6 +36,20 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
+
+    # 1. Define the structural schema of your existing 'roles' table so Alembic understands it
+    meta = sa.MetaData()
+    roles_table = sa.Table(
+        'roles',
+        meta,
+        sa.Column('id', sa.UUID(), primary_key=True),
+        sa.Column('name', sa.String(), unique=True, nullable=False)
+    )
+    # 2. Seed 'Customer' and 'Admin' roles immediately
+    op.bulk_insert(roles_table, [
+        {"id": str(uuid.uuid4()), "name": "Customer"}, # ← Wrapped in str()
+        {"id": str(uuid.uuid4()), "name": "Admin"}    # ← Wrapped in str()
+    ])
     # ### end Alembic commands ###
 
 

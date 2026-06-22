@@ -9,6 +9,15 @@ from app.modules.auth.routers.auth_router import (
 from app.modules.catalog.routers.product_router import (
     router as product_router
 )
+from app.modules.orders.routers.order_router import (
+    router as customer_router
+)
+from app.modules.orders.routers.admin_order_router import (
+    admin_router as admin_order_router
+)
+from app.modules.orders.routers.order_router import (
+    router as order_router
+) 
 
 app = FastAPI(
     title="E-Commerce Platform API",
@@ -17,6 +26,11 @@ app = FastAPI(
 
 app.include_router(auth_router)
 app.include_router(product_router)
+app.include_router(customer_router)
+app.include_router(admin_order_router)
+app.include_router(order_router)  # Include the order_router for customer orders
+
+
 
 
 @app.get("/")

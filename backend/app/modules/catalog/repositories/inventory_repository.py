@@ -1,7 +1,13 @@
 from app.modules.catalog.models.inventory import Inventory
-
+from sqlalchemy.ext.asyncio import AsyncSession
 
 class InventoryRepository:
+
+    def __init__(
+        self,
+        db: AsyncSession
+    ):
+        self.db = db
 
     def create(
         self,

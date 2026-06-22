@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
-
-from jose import jwt
+from jose import jwt, JWTError
 from passlib.context import CryptContext
+
 
 SECRET_KEY = "CHANGE_ME"
 ALGORITHM = "HS256"
@@ -13,7 +13,6 @@ pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto"
 )
-
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
@@ -59,3 +58,11 @@ def create_refresh_token(payload: dict):
         SECRET_KEY,
         algorithm=ALGORITHM
     )
+
+def decode_token(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload
+    except JWTError:
+        return None
+

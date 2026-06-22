@@ -1,0 +1,138 @@
+======================================================================
+TEST CASE 1: Valid Customer Token on Authentication Endpoint
+======================================================================
+METHOD & URL:  GET http://localhost:8000/api/v1/auth/whoami
+HEADERS:       Authorization: Bearer <CUSTOMER_TOKEN>
+EXPECTED HTTP: 200 OK
+ACTUAL HTTP:   200 OK
+
+RESPONSE BODY:
+----------------------------------------------------------------------
+{
+  "id": "6ee31eb0-3cac-4640-81c7-6fabcdef1a35",
+  "email": "customer1@solvexasol.com",
+  "role": "CUSTOMER"
+}
+----------------------------------------------------------------------
+
+======================================================================
+TEST CASE 2: No Token on Authentication Endpoint
+======================================================================
+METHOD & URL:  GET http://localhost:8000/api/v1/auth/whoami
+HEADERS:       None
+EXPECTED HTTP: 401 Unauthorized
+ACTUAL HTTP:   401 Unauthorized
+
+RESPONSE BODY:
+----------------------------------------------------------------------
+{
+  "detail": "Not authenticated"
+}
+----------------------------------------------------------------------
+
+======================================================================
+TEST CASE 3: Valid Admin Token on Authentication Endpoint
+======================================================================
+METHOD & URL:  GET http://localhost:8000/api/v1/auth/whoami
+HEADERS:       Authorization: Bearer <ADMIN_TOKEN>
+EXPECTED HTTP: 200 OK
+ACTUAL HTTP:   200 OK
+
+RESPONSE BODY:
+----------------------------------------------------------------------
+{
+  "id": "73bca82e-98ec-41ed-a202-02f461c9ff9f",
+  "email": "admin21@solvexasol.com",
+  "role": "ADMIN"
+}
+----------------------------------------------------------------------
+
+======================================================================
+TEST CASE 4: No Token on Customer-Only Endpoint
+======================================================================
+METHOD & URL:  GET http://localhost:8000/api/v1/auth/customer-only
+HEADERS:       None
+EXPECTED HTTP: 401 Unauthorized
+ACTUAL HTTP:   401 Unauthorized
+
+RESPONSE BODY:
+----------------------------------------------------------------------
+{
+  "detail": "Not authenticated"
+}
+----------------------------------------------------------------------
+
+======================================================================
+TEST CASE 5: Admin Accessing Customer-Only Endpoint (RBAC Rejection)
+======================================================================
+METHOD & URL:  GET http://localhost:8000/api/v1/auth/customer-only
+HEADERS:       Authorization: Bearer <ADMIN_TOKEN>
+EXPECTED HTTP: 403 Forbidden
+ACTUAL HTTP:   403 Forbidden
+
+RESPONSE BODY:
+----------------------------------------------------------------------
+{
+  "detail": "Customer access required"
+}
+----------------------------------------------------------------------
+
+======================================================================
+TEST CASE 6: Admin Accessing Admin-Only Endpoint (RBAC Pass)
+======================================================================
+METHOD & URL:  GET http://localhost:8000/api/v1/auth/admin-only
+HEADERS:       Authorization: Bearer <ADMIN_TOKEN>
+EXPECTED HTTP: 200 OK
+ACTUAL HTTP:   200 OK
+
+RESPONSE BODY:
+----------------------------------------------------------------------
+{
+  "message": "success"
+}
+----------------------------------------------------------------------
+
+======================================================================
+TEST CASE 7: Customer Accessing Customer-Only Endpoint (RBAC Pass)
+======================================================================
+METHOD & URL:  GET http://localhost:8000/api/v1/auth/customer-only
+HEADERS:       Authorization: Bearer <CUSTOMER_TOKEN>
+EXPECTED HTTP: 200 OK
+ACTUAL HTTP:   200 OK
+
+RESPONSE BODY:
+----------------------------------------------------------------------
+{
+  "message": "success"
+}
+----------------------------------------------------------------------
+
+======================================================================
+TEST CASE 8: Customer Accessing Admin-Only Endpoint (RBAC Rejection)
+======================================================================
+METHOD & URL:  GET http://localhost:8000/api/v1/auth/admin-only
+HEADERS:       Authorization: Bearer <CUSTOMER_TOKEN>
+EXPECTED HTTP: 403 Forbidden
+ACTUAL HTTP:   403 Forbidden
+
+RESPONSE BODY:
+----------------------------------------------------------------------
+{
+  "detail": "Admin access required"
+}
+----------------------------------------------------------------------
+
+======================================================================
+TEST CASE 9: Malformed/Invalid Token on Admin-Only Endpoint
+======================================================================
+METHOD & URL:  GET http://localhost:8000/api/v1/auth/admin-only
+HEADERS:       Authorization: Bearer IslmV4cCI6MTc4MTY3OTY3M-afmmY...
+EXPECTED HTTP: 401 Unauthorized
+ACTUAL HTTP:   401 Unauthorized
+
+RESPONSE BODY:
+----------------------------------------------------------------------
+{
+  "detail": "Invalid token"
+}
+----------------------------------------------------------------------
