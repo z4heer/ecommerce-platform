@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import {
   FormBuilder,
   Validators,
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../../../core/auth/services/auth.service';
-
+import { environment } from '../../../../../environments/environment';
 import {
   MatCardModule
 } from '@angular/material/card';
@@ -25,7 +26,7 @@ import {
 } from '@angular/material/button';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
   imports: [
     CommonModule,
@@ -35,18 +36,23 @@ import {
     MatButtonModule
   ],
 
-  templateUrl: './login.component.html'
+  templateUrl: './register.component.html'
 })
-export class LoginComponent {
+export class RegisterComponent {
 
-  loginForm!: FormGroup;
+  registerForm!: FormGroup;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
   ) {
-    this.loginForm =
+    this.registerForm =
       this.fb.group({
+
+        //        first_name: ['', Validators.required],
+
+        //        last_name: ['', Validators.required],
 
         email: [
           '',
@@ -58,21 +64,26 @@ export class LoginComponent {
           [Validators.required]
         ]
       });
+
   }
 
   onSubmit(): void {
 
-    if (this.loginForm.invalid) {
+    if (this.registerForm.invalid) {
       return;
     }
 
     this.authService
-      .login(this.loginForm.getRawValue() as any)
+      .register(
+        {
+          ...this.registerForm.getRawValue(),
+          role_id: environment.customerRoleId
+        } as any
+      )
       .subscribe({
 
-        next: (response) => {
-          console.log('Login successful', response);
-          this.router.navigate(['/dashboard']);
+        next: () => {
+          this.router.navigate(['/login']);
         },
 
         error: err => {

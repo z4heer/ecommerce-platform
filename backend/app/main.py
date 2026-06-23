@@ -18,12 +18,27 @@ from app.modules.orders.routers.admin_order_router import (
 from app.modules.orders.routers.order_router import (
     router as order_router
 ) 
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI(
     title="E-Commerce Platform API",
     version="1.0.0"
 )
 
+app.add_middleware(
+    CORSMiddleware,
+
+    allow_origins=[
+        "http://localhost:4200"
+    ],
+
+    allow_credentials=True,
+
+    allow_methods=["*"],
+
+    allow_headers=["*"],
+)
 app.include_router(auth_router)
 app.include_router(product_router)
 app.include_router(customer_router)

@@ -1,63 +1,85 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
+import { LoginRequest, AuthResponse } from '../models/auth.model';
+import { RegisterRequest } from '../models/register-request.model';
 
-export interface TokenResponse {
-  access_token: string;
-  refresh_token: string;
-  token_type: string;
-}
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl =
-    'http://localhost:8000/api/v1/auth';
+    private readonly API_URL =
+        'http://localhost:8000/api/v1/auth';
 
-  constructor(
-    private http: HttpClient
-  ) {}
+    private currentUserSubject =
+        new BehaviorSubject<boolean>(this.hasToken());
 
-  login(
-    request: LoginRequest
-  ): Observable<TokenResponse> {
+    isAuthenticated$ =
+        this.currentUserSubject.asObservable();
 
-    return this.http.post<TokenResponse>(
-      `${this.apiUrl}/login`,
-      request
-    );
-  }
+    constructor(
+        private http: HttpClient
+    ) { }
 
-  logout(): void {
+    register(
+        payload: RegisterRequest
+    ): Observable<any> {
 
-    localStorage.removeItem(
-      'access_token'
-    );
+        return this.http.post(
+            `${this.API_URL}/register`,
+            payload
+        );
+    }
 
-    localStorage.removeItem(
-      'refresh_token'
-    );
-  }
+    login(
+        payload: LoginRequest
+    ): Observable<AuthResponse> {
 
-  saveTokens(
-    response: TokenResponse
-  ): void {
+        return this.http
+            .post<AuthResponse>(
+                `${this.API_URL}/login`,
+                payload
+            )
+            .pipe(
+                tap(response => {
 
-    localStorage.setItem(
-      'access_token',
-      response.access_token
-    );
+                    localStorage.setItem(
+                        'access_token',
+                        response.access_token
+                    );
 
-    localStorage.setItem(
-      'refresh_token',
-      response.refresh_token
-    );
-  }
+                    this.currentUserSubject.next(true);
+                })
+            );
+    }
+
+    logout(): void {
+
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+
+        this.currentUserSubject.next(false);
+    }
+
+    getToken(): string | null {
+
+        return localStorage.getItem(
+            'access_token'
+        );
+    }
+
+    isLoggedIn(): boolean {
+
+        return !!this.getToken();
+    }
+
+    private hasToken(): boolean {
+
+        return !!localStorage.getItem(
+            'access_token'
+        );
+    }
 }
