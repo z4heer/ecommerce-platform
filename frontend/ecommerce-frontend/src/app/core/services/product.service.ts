@@ -5,6 +5,13 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Product } from '../models/product.model';
 import { LoggerService } from './logger.service';
+import {
+  retry,
+  timer
+} from 'rxjs';
+
+const PRODUCT_RETRY_COUNT = 2;
+const PRODUCT_RETRY_DELAY_MS = 1000;
 
 @Injectable({
   providedIn: 'root'
@@ -23,18 +30,52 @@ export class ProductService {
 
   getProducts(): Observable<Product[]> {
 
-    this.logger.info('Fetching products from API');
+    this.logger.info(
+      'Fetching products from API'
+    );
+
     return this.http.get<Product[]>(
       `${environment.api.baseUrl}/products`
     ).pipe(
-      tap(products => {
-        this.productsSubject.next(products)
-        this.allProducts = products;
-      }
-      )
-    );
-  }
 
+      retry({
+
+        count: PRODUCT_RETRY_COUNT,
+
+        delay: (
+          error,
+          retryCount
+        ) => {
+
+          this.logger.warn(
+
+            `Retry ${retryCount}/${PRODUCT_RETRY_COUNT} : Products API`
+
+          );
+
+          return timer(
+
+            retryCount * PRODUCT_RETRY_DELAY_MS
+
+          );
+
+        }
+
+      }),
+
+      tap(products => {
+
+        this.productsSubject.next(
+          products
+        );
+
+        this.allProducts = products;
+
+      })
+
+    );
+
+  }
   getProductById(
     id: string
   ): Observable<Product> {

@@ -15,7 +15,6 @@ export const appConfig: ApplicationConfig = {
     withInterceptors([
       LoadingInterceptor,
       AuthInterceptor,
-      //RetryInterceptor,
       ErrorInterceptor
     ]))
   ]
