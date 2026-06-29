@@ -264,7 +264,7 @@ Frontend Configuration
 
 Source:
 
-environment.ts
+`environment.ts`
 environment.development.ts
 
 Primary Parameter:

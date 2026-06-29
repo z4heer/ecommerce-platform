@@ -101,8 +101,9 @@ Instructions:
 * Explain JWT flow.
 * Follow enterprise-grade Angular architecture.
 * Assume a junior developer is implementing the code.
+* Advise / Comment on config and env. setup assumption/requirement, ng command to generate required new or updated items 
 
-Generate only Phase 1 Authentication.
+Generate only Phase 3 Authentication. Phase 2 completed.
 
 Provide:
 - Folder structure
@@ -114,4 +115,4 @@ Provide:
 - Routing updates
 
 Output file-by-file.
-Wait before generating Phase 2.
+Wait before generating Phase 4.

@@ -1,28 +1,45 @@
-import {
-    HttpInterceptorFn
-} from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 
-export const authInterceptor:
-    HttpInterceptorFn = (
-        req,
-        next
-    ) => {
+import { inject } from '@angular/core';
 
-        const token =
-            localStorage.getItem(
-                'access_token'
-            );
+import { StorageService } from '../services/storage.service';
 
-        if (token) {
+/**
+ * ============================================================
+ * Enterprise E-Commerce Platform
+ * Authentication Interceptor
+ * ============================================================
+ *
+ * Automatically attaches JWT access token to outgoing requests.
+ */
+export const AuthInterceptor: HttpInterceptorFn = (request, next) => {
 
-            req = req.clone({
+    const storageService = inject(StorageService);
 
-                setHeaders: {
-                    Authorization:
-                        `Bearer ${token}`
-                }
-            });
+    const accessToken = storageService.getAccessToken();
+
+    /**
+     * Skip Authorization header if no token exists.
+     */
+    if (!accessToken) {
+
+        return next(request);
+
+    }
+
+    /**
+     * Clone immutable request.
+     */
+    const authenticatedRequest = request.clone({
+
+        setHeaders: {
+
+            Authorization: `Bearer ${accessToken}`
+
         }
 
-        return next(req);
-    };
+    });
+
+    return next(authenticatedRequest);
+
+};

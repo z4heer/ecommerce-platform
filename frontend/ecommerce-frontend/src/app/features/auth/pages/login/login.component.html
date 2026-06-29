@@ -1,31 +1,122 @@
-<mat-card>
+<div class="login-page">
 
-    <h2>Login</h2>
+    <mat-card class="login-card">
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-card-header>
 
-        <mat-form-field appearance="outline">
+            <mat-card-title>
 
-            <mat-label>Email</mat-label>
+                Enterprise E-Commerce
 
-            <input matInput formControlName="email">
+            </mat-card-title>
 
-        </mat-form-field>
+            <mat-card-subtitle>
 
-        <mat-form-field appearance="outline">
+                Sign in to continue
 
-            <mat-label>Password</mat-label>
+            </mat-card-subtitle>
 
-            <input matInput type="password" formControlName="password">
+        </mat-card-header>
 
-        </mat-form-field>
+        <mat-card-content>
 
-        <button mat-raised-button color="primary">
+            <form [formGroup]="loginForm" (ngSubmit)="login()">
 
-            Login
+                <!-- ========================= -->
+                <!-- Email -->
+                <!-- ========================= -->
 
-        </button>
+                <mat-form-field appearance="outline" class="full-width">
 
-    </form>
+                    <mat-label>Email Address</mat-label>
 
-</mat-card>
+                    <input matInput type="email" formControlName="email" autocomplete="username">
+
+                    @if (
+                    loginForm.controls.email.hasError('required')
+                    &&
+                    loginForm.controls.email.touched
+                    ) {
+
+                    <mat-error>
+
+                        Email is required.
+
+                    </mat-error>
+
+                    }
+
+                    @if (
+                    loginForm.controls.email.hasError('email')
+                    &&
+                    loginForm.controls.email.touched
+                    ) {
+
+                    <mat-error>
+
+                        Enter a valid email.
+
+                    </mat-error>
+
+                    }
+
+                </mat-form-field>
+
+                <!-- ========================= -->
+                <!-- Password -->
+                <!-- ========================= -->
+
+                <mat-form-field appearance="outline" class="full-width">
+
+                    <mat-label>Password</mat-label>
+
+                    <input matInput type="password" formControlName="password" autocomplete="current-password">
+
+                    @if (
+                    loginForm.controls.password.hasError('required')
+                    &&
+                    loginForm.controls.password.touched
+                    ) {
+
+                    <mat-error>
+
+                        Password is required.
+
+                    </mat-error>
+
+                    }
+
+                    @if (
+                    loginForm.controls.password.hasError('minlength')
+                    &&
+                    loginForm.controls.password.touched
+                    ) {
+
+                    <mat-error>
+
+                        Minimum 6 characters required.
+
+                    </mat-error>
+
+                    }
+
+                </mat-form-field>
+
+                <!-- ========================= -->
+                <!-- Submit -->
+                <!-- ========================= -->
+
+                <button mat-flat-button color="primary" class="login-button" type="submit"
+                    [disabled]="loginForm.invalid">
+
+                    Login
+
+                </button>
+
+            </form>
+
+        </mat-card-content>
+
+    </mat-card>
+
+</div>

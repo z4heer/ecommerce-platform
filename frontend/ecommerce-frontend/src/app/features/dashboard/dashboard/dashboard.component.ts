@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { Router } from '@angular/router';
-
+import { LoadingService } from '../../../core/services/loading.service';
+import { LoggerService } from '../../../core/services/logger.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -20,12 +21,12 @@ export class DashboardComponent {
     private authService: AuthService,
     private router: Router
   ) { }
-
+  protected loadingService: LoadingService = new LoadingService();
+  private readonly logger = inject(LoggerService);
   logout() {
 
     this.authService.logout();
-    console.log('Logged out successfully');
-
+    this.logger.info('User logged out successfully');
     this.router.navigate(['/login']);
 
   }

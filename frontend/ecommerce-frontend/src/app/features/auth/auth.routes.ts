@@ -6,7 +6,7 @@ import { LoginComponent }
 
 import { RegisterComponent }
     from './pages/register/register.component';
-import { authGuard } from '../../core/guard/auth.guard';
+import { authGuard } from '../../core/guards/auth.guard';
 
 export const AUTH_ROUTES:
     Routes = [

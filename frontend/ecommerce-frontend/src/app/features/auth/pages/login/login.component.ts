@@ -1,83 +1,133 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject
+} from '@angular/core';
+
+import { CommonModule } from '@angular/common';
+
 import {
   FormBuilder,
-  Validators,
   ReactiveFormsModule,
-  FormGroup
+  Validators
 } from '@angular/forms';
 
 import { Router } from '@angular/router';
 
-import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { AuthService } from '../../../../core/auth/services/auth.service';
-
-import {
-  MatCardModule
-} from '@angular/material/card';
-
-import {
-  MatInputModule
-} from '@angular/material/input';
-
-import {
-  MatButtonModule
-} from '@angular/material/button';
+import { LoggerService } from '../../../../core/services/logger.service';
 
 @Component({
   selector: 'app-login',
+
   standalone: true,
+
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MatCardModule,
+    MatButtonModule,
     MatInputModule,
-    MatButtonModule
+    MatFormFieldModule
   ],
 
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+
+  styleUrl: './login.component.scss',
+
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
 
-  loginForm!: FormGroup;
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.loginForm =
-      this.fb.group({
+  private readonly fb = inject(FormBuilder);
 
-        email: [
-          '',
-          [Validators.required, Validators.email]
-        ],
+  private readonly authService = inject(AuthService);
 
-        password: [
-          '',
-          [Validators.required]
-        ]
-      });
-  }
+  private readonly router = inject(Router);
 
-  onSubmit(): void {
+  private readonly logger = inject(LoggerService);
+
+  private readonly destroyRef = inject(DestroyRef);
+
+  readonly loginForm = this.fb.nonNullable.group({
+
+    email: [
+      '',
+      [
+        Validators.required,
+        Validators.email
+      ]
+    ],
+
+    password: [
+      '',
+      [
+        Validators.required,
+        Validators.minLength(6)
+      ]
+    ]
+
+  });
+
+  login(): void {
 
     if (this.loginForm.invalid) {
+
+      this.loginForm.markAllAsTouched();
+
       return;
+
     }
 
+    this.logger.info(
+      'Login requested.'
+    );
+
     this.authService
-      .login(this.loginForm.getRawValue() as any)
+      .login(
+        this.loginForm.getRawValue()
+      )
+      .pipe(
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe({
 
-        next: (response) => {
-          console.log('Login successful', response);
-          this.router.navigate(['/dashboard']);
+        next: () => {
+
+          this.logger.info(
+            'User authenticated.'
+          );
+
+          this.router.navigate([
+            '/products'
+          ]);
+
         },
 
-        error: err => {
-          console.error(err);
+        error: error => {
+
+          /**
+           * ErrorInterceptor has already
+           * transformed the error.
+           */
+
+          this.logger.error(
+            'Login failed.',
+            error
+          );
+
         }
+
       });
+
   }
+
 }
