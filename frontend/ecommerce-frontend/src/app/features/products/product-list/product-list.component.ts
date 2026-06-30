@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Observable } from 'rxjs';
 
 import { Product } from '../../../core/models/product.model';
-import { ProductService } from '../../../core/services/product.service';
+import { ProductService } from '../services/product.service';
 import { ProductSearchComponent } from '../product-search/product-search.component';
 import { ProductCategoryFilterComponent }
   from '../product-category-filter/product-category-filter.component';

@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 
 import { Product } from '../../../core/models/product.model';
-import { ProductService } from '../../../core/services/product.service';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-product-detail',

@@ -10,9 +10,9 @@ import {
 import { RegisterRequest } from '../models/register-request.model';
 import { AuthResponse } from '../models/auth.model';
 
-import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
+import { API_ENDPOINTS } from '../../../core/constants/api-endpoints.constants';
 import { LoginRequest } from '../models/auth.model';
-import { StorageService } from '../../../core/services/storage.service';
+import { StorageService } from '../../services/storage.service';
 import { LoggerService } from '../../../core/services/logger.service';
 
 

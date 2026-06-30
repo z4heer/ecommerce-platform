@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 
 import { ProductService }
-  from '../../../core/services/product.service';
+  from '../services/product.service';
 
 @Component({
   selector: 'app-product-category-filter',

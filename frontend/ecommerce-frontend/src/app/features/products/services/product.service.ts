@@ -2,9 +2,9 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
-import { environment } from '../../../environments/environment';
-import { Product } from '../models/product.model';
-import { LoggerService } from './logger.service';
+import { environment } from '../../../../environments/environment';
+import { Product } from '../../../core/models/product.model';
+import { LoggerService } from '../../../core/services/logger.service';
 import {
   retry,
   timer

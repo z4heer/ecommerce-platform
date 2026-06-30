@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
-import { ProductService } from '../../../core/services/product.service';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-product-search',
