@@ -1,6 +1,16 @@
 <app-page-container>
 
-    <!-- Existing page content -->
-    <p>dashboard works!</p>
+    <app-page-header [title]="'Dashboard'" [subtitle]="'Enterprise Overview'">
+
+        <button mat-flat-button color="primary" pageHeaderAction>
+
+            Refresh
+
+        </button>
+
+    </app-page-header>
+
+    <!-- existing dashboard content -->
+    <div>Sample Dashboard text</div>
 
 </app-page-container>

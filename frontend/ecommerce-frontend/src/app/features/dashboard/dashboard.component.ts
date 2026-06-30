@@ -4,10 +4,12 @@ import { Router } from '@angular/router';
 import { LoadingService } from '../../core/services/loading.service';
 import { LoggerService } from '../../core/services/logger.service';
 import { PageContainerComponent } from '../../layout/page-container/page-container.component';
+import { PageHeaderComponent } from '../../layout/page-header/page-header.component';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [PageContainerComponent],
+  imports: [PageContainerComponent, PageHeaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
