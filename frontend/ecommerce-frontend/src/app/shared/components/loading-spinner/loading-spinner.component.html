@@ -1,0 +1,20 @@
+@if (loadingService.loading$ | async) {
+
+<div class="loading-overlay">
+
+    <div class="loading-container">
+
+        <mat-spinner diameter="60" strokeWidth="5">
+        </mat-spinner>
+
+        <div class="loading-text">
+
+            Loading...
+
+        </div>
+
+    </div>
+
+</div>
+
+}

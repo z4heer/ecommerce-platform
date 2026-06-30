@@ -1,0 +1,109 @@
+/**
+============================================================
+Enterprise Loading Spinner
+============================================================
+*/
+
+:host {
+    display: contents;
+}
+
+/* ==========================================================
+   Full Screen Overlay
+========================================================== */
+
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(6px);
+
+    z-index: 9999;
+
+    animation: fadeIn 180ms ease-in-out;
+}
+
+/* ==========================================================
+   Loading Card
+========================================================== */
+
+.loading-container {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 180px;
+
+    padding: 2rem;
+
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, .18);
+
+}
+
+/* ==========================================================
+   Loading Text
+========================================================== */
+
+.loading-text {
+
+    margin-top: 1rem;
+
+    font-size: .95rem;
+
+    font-weight: 500;
+
+    letter-spacing: .4px;
+
+    color: #555;
+
+    user-select: none;
+
+}
+
+/* ==========================================================
+   Responsive
+========================================================== */
+
+@media (max-width: 600px) {
+
+    .loading-container {
+
+        min-width: 150px;
+
+        padding: 1.5rem;
+
+    }
+
+}
+
+/* ==========================================================
+   Animation
+========================================================== */
+
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+    }
+
+    to {
+
+        opacity: 1;
+
+    }
+
+}

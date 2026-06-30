@@ -1,0 +1,6 @@
+- Refactor AuthService to remove remaining legacy patterns.
+- Introduce AuthStateService.
+- Replace direct navigation with facade/state management where appropriate.
+- Introduce BaseHttpService.
+- Move API models into feature folders where applicable.
+- Improve error mapping with HttpErrorMapper.

@@ -1,63 +1,154 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
+import {
+    BehaviorSubject,
+    Observable,
+    tap
+} from 'rxjs';
 
-export interface TokenResponse {
-  access_token: string;
-  refresh_token: string;
-  token_type: string;
-}
+import { RegisterRequest } from '../models/register-request.model';
+import { AuthResponse } from '../models/auth.model';
+
+import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
+import { LoginRequest } from '../models/auth.model';
+import { StorageService } from '../../../core/services/storage.service';
+import { LoggerService } from '../../../core/services/logger.service';
+
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
 
-  private apiUrl =
-    'http://localhost:8000/api/v1/auth';
+    private readonly http = inject(HttpClient);
 
-  constructor(
-    private http: HttpClient
-  ) {}
+    private readonly storage = inject(StorageService);
 
-  login(
-    request: LoginRequest
-  ): Observable<TokenResponse> {
+    private readonly logger = inject(LoggerService);
 
-    return this.http.post<TokenResponse>(
-      `${this.apiUrl}/login`,
-      request
-    );
-  }
+    /**
+     * ===================================================
+     * Authentication State
+     * ===================================================
+     */
 
-  logout(): void {
+    private readonly authenticatedSubject =
+        new BehaviorSubject<boolean>(
+            this.storage.isAuthenticated()
+        );
 
-    localStorage.removeItem(
-      'access_token'
-    );
+    readonly isAuthenticated$ =
+        this.authenticatedSubject.asObservable();
 
-    localStorage.removeItem(
-      'refresh_token'
-    );
-  }
+    /**
+     * ===================================================
+     * Register
+     * ===================================================
+     */
 
-  saveTokens(
-    response: TokenResponse
-  ): void {
+    register(
+        request: RegisterRequest
+    ): Observable<AuthResponse> {
 
-    localStorage.setItem(
-      'access_token',
-      response.access_token
-    );
+        this.logger.info(
+            'Register request started.'
+        );
 
-    localStorage.setItem(
-      'refresh_token',
-      response.refresh_token
-    );
-  }
+        return this.http.post<AuthResponse>(
+            API_ENDPOINTS.AUTH.REGISTER,
+            request
+        );
+
+    }
+
+    /**
+     * ===================================================
+     * Login
+     * ===================================================
+     */
+
+    login(
+        request: LoginRequest
+    ): Observable<AuthResponse> {
+
+        this.logger.info(
+            'Login request started.'
+        );
+
+        return this.http
+            .post<AuthResponse>(
+                API_ENDPOINTS.AUTH.LOGIN,
+                request
+            )
+            .pipe(
+
+                tap(response => {
+
+                    this.storage.setAccessToken(
+                        response.access_token
+                    );
+
+                    if (response.refresh_token) {
+
+                        this.storage.setRefreshToken(
+                            response.refresh_token
+                        );
+
+                    }
+
+                    this.authenticatedSubject.next(true);
+
+                    this.logger.info(
+                        'Login successful.'
+                    );
+
+                })
+
+            );
+
+    }
+
+    /**
+     * ===================================================
+     * Logout
+     * ===================================================
+     */
+
+    logout(): void {
+
+        this.logger.info(
+            'User logged out.'
+        );
+
+        this.storage.clearAuthentication();
+
+        this.authenticatedSubject.next(false);
+
+    }
+
+    /**
+     * ===================================================
+     * Access Token
+     * ===================================================
+     */
+
+    getAccessToken(): string | null {
+
+        return this.storage.getAccessToken();
+
+    }
+
+    /**
+     * ===================================================
+     * Current Authentication State
+     * ===================================================
+     */
+
+    isAuthenticated(): boolean {
+
+        return this.storage.isAuthenticated();
+
+    }
+
 }
