@@ -597,3 +597,14 @@ Task 1 – Enterprise Foundation
 | Configuration-driven Navigation | Simplifies future expansion and RBAC         |
 | Centralized Constants           | Eliminates magic strings                     |
 | Strongly Typed Models           | Improves maintainability and tooling support |
+
+##
+Enterprise Toolbar Component
+Decision:
+   Standalone Component
+   OnPush
+   Angular Material
+   Inject API
+   Shared Application Header
+   No business logic
+   Authentication delegated to AuthService
