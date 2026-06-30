@@ -3,18 +3,13 @@ import { AuthService } from '../../core/auth/services/auth.service';
 import { Router } from '@angular/router';
 import { LoadingService } from '../../core/services/loading.service';
 import { LoggerService } from '../../core/services/logger.service';
+import { PageContainerComponent } from '../../layout/page-container/page-container.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  template: `
-    <h1>Authentication Successful</h1>
-    <h2>Login Successful</h2>
-    <p>Authentication Phase Complete</p>
-    <p>JWT Login Working</p>
-    <button (click)="logout()">
-      Logout
-    </button>
-  `
+  imports: [PageContainerComponent],
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
   constructor(
@@ -23,6 +18,7 @@ export class DashboardComponent {
   ) { }
   protected loadingService: LoadingService = new LoadingService();
   private readonly logger = inject(LoggerService);
+
   logout() {
 
     this.authService.logout();
