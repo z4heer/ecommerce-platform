@@ -6,7 +6,7 @@
 
             <section class="toolbar-section left">
 
-                <button mat-icon-button aria-label="Application Logo">
+                <button mat-icon-button type="button" aria-label="Toggle navigation" (click)="onMenuClick()">
 
                     <mat-icon>shopping_cart</mat-icon>
 
@@ -33,13 +33,14 @@
 
             <section class="toolbar-section right">
 
-                <button mat-icon-button aria-label="Notifications">
+                <button mat-icon-button type="button" aria-label="Toggle navigation" (click)="onMenuClick()">
 
                     <mat-icon>notifications_none</mat-icon>
 
                 </button>
 
-                <button mat-icon-button [matMenuTriggerFor]="userMenu" aria-label="User Menu">
+                <button mat-icon-button type="button" (click)="onMenuClick()" [matMenuTriggerFor]="userMenu"
+                    aria-label="User Menu">
 
                     <mat-icon>account_circle</mat-icon>
 

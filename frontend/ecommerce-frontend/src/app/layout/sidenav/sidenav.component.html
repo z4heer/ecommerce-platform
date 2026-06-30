@@ -1,0 +1,62 @@
+<nav class="app-sidenav" aria-label="Primary Navigation">
+
+    <!-- Navigation List -->
+    <mat-nav-list>
+
+        <ng-container *ngFor="
+        let item of navigationItems;
+        trackBy: trackByRoute
+      ">
+
+            <!-- Enabled Navigation Item -->
+            <a *ngIf="item.enabled; else disabledMenuItem" mat-list-item class="nav-item" [routerLink]="item.route"
+                routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+
+                <mat-icon matListItemIcon aria-hidden="true">
+                    {{ item.icon }}
+                </mat-icon>
+
+                <span matListItemTitle>
+                    {{ item.label }}
+                </span>
+
+                <span *ngIf="item.badge" matListItemMeta class="menu-badge">
+
+                    {{ item.badge }}
+
+                </span>
+
+            </a>
+
+            <!-- Disabled Navigation Item -->
+            <ng-template #disabledMenuItem>
+
+                <button mat-list-item class="nav-item disabled" type="button" disabled matTooltip="Coming Soon">
+
+                    <mat-icon matListItemIcon aria-hidden="true">
+
+                        {{ item.icon }}
+
+                    </mat-icon>
+
+                    <span matListItemTitle>
+
+                        {{ item.label }}
+
+                    </span>
+
+                    <span matListItemMeta class="coming-soon">
+
+                        Coming Soon
+
+                    </span>
+
+                </button>
+
+            </ng-template>
+
+        </ng-container>
+
+    </mat-nav-list>
+
+</nav>

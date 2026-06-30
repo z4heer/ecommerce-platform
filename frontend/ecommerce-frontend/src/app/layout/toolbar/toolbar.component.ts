@@ -1,6 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
+  Output,
   inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -40,4 +42,13 @@ export class ToolbarComponent {
     this.authService.logout();
   }
 
+  @Output()
+  readonly menuToggle =
+    new EventEmitter<void>();
+
+  onMenuClick(): void {
+
+    this.menuToggle.emit();
+
+  }
 }
