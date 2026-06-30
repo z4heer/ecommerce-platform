@@ -2,11 +2,11 @@
 
     display: block;
 
-    height: 100vh;
+    min-height: 100vh;
 
 }
 
-.app-shell {
+.content-shell {
 
     display: flex;
 
@@ -19,6 +19,12 @@
 main {
 
     flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    padding: 24px;
 
     overflow: auto;
 
