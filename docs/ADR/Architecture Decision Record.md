@@ -608,3 +608,8 @@ Decision:
    Shared Application Header
    No business logic
    Authentication delegated to AuthService
+## Record
+   ADR-001 – Application Shell Pattern
+   ADR-002 – Enterprise Toolbar
+   ADR-003 – Responsive Layout Service
+   ADR-004 – Configuration-Driven Navigation

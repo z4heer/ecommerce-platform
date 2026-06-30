@@ -13,12 +13,15 @@ export const AUTH_ROUTES:
 
         {
             path: 'login',
-            component: LoginComponent
+            loadComponent: () =>
+                import('./pages/login/login.component')
+                    .then(m => m.LoginComponent)
         },
 
         {
             path: 'register',
-            component: RegisterComponent,
-            canActivate: [authGuard]
+            loadComponent: () =>
+                import('./pages/register/register.component')
+                    .then(m => m.RegisterComponent)
         }
     ];
