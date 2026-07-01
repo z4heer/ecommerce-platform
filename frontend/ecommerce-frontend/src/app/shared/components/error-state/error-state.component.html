@@ -1,0 +1,44 @@
+<div class="error-state-container">
+    <!-- Visual Accent Section -->
+    <div class="error-state-visual-wrapper">
+        @if (showIllustration()) {
+        <img [src]="illustration()" alt="" aria-hidden="true" class="error-state-illustration" />
+        } @else {
+        <mat-icon [class]="'error-state-icon severity-' + severity()" aria-hidden="true">
+            {{ fallbackIcon() }}
+        </mat-icon>
+        }
+    </div>
+
+    <!-- Text Context Section -->
+    <div class="error-state-content">
+        <h2 class="error-state-title">{{ title() }}</h2>
+
+        @if (description()) {
+        <p class="error-state-description">{{ description() }}</p>
+        }
+
+        @if (errorCode()) {
+        <div class="error-state-code-badge" aria-describedby="error-code-label">
+            <span id="error-code-label" class="cdk-visually-hidden">Error Reference Code:</span>
+            <code>{{ errorCode() }}</code>
+        </div>
+        }
+    </div>
+
+    <!-- Projected Actions Section -->
+    @if (hasActions()) {
+    <div class="error-state-actions">
+        @if (hasPrimaryAction()) {
+        <div class="primary-action-slot">
+            <ng-content select="[error-primary-action]"></ng-content>
+        </div>
+        }
+        @if (hasSecondaryAction()) {
+        <div class="secondary-action-slot">
+            <ng-content select="[error-secondary-action]"></ng-content>
+        </div>
+        }
+    </div>
+    }
+</div>

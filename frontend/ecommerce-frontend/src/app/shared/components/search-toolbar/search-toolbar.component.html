@@ -1,0 +1,33 @@
+<div class="app-search-toolbar" [ngClass]="modifierClasses()" role="toolbar" [attr.aria-label]="ariaLabel()">
+
+    <!-- Search Input Sub-container -->
+    @if (showSearch()) {
+    <div class="app-search-toolbar__search-box">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic">
+            <mat-icon matPrefix class="app-search-toolbar__search-icon">search</mat-icon>
+
+            <input matInput [formControl]="searchControl" [placeholder]="placeholder()" [attr.aria-label]="ariaLabel()"
+                (input)="onInputChange($event)" (keydown)="onKeyDown($event)" />
+
+            @if (loading()) {
+            <mat-spinner matSuffix [diameter]="18" class="app-search-toolbar__spinner"></mat-spinner>
+            } @else if (searchControl.value && !disabled()) {
+            <button mat-icon-button matSuffix (click)="clear()" type="button" aria-label="Clear search input">
+                <mat-icon>clear</mat-icon>
+            </button>
+            }
+        </mat-form-field>
+    </div>
+    }
+
+    <!-- Projected Content Elements -->
+    <div class="app-search-toolbar__filters" *ngIf="hasFilters()">
+        <ng-content select="[toolbar-filters]"></ng-content>
+    </div>
+
+    <span class="app-search-toolbar__spacer"></span>
+
+    <div class="app-search-toolbar__actions" *ngIf="hasActions()">
+        <ng-content select="[toolbar-actions]"></ng-content>
+    </div>
+</div>

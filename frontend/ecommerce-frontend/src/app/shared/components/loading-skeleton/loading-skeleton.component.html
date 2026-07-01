@@ -1,0 +1,64 @@
+<!-- src/app/shared/components/loading-skeleton/loading-skeleton.component.html -->
+<div [ngClass]="cssClasses()" [ngStyle]="computedStyles()" class="app-skeleton-container">
+    @for (item of skeletonItems(); track item) {
+    <div class="app-skeleton-instance">
+
+        @if (variant() === 'text') {
+        <div class="app-skeleton-text-row line-primary"></div>
+        <div class="app-skeleton-text-row line-secondary"></div>
+        <div class="app-skeleton-text-row line-tertiary"></div>
+        }
+
+        @else if (variant() === 'card') {
+        <div class="app-skeleton-card-container">
+            <div class="app-skeleton-card-media"></div>
+            <div class="app-skeleton-card-content">
+                <div class="app-skeleton-text-row line-primary"></div>
+                <div class="app-skeleton-text-row line-secondary"></div>
+            </div>
+        </div>
+        }
+
+        @else if (variant() === 'list') {
+        <div class="app-skeleton-list-item">
+            <div class="app-skeleton-list-icon"></div>
+            <div class="app-skeleton-list-body">
+                <div class="app-skeleton-text-row line-primary"></div>
+                <div class="app-skeleton-text-row line-secondary"></div>
+            </div>
+        </div>
+        }
+
+        @else if (variant() === 'table') {
+        <div class="app-skeleton-table-wrapper">
+            <div class="app-skeleton-table-header">
+                @for (col of tableColumns(); track col) {
+                <div class="app-skeleton-table-th"></div>
+                }
+            </div>
+            @for (row of tableRows(); track row) {
+            <div class="app-skeleton-table-row">
+                @for (col of tableColumns(); track col) {
+                <div class="app-skeleton-table-td"></div>
+                }
+            </div>
+            }
+        </div>
+        }
+
+        @else if (variant() === 'avatar') {
+        <div class="app-skeleton-avatar-wrapper">
+            <div class="app-skeleton-avatar-circle"></div>
+            <div class="app-skeleton-avatar-text">
+                <div class="app-skeleton-text-row line-primary"></div>
+            </div>
+        </div>
+        }
+
+        @else if (variant() === 'custom') {
+        <div class="app-skeleton-custom-block"></div>
+        }
+
+    </div>
+    }
+</div>
