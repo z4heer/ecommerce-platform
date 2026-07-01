@@ -1,467 +1,426 @@
-Understood. Based on the constraints from the Technical Lead, this task is well scoped.
+# AI Prompt — Sprint 3.1B Milestone 2
 
-Since you asked for **implementation only**, below is exactly what should be implemented.
+## Task: Implement Enterprise AppCardComponent
 
----
+You are a **Senior Angular 19 Developer** working on a **production-grade Enterprise E-Commerce Platform**.
 
-# 1. Architecture Summary
+This is **not** a tutorial or demo application.
 
-**Component**
+Follow enterprise coding standards used by large engineering teams.
 
-```
-PageHeaderComponent
-```
+Do **not** modify unrelated files.
 
-Purpose:
-
-* Reusable enterprise page header
-* No business logic
-* Pure presentation component
-* Signal inputs
-* Content projection for action buttons
-* Future-ready for breadcrumb integration
-* Standalone
-* OnPush
+Implement **only** the AppCardComponent.
 
 ---
 
-# 2. Files Created
+# Project Context
 
-```
-src/app/shared/ui/layout/page-header/
+Technology Stack
 
-│── page-header.component.ts
-│── page-header.component.html
-│── page-header.component.scss
-└── page-header.component.spec.ts
-```
+* Angular 19
+* Standalone Components
+* Angular Material
+* Angular Signals
+* Functional Guards
+* Functional Interceptors
+* Reactive Forms
+* OnPush Change Detection
+* Enterprise Folder Structure
 
----
+Already completed
 
-# 3. Files Modified
+* Main Layout
+* Toolbar
+* Footer
+* Responsive Navigation
+* PageContainer
+* PageHeader
+* Layout Service
+* Logger
+* Notification Service
+* Loading Service
 
-Temporary integration only
+The next Design System component is:
 
-```
-src/app/features/dashboard/dashboard.component.ts
+**AppCardComponent**
 
-src/app/features/dashboard/dashboard.component.html
-```
-
-No other files.
-
----
-
-# 4. Production Ready Code
-
----
-
-## page-header.component.ts
-
-```ts
-import {
-  ChangeDetectionStrategy,
-  Component,
-  input,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatDividerModule } from '@angular/material/divider';
-
-@Component({
-  selector: 'app-page-header',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDividerModule,
-  ],
-  templateUrl: './page-header.component.html',
-  styleUrl: './page-header.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-})
-export class PageHeaderComponent {
-  readonly title = input.required<string>();
-
-  readonly subtitle = input<string>();
-
-  readonly showDivider = input(true);
-}
-```
+This component will become the standard reusable card across the entire application.
 
 ---
 
-## page-header.component.html
+# Objective
+
+Create a reusable enterprise card component that supports:
+
+* Dashboard
+* Products
+* Orders
+* Customers
+* Reports
+* Administration
+* Analytics
+
+No business logic should exist inside this component.
+
+It must remain a pure presentation component.
+
+---
+
+# Folder Structure
+
+Create:
+
+```text
+src/app/shared/components/app-card/
+
+    app-card.component.ts
+    app-card.component.html
+    app-card.component.scss
+    app-card.component.spec.ts
+    index.ts
+```
+
+If a shared barrel export exists, update it accordingly.
+
+---
+
+# Angular Requirements
+
+Use
+
+* Standalone Component
+* ChangeDetectionStrategy.OnPush
+* Angular Signals
+* input()
+* output()
+* computed() where appropriate
+
+Do NOT use
+
+* NgModule
+* any
+* ViewEncapsulation.None
+* inline styles
+* inline templates
+* unnecessary subscriptions
+
+---
+
+# Component Selector
 
 ```html
-<header class="page-header">
+<app-card></app-card>
+```
 
-  <div class="page-header__content">
+---
 
-    <div class="page-header__titles">
+# Inputs
 
-      <h1 class="page-header__title">
-        {{ title() }}
-      </h1>
+Implement strongly typed inputs.
 
-      @if (subtitle()) {
-        <p class="page-header__subtitle">
-          {{ subtitle() }}
-        </p>
-      }
+```typescript
+title?: string
+
+subtitle?: string
+
+appearance:
+'elevated' | 'outlined'
+
+Default:
+'elevated'
+
+padding:
+'comfortable'
+'compact'
+'none'
+
+Default:
+'comfortable'
+
+loading:
+boolean
+
+Default false
+
+clickable:
+boolean
+
+Default false
+
+disabled:
+boolean
+
+Default false
+```
+
+Use Angular 19 `input()` APIs.
+
+---
+
+# Output
+
+Create
+
+```typescript
+cardClick
+```
+
+Only emit when
+
+* clickable=true
+* disabled=false
+
+---
+
+# Content Projection
+
+Support three slots.
+
+Header
+
+```html
+<div card-header>
+```
+
+Body
+
+Default ng-content
+
+Actions
+
+```html
+<div card-actions>
+```
+
+Example usage
+
+```html
+<app-card
+    title="Products"
+    subtitle="Available Inventory">
+
+    <div card-header>
+
+        Header Content
 
     </div>
 
-    <div class="page-header__actions">
+    Main Content
 
-      <ng-content
-        select="[pageHeaderAction]">
-      </ng-content>
+    <div card-actions>
+
+        Buttons
 
     </div>
 
-  </div>
-
-  @if (showDivider()) {
-    <mat-divider></mat-divider>
-  }
-
-</header>
+</app-card>
 ```
 
 ---
 
-## page-header.component.scss
+# HTML Layout
 
-```scss
-.page-header {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+Recommended structure
 
-  &__content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
+```text
+Mat Card
 
-  &__titles {
-    display: flex;
-    flex-direction: column;
-    gap: .25rem;
-    min-width: 0;
-    flex: 1;
-  }
+    Header
 
-  &__title {
-    margin: 0;
-    font: inherit;
-    font-size: 2rem;
-    font-weight: 600;
-    line-height: 1.2;
-  }
+        Optional projected header
 
-  &__subtitle {
-    margin: 0;
-    opacity: .75;
-  }
+        Optional title
 
-  &__actions {
-    display: flex;
-    align-items: center;
-    gap: .75rem;
-    flex-wrap: wrap;
-  }
-}
+        Optional subtitle
 
-@media (max-width: 960px) {
+    Body
 
-  .page-header {
+        projected content
 
-    &__content {
-      flex-direction: column;
-      align-items: stretch;
-    }
+    Footer
 
-    &__actions {
-      width: 100%;
-      justify-content: flex-start;
-    }
-  }
-
-}
-
-@media (max-width: 600px) {
-
-  .page-header {
-
-    &__title {
-      font-size: 1.5rem;
-    }
-
-    &__actions {
-      width: 100%;
-    }
-  }
-
-}
+        projected actions
 ```
+
+Do not duplicate DOM elements when sections are absent.
 
 ---
 
-## page-header.component.spec.ts
+# Accessibility
 
-```ts
-import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { MatDividerModule } from '@angular/material/divider';
-import { PageHeaderComponent } from './page-header.component';
+Support
 
-@Component({
-  standalone: true,
-  imports: [PageHeaderComponent],
-  template: `
-    <app-page-header
-      [title]="title"
-      [subtitle]="subtitle"
-      [showDivider]="showDivider">
+Keyboard
 
-      <button pageHeaderAction>
-        Action
-      </button>
+Enter
 
-    </app-page-header>
-  `,
-})
-class TestHostComponent {
-  title = 'Dashboard';
-  subtitle?: string = 'Enterprise Overview';
-  showDivider = true;
-}
+Space
 
-describe('PageHeaderComponent', () => {
-  let fixture: ComponentFixture<TestHostComponent>;
+Focus
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [
-        TestHostComponent,
-        MatDividerModule,
-      ],
-    }).compileComponents();
+Proper tabindex
 
-    fixture = TestBed.createComponent(TestHostComponent);
-    fixture.detectChanges();
-  });
+Proper role
 
-  it('should create', () => {
-    expect(fixture).toBeTruthy();
-  });
+Only interactive when clickable=true.
 
-  it('should render title', () => {
-    expect(
-      fixture.nativeElement.querySelector('h1').textContent
-    ).toContain('Dashboard');
-  });
-
-  it('should render subtitle', () => {
-    expect(
-      fixture.nativeElement.querySelector('p').textContent
-    ).toContain('Enterprise Overview');
-  });
-
-  it('should hide subtitle', () => {
-    fixture.componentInstance.subtitle = undefined;
-    fixture.detectChanges();
-
-    expect(
-      fixture.nativeElement.querySelector('p')
-    ).toBeNull();
-  });
-
-  it('should show divider', () => {
-    expect(
-      fixture.debugElement.query(By.css('mat-divider'))
-    ).toBeTruthy();
-  });
-
-  it('should hide divider', () => {
-    fixture.componentInstance.showDivider = false;
-    fixture.detectChanges();
-
-    expect(
-      fixture.debugElement.query(By.css('mat-divider'))
-    ).toBeNull();
-  });
-
-  it('should project actions', () => {
-    expect(
-      fixture.nativeElement.querySelector('button').textContent
-    ).toContain('Action');
-  });
-});
-```
+Disabled cards must not receive focus.
 
 ---
 
-# Temporary Dashboard Integration
+# Styling Requirements
 
-## dashboard.component.ts
+Use Angular Material Card.
 
-```ts
-import { PageHeaderComponent } from
-'@shared/ui/layout/page-header/page-header.component';
-```
+Provide enterprise SCSS.
 
-Add to imports:
+Support
 
-```ts
-imports: [
-  ...
-  PageHeaderComponent
-]
-```
+Elevated
 
----
+Outlined
 
-## dashboard.component.html
+Hover effect
 
-Immediately inside the page container:
+Clickable state
 
-```html
-<app-page-container>
+Disabled state
 
-  <app-page-header
-    [title]="'Dashboard'"
-    [subtitle]="'Enterprise Overview'">
+Loading state
 
-    <button
-      mat-flat-button
-      color="primary"
-      pageHeaderAction>
+Compact padding
 
-      Refresh
+Comfortable padding
 
-    </button>
+No padding
 
-  </app-page-header>
+Responsive
 
-  <!-- existing dashboard content -->
+Rounded corners
 
-</app-page-container>
-```
+Consistent spacing
+
+Use Material theme tokens.
+
+Do not hardcode theme colors.
 
 ---
 
-# 5. Unit Test Results
+# Performance Requirements
 
-Expected:
+Must use
 
-```
-✓ should create
+OnPush
 
-✓ renders title
+Signals
 
-✓ renders subtitle
+No unnecessary change detection
 
-✓ hides subtitle
+Minimal DOM
 
-✓ divider visible
+No unnecessary directives
 
-✓ divider hidden
-
-✓ projects actions
-
-7/7 PASS
-```
+No duplicated CSS
 
 ---
 
-# 6. Build Result
+# Type Safety
 
-Expected
+No any.
 
-```
-ng build
-
-✔ Build successful
-```
+Use strict typing everywhere.
 
 ---
 
-# 7. Lint Result
+# Unit Tests
 
-Expected
+Create tests covering
 
-```
-ng lint
+* component creation
+* title rendering
+* subtitle rendering
+* header projection
+* body projection
+* actions projection
+* appearance class
+* padding class
+* loading state
+* clickable state
+* disabled state
+* click event
+* keyboard interaction
+* output emission
 
-✔ No lint errors
-```
+Target
 
----
-
-# 8. Manual Testing Steps
-
-* Navigate to Dashboard.
-* Verify the page title displays as "Dashboard".
-* Verify the subtitle displays as "Enterprise Overview".
-* Verify the divider is visible by default.
-* Verify the "Refresh" button appears in the actions area.
-* Resize the browser to tablet width and confirm the actions wrap beneath the title.
-* Resize to mobile width and ensure the layout stacks vertically.
-* Check the browser console for any errors.
-* Confirm the component integrates cleanly within the existing `PageContainer`.
-
----
-
-# 9. Accessibility Review
-
-* Uses semantic `<header>`.
-* Uses a single `<h1>` for the page title.
-* Subtitle is rendered in a `<p>` element.
-* Projected action buttons remain fully keyboard accessible.
-* No custom keyboard handling is introduced.
+95%+ coverage
 
 ---
 
-# 10. Performance Review
+# Manual Testing Checklist
 
-* Standalone component.
-* `ChangeDetectionStrategy.OnPush`.
-* Uses Angular 19 signal `input()` API.
-* No services injected.
-* No HTTP requests.
-* No RxJS subscriptions.
-* No business logic.
-* Minimal Angular Material dependency (`MatDividerModule` only).
+Verify
+
+Desktop
+
+Tablet
+
+Mobile
+
+Long content
+
+No title
+
+No subtitle
+
+No header
+
+No actions
+
+Clickable
+
+Disabled
+
+Loading
+
+Keyboard navigation
+
+Responsive layout
 
 ---
 
-# 11. Git Commit
+# Acceptance Criteria
 
-```bash
-git add .
+The implementation is complete only if
 
-git commit -m "feat(ui): add reusable enterprise page header"
-```
+* Component builds successfully
+* No lint errors
+* No TypeScript errors
+* Strict typing passes
+* Unit tests pass
+* Uses Angular 19 best practices
+* Uses Signals appropriately
+* Uses OnPush
+* Is reusable
+* Is accessible
+* Contains no business logic
+* Ready for enterprise production use
 
 ---
 
-# 12. Pull Request Checklist
+# Deliverables
 
-* [ ] Component is standalone.
-* [ ] Uses Angular 19 signal inputs.
-* [ ] Uses `OnPush` change detection.
-* [ ] No business logic added.
-* [ ] No routing changes.
-* [ ] No layout component modifications.
-* [ ] No service dependencies.
-* [ ] Unit tests added and passing.
-* [ ] Responsive layout verified.
-* [ ] Accessibility reviewed.
-* [ ] Dashboard smoke test completed.
-* [ ] Build and lint successful.
+Provide
 
-**Implementation complete. Stopping here as requested, awaiting Technical Lead review before proceeding to the next design system component.**
+1. Folder structure
+2. Files created
+3. Files modified
+4. Complete source code for every file
+5. Unit tests
+6. Explanation of important design decisions
+7. Any assumptions made
+
+Do not implement any other Design System component.
+
+Stop after completing **AppCardComponent** and wait for Technical Lead review before proceeding to the next task.
