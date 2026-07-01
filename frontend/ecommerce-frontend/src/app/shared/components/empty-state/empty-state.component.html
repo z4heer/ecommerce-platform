@@ -1,0 +1,19 @@
+<!-- Media Container -->
+<div *ngIf="showIllustration() || showIcon()" class="app-empty-state__media">
+    <img *ngIf="showIllustration()" [src]="illustration()" [alt]="''" aria-hidden="true"
+        class="app-empty-state__illustration" />
+    <mat-icon *ngIf="showIcon()" aria-hidden="true" class="app-empty-state__icon">{{ icon() }}</mat-icon>
+</div>
+
+<!-- Text Content Container -->
+<div class="app-empty-state__content">
+    <h3 class="app-empty-state__title">{{ title() }}</h3>
+    <p *ngIf="description()" class="app-empty-state__description">
+        {{ description() }}
+    </p>
+</div>
+
+<!-- Action Projection Slot -->
+<div *ngIf="hasActions()" class="app-empty-state__actions">
+    <ng-content select="[appEmptyActions], [empty-actions]"></ng-content>
+</div>

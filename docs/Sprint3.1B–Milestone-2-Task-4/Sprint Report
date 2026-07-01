@@ -1,4 +1,36 @@
 Sprint Report
+##
+**Sprint 3.1B – Milestone 2**
+
+Task: Enterprise EmptyStateComponent
+
+Expected outcome:
+
+* Standardized empty-state UX
+* Consistent messaging across modules
+* Improved accessibility
+* Better user guidance
+* Reusable across all feature areas
+##
+Sprint Report Update: Milestone 3.1B.2 Resolved
+-------------------------------------------------------------------------
+- Developed and packaged the core presentational UI primitive: LoadingSkeletonComponent.
+- Verified smooth operation on Angular 19 platforms using OnPush optimization metrics.
+- Added media listener overrides for environments configured with prefers-reduced-motion profiles.
+- Integrated standard Angular Material token color values into the base scss layout rules.
+
+##
+**Sprint 3.1B – Milestone 2**
+
+Task: Enterprise LoadingSkeletonComponent
+
+Expected outcome:
+
+* Standardized loading experience
+* Reduced layout shift
+* Better perceived performance
+* Reusable loading patterns across all modules
+* Accessibility-compliant animations
 
 ##
 Sprint 3.1B – Milestone 2
