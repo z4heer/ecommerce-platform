@@ -5,6 +5,10 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist/out-tsc",
+    "types": [
+      "jasmine",
+      "node"
+    ],
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
@@ -24,5 +28,9 @@
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true
-  }
+  },
+  "include": [
+    "src/**/*.spec.ts",
+    "src/**/*.d.ts"
+  ]
 }

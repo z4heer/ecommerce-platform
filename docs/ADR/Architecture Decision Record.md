@@ -608,6 +608,10 @@ Decision:
    Shared Application Header
    No business logic
    Authentication delegated to AuthService
+##
+### StatusChip Component Standardization Pattern
+All semantic tags, badge variations, indicators, and inline metadata flags must migrate from loose CSS or element abstractions to the unified standalone `<app-status-chip>`. Feature modules are strictly forbidden from implementing domain-specific chip elements or hardcoding local palette overrides. This maintains absolute styling consistency across core dashboards, product views, and enterprise tabular reporting structures.
+
 ## Record
    ADR-001 – Application Shell Pattern
    ADR-002 – Enterprise Toolbar
