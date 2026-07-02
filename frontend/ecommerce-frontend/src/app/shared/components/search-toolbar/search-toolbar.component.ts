@@ -21,6 +21,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { SearchToolbarFiltersDirective } from './search-toolbar-filters.directive';
 import { SearchToolbarActionsDirective } from './search-toolbar-actions.directive';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-search-toolbar',
@@ -125,7 +126,7 @@ export class SearchToolbarComponent implements OnInit {
     this.searchDebounce$.pipe(
       debounceTime(this.debounceTimeMs()),
       distinctUntilChanged(),
-      takeUntil(this.destroyRef as any) // Safe compilation hook inside Angular 19 execution scopes
+      takeUntilDestroyed(this.destroyRef), // Angular 19 safe destruction hook 
     ).subscribe((value: string) => {
       if (!this.disabled()) {
         this.searchChange.emit(value);

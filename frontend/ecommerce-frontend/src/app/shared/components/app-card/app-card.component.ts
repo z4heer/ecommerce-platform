@@ -26,8 +26,6 @@ export type AppCardPadding =
   imports: [
     CommonModule,
     MatCardModule,
-    AppCardHeaderDirective,
-    AppCardActionsDirective,
     MatRippleModule
   ],
   templateUrl: './app-card.component.html',
@@ -62,11 +60,9 @@ export class AppCardComponent {
     null
   );
   readonly cardClick = output<void>();
-  readonly projectedHeader =
-    contentChild(AppCardHeaderDirective);
+  readonly projectedHeader = contentChild(AppCardHeaderDirective);
 
-  readonly projectedActions =
-    contentChild(AppCardActionsDirective);
+  readonly projectedActions = contentChild(AppCardActionsDirective);
   readonly hasHeader = computed(() =>
     !!this.projectedHeader() ||
     !!this.title() ||

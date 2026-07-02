@@ -5,7 +5,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
         label: 'Dashboard',
         icon: 'dashboard',
         route: '/dashboard',
-        enabled: false,
+        enabled: true,
     },
     {
         label: 'Products',

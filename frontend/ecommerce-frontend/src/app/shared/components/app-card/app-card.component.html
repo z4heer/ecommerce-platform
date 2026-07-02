@@ -1,6 +1,6 @@
-<mat-card [ngClass]="cardClasses()" [attr.role]="role()" [attr.tabindex]="tabindex()"
+<mat-card matRipple [ngClass]="cardClasses()" [attr.role]="role()" [attr.tabindex]="tabindex()"
     [attr.aria-label]="computedAriaLabel()" [attr.aria-disabled]="disabled()" [attr.aria-busy]="loading()"
-    (click)="onCardClick()" [matRippleDisabled]="disabled() || !clickable()">
+    [matRippleDisabled]="disabled() || !clickable()" (click)="onCardClick()">
 
     @if (hasHeader()) {
     <mat-card-header class="app-card__header">
