@@ -1,32 +1,40 @@
-@if(product){
+<div class="detail-container">
+    <!-- Interactive Navigation Action Button -->
+    <button mat-stroked-button color="primary" class="back-btn" (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon> Back to Products
+    </button>
 
-<mat-card>
+    @if (product(); as prod) {
+    <mat-card class="product-card">
+        <mat-card-header>
+            <mat-card-title style="font-size: 28px; margin-bottom: 8px;">
+                {{ prod.name }}
+            </mat-card-title>
+            <mat-card-subtitle style="font-size: 16px;">
+                {{ prod.description }}
+            </mat-card-subtitle>
+        </mat-card-header>
 
-    <mat-card-title>
-        {{ product.name }}
-    </mat-card-title>
+        <mat-card-content style="margin-top: 16px;">
+            <div class="info-row">
+                <strong>Category:</strong> {{ prod.category }}
+            </div>
 
-    <mat-card-content>
+            <div class="info-row" style="color: #2e7d32; font-size: 18px;">
+                <strong>Price:</strong> ₹{{ prod.price | number:'1.2-2' }}
+            </div>
 
-        <p>{{ product.description }}</p>
-
-        <p>
-            Category:
-            {{ product.category }}
-        </p>
-
-        <p>
-            Price:
-            ₹ {{ product.price }}
-        </p>
-
-        <p>
-            Stock:
-            {{ product.stock_quantity }}
-        </p>
-
-    </mat-card-content>
-
-</mat-card>
-
-}
+            <div class="info-row">
+                <strong>Stock Status:</strong>
+                <!-- Safety guard evaluation helper to catch empty API variations -->
+                {{ prod.stock_quantity !== undefined && prod.stock_quantity !== null ? prod.stock_quantity : 'Out of
+                Stock' }}
+            </div>
+        </mat-card-content>
+    </mat-card>
+    } @else {
+    <div style="padding: 40px; text-align: center;">
+        <p>Loading product metadata profiles...</p>
+    </div>
+    }
+</div>
