@@ -2,7 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
-  inject
+  inject,
+  signal
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
@@ -13,17 +14,23 @@ import {
   Validators
 } from '@angular/forms';
 
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 import { AuthService } from '../../../../core/auth/services/auth.service';
 import { LoggerService } from '../../../../core/services/logger.service';
+
+// Enterprise Design System components
+import { PageContainerComponent } from '../../../../layout/page-container/page-container.component';
+import { PageHeaderComponent } from '../../../../layout/page-header/page-header.component';
+import { AppCardComponent } from '../../../../shared/components/app-card/app-card.component';
+import { LoadingSkeletonComponent } from '../../../../shared/components/loading-skeleton/loading-skeleton.component';
+import { ErrorStateComponent } from '../../../../shared/components/error-state/error-state.component';
 
 @Component({
   selector: 'app-login',
@@ -33,10 +40,17 @@ import { LoggerService } from '../../../../core/services/logger.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCardModule,
+    RouterLink,
     MatButtonModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+
+    // Design System
+    PageContainerComponent,
+    PageHeaderComponent,
+    AppCardComponent,
+    LoadingSkeletonComponent,
+    ErrorStateComponent
   ],
 
   templateUrl: './login.component.html',
@@ -56,6 +70,10 @@ export class LoginComponent {
   private readonly logger = inject(LoggerService);
 
   private readonly destroyRef = inject(DestroyRef);
+
+  // Presentation-only signals
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
 
   readonly loginForm = this.fb.nonNullable.group({
 
@@ -87,6 +105,9 @@ export class LoginComponent {
 
     }
 
+    this.error.set(null);
+    this.loading.set(true);
+
     this.logger.info(
       'Login requested.'
     );
@@ -106,6 +127,8 @@ export class LoginComponent {
             'User authenticated.'
           );
 
+          this.loading.set(false);
+
           this.router.navigate([
             '/products'
           ]);
@@ -124,6 +147,10 @@ export class LoginComponent {
             error
           );
 
+          // Preserve existing error handling while surfacing message in UI
+          const message = (error && (error.message || error.error?.message)) || 'Login failed. Please try again.';
+          this.error.set(message);
+          this.loading.set(false);
         }
 
       });

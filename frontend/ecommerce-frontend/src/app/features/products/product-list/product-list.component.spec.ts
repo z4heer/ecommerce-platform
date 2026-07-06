@@ -20,8 +20,8 @@ describe('ProductListComponent Integration Paths', () => {
     });
 
     beforeEach(async () => {
-        mockProductService = jasmine.createSpyObj('ProductService', ['getProductsQuery']);
-        mockProductService.getProductsQuery.and.returnValue(mockQuerySignal as any);
+        // ProductService exposes a "productsQuery" computed signal (not a method).
+        mockProductService = { productsQuery: mockQuerySignal } as any;
         mockRouter = jasmine.createSpyObj('Router', ['navigate']);
 
         await TestBed.configureTestingModule({
