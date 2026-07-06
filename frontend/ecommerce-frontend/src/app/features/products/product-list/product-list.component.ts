@@ -9,13 +9,14 @@ import { PageContainerComponent } from '../../../layout/page-container/page-cont
 import { PageHeaderComponent } from '../../../layout/page-header/page-header.component';
 
 // Shared Components
-import { SectionHeaderComponent } from '../../../shared/components/section-header/section-header.component';
 import { AppCardComponent } from '../../../shared/components/app-card/app-card.component';
 import { SearchToolbarComponent } from '../../../shared/components/search-toolbar/search-toolbar.component';
 import { StatusChipComponent } from '../../../shared/components/status-chip/status-chip.component';
 import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { ErrorStateComponent } from '../../../shared/components/error-state/error-state.component';
+import { ProductCategoryFilterComponent } from '../product-category-filter/product-category-filter.component';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-product-list',
@@ -24,13 +25,14 @@ import { ErrorStateComponent } from '../../../shared/components/error-state/erro
     CommonModule,
     PageContainerComponent,
     PageHeaderComponent,
-    SectionHeaderComponent,
     AppCardComponent,
     SearchToolbarComponent,
+    ProductCategoryFilterComponent,
     StatusChipComponent,
     LoadingSkeletonComponent,
     EmptyStateComponent,
-    ErrorStateComponent
+    ErrorStateComponent,
+    MatIconModule
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
@@ -102,6 +104,17 @@ export class ProductListComponent implements OnInit {
   }
 
   public resolveStatusLabel(status: string | undefined): string {
-    return status || 'Unknown';
+    if (!status || status.trim().toLowerCase() === 'unknown') {
+      return 'Not Available';
+    }
+    return status;
+  }
+
+  public resolveText(value: string | undefined, fallback = 'Not Available'): string {
+    return value && value.trim() ? value : fallback;
+  }
+
+  public resolveNumeric(value: number | undefined, fallback = 'N/A'): string {
+    return value !== undefined && value !== null ? `${value}` : fallback;
   }
 }
