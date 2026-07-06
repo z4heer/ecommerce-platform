@@ -1,11 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-
-import { ProductService }
-  from '../services/product.service';
 
 @Component({
   selector: 'app-product-category-filter',
@@ -15,28 +11,22 @@ import { ProductService }
     MatFormFieldModule,
     MatSelectModule
   ],
-  templateUrl:
-    './product-category-filter.component.html'
+  templateUrl: './product-category-filter.component.html'
 })
 export class ProductCategoryFilterComponent {
-
-  categories: string[] = [
+  // Made input signal-driven, default to standard collection values if not provided by parent
+  public readonly categories = input<string[]>([
     'Electronics',
     'Books',
     'Clothing',
     'Sports',
     'Home'
-  ];
+  ]);
 
-  constructor(
-    private productService: ProductService
-  ) { }
+  // Angular 19 declarative output stream
+  public readonly categoryChange = output<string>();
 
-  onCategoryChange(
-    category: string
-  ): void {
-
-    this.productService
-      .filterByCategory(category);
+  public onCategoryChange(category: string): void {
+    this.categoryChange.emit(category || 'All');
   }
 }
