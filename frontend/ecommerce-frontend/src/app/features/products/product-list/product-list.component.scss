@@ -6,14 +6,41 @@
 .controls-section {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
-.filter-group {
-    display: flex;
-    flex-direction: column;
+.search-filter-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) minmax(220px, 0.8fr);
     gap: 0.75rem;
+    align-items: center;
+    width: 100%;
+}
+
+.filter-column {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.filter-column app-product-category-filter {
+    width: 100%;
+    max-width: 320px;
+}
+
+@media (max-width: 900px) {
+    .search-filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-column {
+        justify-content: stretch;
+    }
+
+    .filter-column app-product-category-filter {
+        max-width: none;
+    }
 }
 
 .filter-chips {
@@ -53,7 +80,7 @@
     border: 0;
     height: 1px;
     background: var(--sys-outline-variant, #e0e0e0);
-    margin: 1.5rem 0;
+    margin: 1rem 0;
 }
 
 .grid-container {
@@ -103,6 +130,40 @@
     margin-bottom: 1rem;
 }
 
+.product-meta {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 1rem;
+}
+
+.meta-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--sys-on-surface-variant, #666);
+}
+
+.meta-label {
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.meta-value {
+    font-weight: 700;
+    color: var(--sys-on-surface, #111);
+}
+
+.image-placeholder {
+    width: 100%;
+    padding-top: 66.67%;
+    background-color: var(--sys-surface-variant, #f0f0f0);
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
 .product-category {
     font-size: 0.75rem;
     text-transform: uppercase;
@@ -133,6 +194,17 @@
     align-items: center;
     margin-top: auto;
     padding-top: 0.5rem;
+    gap: 0.75rem;
+}
+
+.product-card-action {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.75rem 1rem 1rem;
+}
+
+.product-card-action mat-icon {
+    color: var(--sys-on-surface-variant, #757575);
 }
 
 .product-price {

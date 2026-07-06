@@ -1,40 +1,66 @@
-<div class="detail-container">
-    <!-- Interactive Navigation Action Button -->
-    <button mat-stroked-button color="primary" class="back-btn" (click)="goBack()">
-        <mat-icon>arrow_back</mat-icon> Back to Products
-    </button>
+<app-page-container>
+    <app-page-header title="Product Details" subtitle="Inspect inventory item information and stock availability."></app-page-header>
 
-    @if (product(); as prod) {
-    <mat-card class="product-card">
-        <mat-card-header>
-            <mat-card-title style="font-size: 28px; margin-bottom: 8px;">
-                {{ prod.name }}
-            </mat-card-title>
-            <mat-card-subtitle style="font-size: 16px;">
-                {{ prod.description }}
-            </mat-card-subtitle>
-        </mat-card-header>
+    <section class="detail-content" aria-label="Product detail content">
+        <div class="action-row">
+            <button mat-stroked-button color="primary" class="back-btn" (click)="goBack()" aria-label="Back to products">
+                <mat-icon aria-hidden="true">arrow_back</mat-icon>
+                Back to Products
+            </button>
+        </div>
 
-        <mat-card-content style="margin-top: 16px;">
-            <div class="info-row">
-                <strong>Category:</strong> {{ prod.category }}
-            </div>
+        <app-loading-skeleton *ngIf="isLoading()" variant="card" [count]="1" class="detail-loading" aria-live="polite"
+            aria-busy="true">
+        </app-loading-skeleton>
 
-            <div class="info-row" style="color: #2e7d32; font-size: 18px;">
-                <strong>Price:</strong> ₹{{ prod.price | number:'1.2-2' }}
-            </div>
+        <app-error-state *ngIf="!isLoading() && error()" title="Unable to load product details"
+            [description]="error()?.message || 'Please try again later.'">
+        </app-error-state>
 
-            <div class="info-row">
-                <strong>Stock Status:</strong>
-                <!-- Safety guard evaluation helper to catch empty API variations -->
-                {{ prod.stock_quantity !== undefined && prod.stock_quantity !== null ? prod.stock_quantity : 'Out of
-                Stock' }}
-            </div>
-        </mat-card-content>
-    </mat-card>
-    } @else {
-    <div style="padding: 40px; text-align: center;">
-        <p>Loading product metadata profiles...</p>
-    </div>
-    }
-</div>
+        <ng-container *ngIf="!isLoading() && !error()">
+            <app-empty-state *ngIf="!product()" title="Product Not Found"
+                description="The requested inventory item could not be located. Please return to the product catalog.">
+            </app-empty-state>
+
+            <app-card *ngIf="product() as currentProduct" [title]="currentProduct.name"
+                [subtitle]="currentProduct.description" [ariaLabel]="currentProduct.name + ' details'">
+
+                <div class="detail-grid">
+                    <div class="detail-summary">
+                        <div class="detail-field">
+                            <span class="detail-label">Product ID</span>
+                            <span class="detail-value">{{ resolveText(currentProduct.id, 'Not Available') }}</span>
+                        </div>
+                        <div class="detail-field">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">{{ resolveText(currentProduct.category, 'Uncategorized') }}</span>
+                        </div>
+                        <div class="detail-field">
+                            <span class="detail-label">Stock Quantity</span>
+                            <span class="detail-value">{{ resolveNumeric(currentProduct.stock_quantity) }}</span>
+                        </div>
+                        <div class="detail-field">
+                            <span class="detail-label">Last Updated</span>
+                            <span class="detail-value">{{ currentProduct.created_at ? (currentProduct.created_at | date:'medium') : 'Not Available' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="detail-status-panel">
+                        <div class="detail-field">
+                            <span class="detail-label">Inventory Status</span>
+                            <app-status-chip [status]="mapStatusType(currentProduct.status)"
+                                [label]="resolveStatusLabel(currentProduct.status)"
+                                size="medium"
+                                ariaLabel="Inventory status for {{ currentProduct.name }}">
+                            </app-status-chip>
+                        </div>
+                        <div class="detail-field">
+                            <span class="detail-label">Price</span>
+                            <span class="detail-value">{{ currentProduct.price | currency }}</span>
+                        </div>
+                    </div>
+                </div>
+            </app-card>
+        </ng-container>
+    </section>
+</app-page-container>
