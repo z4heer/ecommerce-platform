@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 import {
   FormBuilder,
@@ -13,9 +13,6 @@ import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../../../core/auth/services/auth.service';
 import { environment } from '../../../../../environments/environment';
-import {
-  MatCardModule
-} from '@angular/material/card';
 
 import {
   MatInputModule
@@ -25,15 +22,28 @@ import {
   MatButtonModule
 } from '@angular/material/button';
 
+// Enterprise Design System components
+import { PageContainerComponent } from '../../../../layout/page-container/page-container.component';
+import { PageHeaderComponent } from '../../../../layout/page-header/page-header.component';
+import { AppCardComponent } from '../../../../shared/components/app-card/app-card.component';
+import { LoadingSkeletonComponent } from '../../../../shared/components/loading-skeleton/loading-skeleton.component';
+import { ErrorStateComponent } from '../../../../shared/components/error-state/error-state.component';
+
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCardModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+
+    // Design System
+    PageContainerComponent,
+    PageHeaderComponent,
+    AppCardComponent,
+    LoadingSkeletonComponent,
+    ErrorStateComponent
   ],
 
   templateUrl: './register.component.html'
@@ -41,6 +51,10 @@ import {
 export class RegisterComponent {
 
   registerForm!: FormGroup;
+
+  // Presentation only
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
 
   constructor(
     private fb: FormBuilder,
@@ -70,8 +84,12 @@ export class RegisterComponent {
   onSubmit(): void {
 
     if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
       return;
     }
+
+    this.error.set(null);
+    this.loading.set(true);
 
     this.authService
       .register(
@@ -83,11 +101,15 @@ export class RegisterComponent {
       .subscribe({
 
         next: () => {
+          this.loading.set(false);
           this.router.navigate(['/login']);
         },
 
         error: err => {
           console.error(err);
+          const message = (err && (err.message || err.error?.message)) || 'Registration failed. Please try again.';
+          this.error.set(message);
+          this.loading.set(false);
         }
       });
   }
