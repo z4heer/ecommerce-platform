@@ -8,11 +8,7 @@ describe('DashboardService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        DashboardService,
-        provideHttpClient(),
-        provideHttpClientTesting()
-      ]
+      providers: [DashboardService, provideHttpClient(), provideHttpClientTesting()],
     });
     service = TestBed.inject(DashboardService);
   });
@@ -27,7 +23,7 @@ describe('DashboardService', () => {
     // Force complete loading baseline initialization bypassing latency delay
     (service as any)._orders.set([
       { id: 'ORD-101', customerName: 'Alpha', amount: 10, status: 'pending', canCancel: true },
-      { id: 'ORD-202', customerName: 'Beta', amount: 20, status: 'completed', canCancel: false }
+      { id: 'ORD-202', customerName: 'Beta', amount: 20, status: 'completed', canCancel: false },
     ]);
 
     service.updateSearchQuery('Beta');

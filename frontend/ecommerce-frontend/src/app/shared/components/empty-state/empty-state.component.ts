@@ -15,8 +15,8 @@ export type EmptyStateSize = 'small' | 'medium' | 'large';
   host: {
     '[attr.role]': '"status"',
     '[attr.aria-label]': 'ariaLabel() || title()',
-    '[class]': 'hostClasses()'
-  }
+    '[class]': 'hostClasses()',
+  },
 })
 export class EmptyStateComponent {
   // Inputs using Angular 19 Signal API
@@ -40,7 +40,7 @@ export class EmptyStateComponent {
     return [
       'app-empty-state',
       `app-empty-state--${this.size()}`,
-      this.centered() ? 'app-empty-state--centered' : 'app-empty-state--left-aligned'
+      this.centered() ? 'app-empty-state--centered' : 'app-empty-state--left-aligned',
     ].join(' ');
   });
 }

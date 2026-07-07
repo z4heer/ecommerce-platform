@@ -1,28 +1,32 @@
-<div class="dialog-container" role="alertdialog" [attr.aria-label]="ariaLabel()"
-    [attr.aria-labelledby]="!ariaLabelInput() ? 'dialog-title-id' : null" [attr.aria-describedby]="'dialog-desc-id'"
-    [class]="'severity-' + dialogSeverity()">
+<div
+  class="dialog-container"
+  role="alertdialog"
+  [attr.aria-label]="ariaLabel()"
+  [attr.aria-labelledby]="!ariaLabelInput() ? 'dialog-title-id' : null"
+  [attr.aria-describedby]="'dialog-desc-id'"
+  [class]="'severity-' + dialogSeverity()"
+>
+  <h2 mat-dialog-title id="dialog-title-id" class="dialog-header">
+    @if (displayIcon()) {
+      <mat-icon class="header-icon" aria-hidden="true">{{ displayIcon() }}</mat-icon>
+    }
+    <span class="title-text">{{ dialogTitle() }}</span>
+  </h2>
 
-    <h2 mat-dialog-title id="dialog-title-id" class="dialog-header">
-        @if (displayIcon()) {
-        <mat-icon class="header-icon" aria-hidden="true">{{ displayIcon() }}</mat-icon>
-        }
-        <span class="title-text">{{ dialogTitle() }}</span>
-    </h2>
+  <mat-dialog-content id="dialog-desc-id" class="dialog-body">
+    <p class="message-text">{{ dialogMessage() }}</p>
 
-    <mat-dialog-content id="dialog-desc-id" class="dialog-body">
-        <p class="message-text">{{ dialogMessage() }}</p>
+    <div class="projected-content-wrapper">
+      <ng-content select="[dialog-content]"></ng-content>
+    </div>
+  </mat-dialog-content>
 
-        <div class="projected-content-wrapper">
-            <ng-content select="[dialog-content]"></ng-content>
-        </div>
-    </mat-dialog-content>
-
-    <mat-dialog-actions align="end" class="dialog-footer">
-        <button mat-button type="button" class="btn-cancel" (click)="onCancel()">
-            {{ cancelLabel() }}
-        </button>
-        <button mat-flat-button type="button" class="btn-confirm" cdkFocusInitial (click)="onConfirm()">
-            {{ confirmLabel() }}
-        </button>
-    </mat-dialog-actions>
+  <mat-dialog-actions align="end" class="dialog-footer">
+    <button mat-button type="button" class="btn-cancel" (click)="onCancel()">
+      {{ cancelLabel() }}
+    </button>
+    <button mat-flat-button type="button" class="btn-confirm" cdkFocusInitial (click)="onConfirm()">
+      {{ confirmLabel() }}
+    </button>
+  </mat-dialog-actions>
 </div>

@@ -1,26 +1,26 @@
 <header class="toolbar-header">
+  <mat-toolbar>
+    <nav class="toolbar-navigation" aria-label="Primary Navigation">
+      <!-- Left -->
 
-    <mat-toolbar>
-        <nav class="toolbar-navigation" aria-label="Primary Navigation">
-            <!-- Left -->
+      <section class="toolbar-section left">
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Toggle navigation"
+          (click)="onMenuClick()"
+        >
+          <mat-icon>shopping_cart</mat-icon>
+        </button>
 
-            <section class="toolbar-section left">
+        <span class="application-title">
+          {{ appTitle }}
+        </span>
+      </section>
 
-                <button mat-icon-button type="button" aria-label="Toggle navigation" (click)="onMenuClick()">
+      <!-- Center -->
 
-                    <mat-icon>shopping_cart</mat-icon>
-
-                </button>
-
-                <span class="application-title">
-                    {{ appTitle }}
-                </span>
-
-            </section>
-
-            <!-- Center -->
-
-            <!-- <section class="toolbar-section center">
+      <!-- <section class="toolbar-section center">
                 <div class="search-placeholder" aria-hidden="true">
                     <mat-icon>search</mat-icon>
 
@@ -29,55 +29,50 @@
 
             </section> -->
 
-            <!-- Right -->
+      <!-- Right -->
 
-            <section class="toolbar-section right">
+      <section class="toolbar-section right">
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Toggle navigation"
+          (click)="onMenuClick()"
+        >
+          <mat-icon>notifications_none</mat-icon>
+        </button>
 
-                <button mat-icon-button type="button" aria-label="Toggle navigation" (click)="onMenuClick()">
+        <button
+          mat-icon-button
+          type="button"
+          (click)="onMenuClick()"
+          [matMenuTriggerFor]="userMenu"
+          aria-label="User Menu"
+        >
+          <mat-icon>account_circle</mat-icon>
+        </button>
 
-                    <mat-icon>notifications_none</mat-icon>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item>
+            <mat-icon>person</mat-icon>
 
-                </button>
+            <span>Profile</span>
+          </button>
 
-                <button mat-icon-button type="button" (click)="onMenuClick()" [matMenuTriggerFor]="userMenu"
-                    aria-label="User Menu">
+          <button mat-menu-item>
+            <mat-icon>settings</mat-icon>
 
-                    <mat-icon>account_circle</mat-icon>
+            <span>Settings</span>
+          </button>
 
-                </button>
+          <mat-divider></mat-divider>
 
-                <mat-menu #userMenu="matMenu">
+          <button mat-menu-item (click)="logout()" aria-label="Logout">
+            <mat-icon>logout</mat-icon>
 
-                    <button mat-menu-item>
-
-                        <mat-icon>person</mat-icon>
-
-                        <span>Profile</span>
-
-                    </button>
-
-                    <button mat-menu-item>
-
-                        <mat-icon>settings</mat-icon>
-
-                        <span>Settings</span>
-
-                    </button>
-
-                    <mat-divider></mat-divider>
-
-                    <button mat-menu-item (click)="logout()" aria-label="Logout">
-
-                        <mat-icon>logout</mat-icon>
-
-                        <span>Logout</span>
-
-                    </button>
-
-                </mat-menu>
-
-            </section>
-        </nav>
-    </mat-toolbar>
-
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </section>
+    </nav>
+  </mat-toolbar>
 </header>

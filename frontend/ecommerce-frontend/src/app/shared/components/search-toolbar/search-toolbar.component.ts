@@ -8,7 +8,7 @@ import {
   OnInit,
   DestroyRef,
   inject,
-  effect
+  effect,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,11 +33,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './search-toolbar.component.html',
   styleUrls: ['./search-toolbar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchToolbarComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
@@ -65,13 +65,16 @@ export class SearchToolbarComponent implements OnInit {
   private readonly filtersContent = contentChild(SearchToolbarFiltersDirective);
   private readonly actionsContent = contentChild(SearchToolbarActionsDirective);
 
-  readonly searchControl = new FormControl<string>({ value: '', disabled: false }, { nonNullable: true });
+  readonly searchControl = new FormControl<string>(
+    { value: '', disabled: false },
+    { nonNullable: true },
+  );
 
   // Compute CSS Modifier Classes Reactively
   readonly modifierClasses = computed(() => ({
     'app-search-toolbar--dense': this.dense(),
     'app-search-toolbar--disabled': this.disabled(),
-    'app-search-toolbar--loading': this.loading()
+    'app-search-toolbar--loading': this.loading(),
   }));
 
   constructor() {
@@ -123,14 +126,16 @@ export class SearchToolbarComponent implements OnInit {
 
   private setupSearchDebouncePipeline(): void {
     // Dynamic stream configuration based on configuration signal properties
-    this.searchDebounce$.pipe(
-      debounceTime(this.debounceTimeMs()),
-      distinctUntilChanged(),
-      takeUntilDestroyed(this.destroyRef), // Angular 19 safe destruction hook 
-    ).subscribe((value: string) => {
-      if (!this.disabled()) {
-        this.searchChange.emit(value);
-      }
-    });
+    this.searchDebounce$
+      .pipe(
+        debounceTime(this.debounceTimeMs()),
+        distinctUntilChanged(),
+        takeUntilDestroyed(this.destroyRef), // Angular 19 safe destruction hook
+      )
+      .subscribe((value: string) => {
+        if (!this.disabled()) {
+          this.searchChange.emit(value);
+        }
+      });
   }
 }

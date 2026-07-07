@@ -1,99 +1,99 @@
 @use '@angular/material' as mat;
 
 :host {
-    display: block;
-    width: 100%;
+  display: block;
+  width: 100%;
 }
 
 .app-search-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background-color: var(--mat-sys-surface-container, #f8f9fa);
+  border: 1px solid var(--mat-sys-outline-variant, #e0e0e0);
+  transition: all 0.2s ease-in-out;
+
+  &__search-box {
+    flex: 1 1 300px;
+    min-width: 260px;
+
+    mat-form-field {
+      width: 100%;
+
+      // Angular Material Token Overrides for Layout Control
+      --mdc-outlined-text-field-container-shape: 6px;
+      --mdc-form-field-container-height: 48px;
+    }
+  }
+
+  &__search-icon {
+    color: var(--mat-sys-on-surface-variant, #757575);
+    margin-right: 8px;
+  }
+
+  &__spinner {
+    margin-right: 4px;
+  }
+
+  &__filters {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 16px;
-    padding: 12px 16px;
-    border-radius: 8px;
-    background-color: var(--mat-sys-surface-container, #f8f9fa);
-    border: 1px solid var(--mat-sys-outline-variant, #e0e0e0);
-    transition: all 0.2s ease-in-out;
+    gap: 12px;
+  }
 
-    &__search-box {
-        flex: 1 1 300px;
-        min-width: 260px;
+  &__spacer {
+    flex: 1 1 auto;
+  }
 
-        mat-form-field {
-            width: 100%;
+  &__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 
-            // Angular Material Token Overrides for Layout Control
-            --mdc-outlined-text-field-container-shape: 6px;
-            --mdc-form-field-container-height: 48px;
-        }
+  // Structural Dense Variant Rules
+  &--dense {
+    padding: 6px 12px;
+    gap: 12px;
+
+    .app-search-toolbar__search-box mat-form-field {
+      --mdc-form-field-container-height: 36px;
+      font-size: 13px;
     }
+  }
 
-    &__search-icon {
-        color: var(--mat-sys-on-surface-variant, #757575);
-        margin-right: 8px;
-    }
-
-    &__spinner {
-        margin-right: 4px;
-    }
-
-    &__filters {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-
-    &__spacer {
-        flex: 1 1 auto;
-    }
-
-    &__actions {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-
-    // Structural Dense Variant Rules
-    &--dense {
-        padding: 6px 12px;
-        gap: 12px;
-
-        .app-search-toolbar__search-box mat-form-field {
-            --mdc-form-field-container-height: 36px;
-            font-size: 13px;
-        }
-    }
-
-    &--disabled {
-        opacity: 0.6;
-        pointer-events: none;
-        background-color: var(--mat-sys-surface-container-low, #f1f3f4);
-    }
+  &--disabled {
+    opacity: 0.6;
+    pointer-events: none;
+    background-color: var(--mat-sys-surface-container-low, #f1f3f4);
+  }
 }
 
 // Media Query Strategy for Screen Breakpoints
 @media (max-width: 768px) {
-    .app-search-toolbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
+  .app-search-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
 
-        &__search-box {
-            flex: 1 1 100%;
-            width: 100%;
-        }
-
-        &__filters,
-        &__actions {
-            width: 100%;
-            display: flex;
-        }
-
-        &__spacer {
-            display: none; // Drop alignment element on narrow mobile views
-        }
+    &__search-box {
+      flex: 1 1 100%;
+      width: 100%;
     }
+
+    &__filters,
+    &__actions {
+      width: 100%;
+      display: flex;
+    }
+
+    &__spacer {
+      display: none; // Drop alignment element on narrow mobile views
+    }
+  }
 }

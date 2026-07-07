@@ -1,9 +1,5 @@
 <mat-form-field appearance="outline">
+  <mat-label> Search Products </mat-label>
 
-    <mat-label>
-        Search Products
-    </mat-label>
-
-    <input matInput [(ngModel)]="searchText" (keyup)="search()">
-
+  <input matInput [(ngModel)]="searchText" (keyup)="search()" />
 </mat-form-field>

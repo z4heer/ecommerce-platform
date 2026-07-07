@@ -6,12 +6,8 @@ import { MatSelectModule } from '@angular/material/select';
 @Component({
   selector: 'app-product-category-filter',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatSelectModule
-  ],
-  templateUrl: './product-category-filter.component.html'
+  imports: [CommonModule, MatFormFieldModule, MatSelectModule],
+  templateUrl: './product-category-filter.component.html',
 })
 export class ProductCategoryFilterComponent {
   // Made input signal-driven, default to standard collection values if not provided by parent
@@ -20,7 +16,7 @@ export class ProductCategoryFilterComponent {
     'Books',
     'Clothing',
     'Sports',
-    'Home'
+    'Home',
   ]);
 
   // Angular 19 declarative output stream

@@ -1,4 +1,11 @@
-import { Component, ChangeDetectionStrategy, inject, signal, computed, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  inject,
+  signal,
+  computed,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProductService } from '../services/product.service';
@@ -32,11 +39,11 @@ import { MatIconModule } from '@angular/material/icon';
     LoadingSkeletonComponent,
     EmptyStateComponent,
     ErrorStateComponent,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductListComponent implements OnInit {
   private readonly productService = inject(ProductService);
@@ -55,29 +62,33 @@ export class ProductListComponent implements OnInit {
     const data = this.productsQuery().data;
     return data.filter(product => {
       const matchesSearch = product.name.toLowerCase().includes(this.searchTerm().toLowerCase());
-      const matchesCategory = this.selectedCategory() === 'All' || product.category === this.selectedCategory();
+      const matchesCategory =
+        this.selectedCategory() === 'All' || product.category === this.selectedCategory();
       return matchesSearch && matchesCategory;
     });
-  });  // Category compilation loop with fallback array check
+  }); // Category compilation loop with fallback array check
   public readonly categories = computed(() => {
     const queryResult = this.productsQuery();
-    const rawData = queryResult && typeof queryResult === 'object' && 'data' in queryResult
-      ? (queryResult as any).data
-      : queryResult;
+    const rawData =
+      queryResult && typeof queryResult === 'object' && 'data' in queryResult
+        ? (queryResult as any).data
+        : queryResult;
 
     if (!Array.isArray(rawData)) return ['All'];
-    const uniqueCategories = Array.from(new Set(rawData.map((p: Product) => p.category).filter(Boolean)));
+    const uniqueCategories = Array.from(
+      new Set(rawData.map((p: Product) => p.category).filter(Boolean)),
+    );
     return ['All', ...uniqueCategories];
   });
   public ngOnInit(): void {
     this.productService.getProducts().subscribe({
-      next: (data) => {
+      next: data => {
         // Signals are automatically handled inside the service's tap operator!
         console.log('Catalog successfully loaded:', data);
       },
-      error: (err) => {
+      error: err => {
         console.error('Catalog fetch stream failed:', err);
-      }
+      },
     });
   }
   public onSearch(term: string): void {
@@ -96,10 +107,14 @@ export class ProductListComponent implements OnInit {
 
   public mapStatusType(status: string | undefined): 'success' | 'warning' | 'error' | 'neutral' {
     switch (status as ProductStatus) {
-      case 'In Stock': return 'success';
-      case 'Low Stock': return 'warning';
-      case 'Out of Stock': return 'error';
-      default: return 'neutral';
+      case 'In Stock':
+        return 'success';
+      case 'Low Stock':
+        return 'warning';
+      case 'Out of Stock':
+        return 'error';
+      default:
+        return 'neutral';
     }
   }
 

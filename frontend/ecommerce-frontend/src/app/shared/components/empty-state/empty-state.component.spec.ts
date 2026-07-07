@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { EmptyStateComponent } from './empty-state.component';
 import { EmptyActionsDirective } from './empty-actions.directive';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   standalone: true,
@@ -11,7 +12,7 @@ import { EmptyActionsDirective } from './empty-actions.directive';
     <app-empty-state title="Test Title" description="Test Description">
       <div empty-actions><button id="action-btn">Action</button></div>
     </app-empty-state>
-  `
+  `,
 })
 class TestHostComponent { }
 
@@ -21,7 +22,7 @@ describe('EmptyStateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EmptyStateComponent, TestHostComponent]
+      imports: [EmptyStateComponent, TestHostComponent, MatDialogModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(EmptyStateComponent);

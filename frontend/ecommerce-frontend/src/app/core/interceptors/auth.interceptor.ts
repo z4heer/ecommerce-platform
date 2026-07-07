@@ -13,33 +13,25 @@ import { StorageService } from '../services/storage.service';
  * Automatically attaches JWT access token to outgoing requests.
  */
 export const AuthInterceptor: HttpInterceptorFn = (request, next) => {
+  const storageService = inject(StorageService);
 
-    const storageService = inject(StorageService);
+  const accessToken = storageService.getAccessToken();
 
-    const accessToken = storageService.getAccessToken();
+  /**
+   * Skip Authorization header if no token exists.
+   */
+  if (!accessToken) {
+    return next(request);
+  }
 
-    /**
-     * Skip Authorization header if no token exists.
-     */
-    if (!accessToken) {
+  /**
+   * Clone immutable request.
+   */
+  const authenticatedRequest = request.clone({
+    setHeaders: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
-        return next(request);
-
-    }
-
-    /**
-     * Clone immutable request.
-     */
-    const authenticatedRequest = request.clone({
-
-        setHeaders: {
-
-            Authorization: `Bearer ${accessToken}`
-
-        }
-
-    });
-
-    return next(authenticatedRequest);
-
+  return next(authenticatedRequest);
 };

@@ -6,50 +6,47 @@ import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component'
 import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
-
-    //-------------------------------------------------------
-    // Authentication Area
-    //-------------------------------------------------------
-    {
+  //-------------------------------------------------------
+  // Authentication Area
+  //-------------------------------------------------------
+  {
+    path: '',
+    component: AuthLayoutComponent,
+    children: [
+      {
         path: '',
-        component: AuthLayoutComponent,
-        children: [
-            {
-                path: '',
-                loadChildren: () =>
-                    import('./features/auth/auth.routes')
-                        .then(m => m.AUTH_ROUTES)
-            }
-        ]
-    },
-    //-------------------------------------------------------
-    // Protected Area
-    //-------------------------------------------------------
-    {
+        loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES),
+      },
+    ],
+  },
+  //-------------------------------------------------------
+  // Protected Area
+  //-------------------------------------------------------
+  {
+    path: '',
 
-        path: '',
+    component: MainLayoutComponent,
 
-        component: MainLayoutComponent,
+    canActivate: [authGuard],
 
+    children: [
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES),
         canActivate: [authGuard],
-
-        children: [
-
-            {
-                path: 'dashboard',
-                loadChildren: () =>
-                    import('./features/dashboard/dashboard.routes')
-                        .then(m => m.DASHBOARD_ROUTES),
-                canActivate: [authGuard]
-            },
-            {
-                path: 'products',
-                loadChildren: () =>
-                    import('./features/products/product.routes')
-                        .then(m => m.PRODUCT_ROUTES),
-                canActivate: [authGuard]
-            },
-            /*            {
+      },
+      {
+        path: 'products',
+        loadChildren: () =>
+          import('./features/products/product.routes').then(m => m.PRODUCT_ROUTES),
+        canActivate: [authGuard],
+      },
+      {
+        path: 'cart',
+        loadChildren: () => import('./features/cart/cart.routes').then(m => m.CART_ROUTES),
+      },
+      /*            {
             
                             path: 'orders',
             
@@ -59,44 +56,29 @@ export const routes: Routes = [
             
                         },
             
-                        {
-            
-                            path: 'cart',
-            
-                            loadChildren: () =>
-                                import('./features/cart/cart.routes')
-                                    .then(m => m.CART_ROUTES)
-            
-                        }
             */
-        ]
+    ],
+  },
 
-    },
+  //-------------------------------------------------------
+  // Default
+  //-------------------------------------------------------
 
-    //-------------------------------------------------------
-    // Default
-    //-------------------------------------------------------
+  {
+    path: '',
 
-    {
+    pathMatch: 'full',
 
-        path: '',
+    redirectTo: 'dashboard',
+  },
 
-        pathMatch: 'full',
+  //-------------------------------------------------------
+  // Wildcard
+  //-------------------------------------------------------
 
-        redirectTo: 'dashboard'
+  {
+    path: '**',
 
-    },
-
-    //-------------------------------------------------------
-    // Wildcard
-    //-------------------------------------------------------
-
-    {
-
-        path: '**',
-
-        redirectTo: 'dashboard'
-
-    }
-
+    redirectTo: 'dashboard',
+  },
 ];

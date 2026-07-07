@@ -1,11 +1,6 @@
 import { Component, signal } from '@angular/core';
 
-import {
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-  FormGroup
-} from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 
 import { Router } from '@angular/router';
 
@@ -14,13 +9,9 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../../core/auth/services/auth.service';
 import { environment } from '../../../../../environments/environment';
 
-import {
-  MatInputModule
-} from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 
-import {
-  MatButtonModule
-} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 
 // Enterprise Design System components
 import { PageContainerComponent } from '../../../../layout/page-container/page-container.component';
@@ -43,13 +34,12 @@ import { ErrorStateComponent } from '../../../../shared/components/error-state/e
     PageHeaderComponent,
     AppCardComponent,
     LoadingSkeletonComponent,
-    ErrorStateComponent
+    ErrorStateComponent,
   ],
 
-  templateUrl: './register.component.html'
+  templateUrl: './register.component.html',
 })
 export class RegisterComponent {
-
   registerForm!: FormGroup;
 
   // Presentation only
@@ -59,30 +49,20 @@ export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {
-    this.registerForm =
-      this.fb.group({
+    this.registerForm = this.fb.group({
+      //        first_name: ['', Validators.required],
 
-        //        first_name: ['', Validators.required],
+      //        last_name: ['', Validators.required],
 
-        //        last_name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
 
-        email: [
-          '',
-          [Validators.required, Validators.email]
-        ],
-
-        password: [
-          '',
-          [Validators.required]
-        ]
-      });
-
+      password: ['', [Validators.required]],
+    });
   }
 
   onSubmit(): void {
-
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;
@@ -92,14 +72,11 @@ export class RegisterComponent {
     this.loading.set(true);
 
     this.authService
-      .register(
-        {
-          ...this.registerForm.getRawValue(),
-          role_id: environment.customerRoleId
-        } as any
-      )
+      .register({
+        ...this.registerForm.getRawValue(),
+        role_id: environment.customerRoleId,
+      } as any)
       .subscribe({
-
         next: () => {
           this.loading.set(false);
           this.router.navigate(['/login']);
@@ -107,10 +84,12 @@ export class RegisterComponent {
 
         error: err => {
           console.error(err);
-          const message = (err && (err.message || err.error?.message)) || 'Registration failed. Please try again.';
+          const message =
+            (err && (err.message || err.error?.message)) ||
+            'Registration failed. Please try again.';
           this.error.set(message);
           this.loading.set(false);
-        }
+        },
       });
   }
 }

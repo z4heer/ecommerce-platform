@@ -19,7 +19,7 @@ export interface SystemOrder {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DashboardService {
   private readonly http = inject(HttpClient);
@@ -46,9 +46,9 @@ export class DashboardService {
       return allOrders;
     }
 
-    return allOrders.filter(order =>
-      order.id.toLowerCase().includes(query) ||
-      order.customerName.toLowerCase().includes(query)
+    return allOrders.filter(
+      order =>
+        order.id.toLowerCase().includes(query) || order.customerName.toLowerCase().includes(query),
     );
   });
 
@@ -69,24 +69,48 @@ export class DashboardService {
         { id: 'm1', label: 'Quarterly Revenue', value: '$1,248,900', trend: 'up' },
         { id: 'm2', label: 'Active Sessions', value: '3,842', trend: 'stable' },
         { id: 'm3', label: 'System Error Rate', value: '0.04%', trend: 'down' },
-        { id: 'm4', label: 'Pending Fulfillments', value: '142', trend: 'up' }
+        { id: 'm4', label: 'Pending Fulfillments', value: '142', trend: 'up' },
       ] as MetricItem[],
       orders: [
-        { id: 'ORD-8492', customerName: 'Acme Corp Logistics', amount: 12450.00, status: 'pending', canCancel: true },
-        { id: 'ORD-7721', customerName: 'Global Retail Systems', amount: 3400.50, status: 'completed', canCancel: false },
-        { id: 'ORD-6109', customerName: 'Nexa Industries Ltd', amount: 450.00, status: 'cancelled', canCancel: false },
-        { id: 'ORD-5541', customerName: 'Apex Development Corp', amount: 8910.00, status: 'pending', canCancel: true }
-      ] as SystemOrder[]
+        {
+          id: 'ORD-8492',
+          customerName: 'Acme Corp Logistics',
+          amount: 12450.0,
+          status: 'pending',
+          canCancel: true,
+        },
+        {
+          id: 'ORD-7721',
+          customerName: 'Global Retail Systems',
+          amount: 3400.5,
+          status: 'completed',
+          canCancel: false,
+        },
+        {
+          id: 'ORD-6109',
+          customerName: 'Nexa Industries Ltd',
+          amount: 450.0,
+          status: 'cancelled',
+          canCancel: false,
+        },
+        {
+          id: 'ORD-5541',
+          customerName: 'Apex Development Corp',
+          amount: 8910.0,
+          status: 'pending',
+          canCancel: true,
+        },
+      ] as SystemOrder[],
     })
       .pipe(
         delay(800), // Simulate network threshold latency
-        catchError((err) => {
+        catchError(err => {
           this._error.set(err?.message || 'Failed to sync with upstream dashboard services.');
           return of({ metrics: [], orders: [] });
         }),
-        finalize(() => this._isLoading.set(false))
+        finalize(() => this._isLoading.set(false)),
       )
-      .subscribe((data) => {
+      .subscribe(data => {
         this._metrics.set(data.metrics);
         this._orders.set(data.orders);
       });
@@ -110,19 +134,17 @@ export class DashboardService {
       .pipe(
         delay(400),
         tap(() => {
-          this._orders.update((currentOrders) =>
-            currentOrders.map((order) =>
-              order.id === orderId
-                ? { ...order, status: 'cancelled', canCancel: false }
-                : order
-            )
+          this._orders.update(currentOrders =>
+            currentOrders.map(order =>
+              order.id === orderId ? { ...order, status: 'cancelled', canCancel: false } : order,
+            ),
           );
         }),
-        catchError((err) => {
+        catchError(err => {
           this._error.set(`Failed to cancel order ${orderId}: ${err?.message}`);
           return of(null);
         }),
-        finalize(() => this._isLoading.set(false))
+        finalize(() => this._isLoading.set(false)),
       )
       .subscribe();
   }

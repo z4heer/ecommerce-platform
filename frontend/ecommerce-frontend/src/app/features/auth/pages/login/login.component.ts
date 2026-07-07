@@ -1,18 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-  signal
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Router, RouterLink } from '@angular/router';
 
@@ -50,17 +40,16 @@ import { ErrorStateComponent } from '../../../../shared/components/error-state/e
     PageHeaderComponent,
     AppCardComponent,
     LoadingSkeletonComponent,
-    ErrorStateComponent
+    ErrorStateComponent,
   ],
 
   templateUrl: './login.component.html',
 
   styleUrl: './login.component.scss',
 
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-
   private readonly fb = inject(FormBuilder);
 
   private readonly authService = inject(AuthService);
@@ -76,85 +65,49 @@ export class LoginComponent {
   readonly error = signal<string | null>(null);
 
   readonly loginForm = this.fb.nonNullable.group({
+    email: ['', [Validators.required, Validators.email]],
 
-    email: [
-      '',
-      [
-        Validators.required,
-        Validators.email
-      ]
-    ],
-
-    password: [
-      '',
-      [
-        Validators.required,
-        Validators.minLength(6)
-      ]
-    ]
-
+    password: ['', [Validators.required, Validators.minLength(6)]],
   });
 
   login(): void {
-
     if (this.loginForm.invalid) {
-
       this.loginForm.markAllAsTouched();
 
       return;
-
     }
 
     this.error.set(null);
     this.loading.set(true);
 
-    this.logger.info(
-      'Login requested.'
-    );
+    this.logger.info('Login requested.');
 
     this.authService
-      .login(
-        this.loginForm.getRawValue()
-      )
-      .pipe(
-        takeUntilDestroyed(this.destroyRef)
-      )
+      .login(this.loginForm.getRawValue())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-
         next: () => {
-
-          this.logger.info(
-            'User authenticated.'
-          );
+          this.logger.info('User authenticated.');
 
           this.loading.set(false);
 
-          this.router.navigate([
-            '/products'
-          ]);
-
+          this.router.navigate(['/products']);
         },
 
         error: error => {
-
           /**
            * ErrorInterceptor has already
            * transformed the error.
            */
 
-          this.logger.error(
-            'Login failed.',
-            error
-          );
+          this.logger.error('Login failed.', error);
 
           // Preserve existing error handling while surfacing message in UI
-          const message = (error && (error.message || error.error?.message)) || 'Login failed. Please try again.';
+          const message =
+            (error && (error.message || error.error?.message)) || 'Login failed. Please try again.';
           this.error.set(message);
           this.loading.set(false);
-        }
-
+        },
       });
-
   }
-
 }

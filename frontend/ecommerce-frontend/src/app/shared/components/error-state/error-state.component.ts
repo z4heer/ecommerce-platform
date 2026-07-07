@@ -1,10 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  input,
-  computed,
-  contentChild
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed, contentChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ErrorPrimaryActionDirective } from './error-primary-action.directive';
@@ -20,15 +14,15 @@ export type ErrorSeverity = 'warning' | 'error' | 'critical';
   styleUrls: ['./error-state.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    'role': 'alert',
+    role: 'alert',
     'aria-live': 'assertive',
     '[attr.aria-label]': 'ariaLabel() || title()',
     '[class.app-error-state-centered]': 'centered()',
     '[class.app-error-state-left]': '!centered()',
     '[class.severity-warning]': 'severity() === "warning"',
     '[class.severity-error]': 'severity() === "error"',
-    '[class.severity-critical]': 'severity() === "critical"'
-  }
+    '[class.severity-critical]': 'severity() === "critical"',
+  },
 })
 export class ErrorStateComponent {
   // Required Inputs
@@ -54,8 +48,10 @@ export class ErrorStateComponent {
   readonly fallbackIcon = computed(() => {
     if (this.icon()) return this.icon();
     switch (this.severity()) {
-      case 'warning': return 'warning';
-      case 'critical': return 'gpp_maybe';
+      case 'warning':
+        return 'warning';
+      case 'critical':
+        return 'gpp_maybe';
       case 'error':
       default:
         return 'error_outline';

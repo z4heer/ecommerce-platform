@@ -1,20 +1,20 @@
 :host {
-    display: block;
-    height: 100%;
+  display: block;
+  height: 100%;
 }
 
 .app-sidenav {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 }
 
 mat-nav-list {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 0.5rem 0;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem 0;
 }
 
 /* ----------------------------------------------------
@@ -22,15 +22,15 @@ mat-nav-list {
 ----------------------------------------------------- */
 
 .nav-item {
-    height: 48px !important;
-    margin: 0.25rem 0.75rem;
-    border-radius: 8px;
-    transition:
-        background-color 200ms ease,
-        color 200ms ease;
+  height: 48px !important;
+  margin: 0.25rem 0.75rem;
+  border-radius: 8px;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
 
-    text-decoration: none;
-    cursor: pointer;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 /* ----------------------------------------------------
@@ -38,7 +38,7 @@ mat-nav-list {
 ----------------------------------------------------- */
 
 a.nav-item:hover:not(.active) {
-    background-color: rgba(0, 0, 0, 0.04);
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 /* ----------------------------------------------------
@@ -46,12 +46,12 @@ a.nav-item:hover:not(.active) {
 ----------------------------------------------------- */
 
 a.active {
-    font-weight: 600;
-    background-color: rgba(25, 118, 210, 0.12);
+  font-weight: 600;
+  background-color: rgba(25, 118, 210, 0.12);
 }
 
 a.active mat-icon {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 /* ----------------------------------------------------
@@ -59,7 +59,7 @@ a.active mat-icon {
 ----------------------------------------------------- */
 
 mat-icon {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 /* ----------------------------------------------------
@@ -67,12 +67,12 @@ mat-icon {
 ----------------------------------------------------- */
 
 .menu-badge {
-    min-width: 24px;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: .75rem;
-    font-weight: 600;
-    text-align: center;
+  min-width: 24px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
 }
 
 /* ----------------------------------------------------
@@ -80,18 +80,18 @@ mat-icon {
 ----------------------------------------------------- */
 
 .nav-item.disabled {
-    cursor: default;
-    opacity: .60;
+  cursor: default;
+  opacity: 0.6;
 }
 
 .nav-item.disabled:hover {
-    background: transparent;
+  background: transparent;
 }
 
 .coming-soon {
-    font-size: .75rem;
-    font-style: italic;
-    white-space: nowrap;
+  font-size: 0.75rem;
+  font-style: italic;
+  white-space: nowrap;
 }
 
 /* ----------------------------------------------------
@@ -99,8 +99,8 @@ mat-icon {
 ----------------------------------------------------- */
 
 .nav-item:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 2px;
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 /* ----------------------------------------------------
@@ -108,12 +108,12 @@ mat-icon {
 ----------------------------------------------------- */
 
 mat-nav-list::-webkit-scrollbar {
-    width: 8px;
+  width: 8px;
 }
 
 mat-nav-list::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: rgba(0, 0, 0, .18);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.18);
 }
 
 /* ----------------------------------------------------
@@ -121,11 +121,9 @@ mat-nav-list::-webkit-scrollbar-thumb {
 ----------------------------------------------------- */
 
 @media (max-width: 1024px) {
-
-    .nav-item {
-        margin-inline: .5rem;
-    }
-
+  .nav-item {
+    margin-inline: 0.5rem;
+  }
 }
 
 /* ----------------------------------------------------
@@ -133,13 +131,9 @@ mat-nav-list::-webkit-scrollbar-thumb {
 ----------------------------------------------------- */
 
 @media (max-width: 768px) {
+  .nav-item {
+    height: 52px !important;
 
-    .nav-item {
-
-        height: 52px !important;
-
-        margin-inline: .5rem;
-
-    }
-
+    margin-inline: 0.5rem;
+  }
 }

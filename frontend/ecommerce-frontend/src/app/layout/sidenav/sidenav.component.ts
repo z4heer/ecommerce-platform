@@ -1,8 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -24,17 +20,16 @@ import { NAVIGATION_ITEMS } from '../layout.config';
     MatListModule,
     MatIconModule,
     MatButtonModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
 
   templateUrl: './sidenav.component.html',
 
   styleUrls: ['./sidenav.component.scss'],
 
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidenavComponent {
-
   /**
    * Current navigation configuration.
    * All future modules should be added in layout.config.ts
@@ -52,19 +47,14 @@ export class SidenavComponent {
   /**
    * TrackBy improves rendering performance.
    */
-  trackByRoute(
-    index: number,
-    item: NavigationItem
-  ): string {
+  trackByRoute(index: number, item: NavigationItem): string {
     return item.route;
   }
 
   /**
    * Returns true when menu item can navigate.
    */
-  isEnabled(
-    item: NavigationItem
-  ): boolean {
+  isEnabled(item: NavigationItem): boolean {
     return item.enabled;
   }
 }

@@ -1,17 +1,15 @@
 export interface NavigationItem {
+  label: string;
 
-    label: string;
+  icon: string;
 
-    icon: string;
+  route: string;
 
-    route: string;
+  enabled: boolean;
 
-    enabled: boolean;
+  badge?: string;
 
-    badge?: string;
+  requiredRole?: string;
 
-    requiredRole?: string;
-
-    children?: NavigationItem[];
-
+  children?: NavigationItem[];
 }

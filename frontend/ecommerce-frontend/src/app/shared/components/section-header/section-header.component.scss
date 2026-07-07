@@ -1,130 +1,130 @@
 :host {
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .app-section-header {
-    &__container {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: var(--mat-sys-spacing-medium, 16px);
-        padding: var(--mat-sys-spacing-medium, 16px) 0;
-        width: 100%;
+  &__container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--mat-sys-spacing-medium, 16px);
+    padding: var(--mat-sys-spacing-medium, 16px) 0;
+    width: 100%;
 
-        // Alignment Modifiers
-        &--align-start {
-            justify-content: flex-start;
+    // Alignment Modifiers
+    &--align-start {
+      justify-content: flex-start;
 
-            .app-section-header__spacer {
-                display: none;
-            }
-        }
-
-        &--align-center {
-            justify-content: center;
-            text-align: center;
-
-            .app-section-header__spacer {
-                display: none;
-            }
-
-            .app-section-header__content-block {
-                flex: 0 1 auto;
-            }
-        }
-
-        &--align-space-between {
-            justify-content: space-between;
-        }
+      .app-section-header__spacer {
+        display: none;
+      }
     }
 
-    &__content-block {
-        display: flex;
-        flex-direction: column;
-        gap: var(--mat-sys-spacing-x-small, 4px);
-        flex: 1 1 auto;
-        min-width: 200px;
-    }
+    &--align-center {
+      justify-content: center;
+      text-align: center;
 
-    &__title {
-        margin: 0;
-        font: var(--mat-sys-typescale-title-large-font, var(--mat-typography-headline-6-font-family));
-        font-size: var(--mat-sys-typescale-title-large-size, 1.25rem);
-        font-weight: var(--mat-sys-typescale-title-large-weight, 500);
-        letter-spacing: var(--mat-sys-typescale-title-large-tracking, 0.015em);
-        color: var(--mat-sys-on-surface, rgba(0, 0, 0, 0.87));
-    }
+      .app-section-header__spacer {
+        display: none;
+      }
 
-    &__subtitle {
-        margin: 0;
-        font: var(--mat-sys-typescale-body-medium-font, var(--mat-typography-body-2-font-family));
-        font-size: var(--mat-sys-typescale-body-medium-size, 0.875rem);
-        color: var(--mat-sys-on-surface-variant, rgba(0, 0, 0, 0.6));
-    }
-
-    &__meta-block {
-        display: flex;
-        align-items: center;
-        gap: var(--mat-sys-spacing-small, 8px);
+      .app-section-header__content-block {
         flex: 0 1 auto;
+      }
     }
 
-    &__spacer {
-        flex: 1 1 auto;
+    &--align-space-between {
+      justify-content: space-between;
+    }
+  }
 
-        @media (max-width: 768px) {
-            display: none;
-        }
+  &__content-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mat-sys-spacing-x-small, 4px);
+    flex: 1 1 auto;
+    min-width: 200px;
+  }
+
+  &__title {
+    margin: 0;
+    font: var(--mat-sys-typescale-title-large-font, var(--mat-typography-headline-6-font-family));
+    font-size: var(--mat-sys-typescale-title-large-size, 1.25rem);
+    font-weight: var(--mat-sys-typescale-title-large-weight, 500);
+    letter-spacing: var(--mat-sys-typescale-title-large-tracking, 0.015em);
+    color: var(--mat-sys-on-surface, rgba(0, 0, 0, 0.87));
+  }
+
+  &__subtitle {
+    margin: 0;
+    font: var(--mat-sys-typescale-body-medium-font, var(--mat-typography-body-2-font-family));
+    font-size: var(--mat-sys-typescale-body-medium-size, 0.875rem);
+    color: var(--mat-sys-on-surface-variant, rgba(0, 0, 0, 0.6));
+  }
+
+  &__meta-block {
+    display: flex;
+    align-items: center;
+    gap: var(--mat-sys-spacing-small, 8px);
+    flex: 0 1 auto;
+  }
+
+  &__spacer {
+    flex: 1 1 auto;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  &__actions-block {
+    display: flex;
+    align-items: center;
+    gap: var(--mat-sys-spacing-small, 8px);
+    flex: 0 1 auto;
+
+    @media (max-width: 599px) {
+      width: 100%;
+      justify-content: flex-start;
+    }
+  }
+
+  &__divider {
+    margin-top: var(--mat-sys-spacing-small, 8px);
+  }
+
+  // Dense Variant Overrides
+  &--dense {
+    .app-section-header__container {
+      padding: var(--mat-sys-spacing-small, 8px) 0;
+      gap: var(--mat-sys-spacing-small, 8px);
     }
 
-    &__actions-block {
-        display: flex;
-        align-items: center;
-        gap: var(--mat-sys-spacing-small, 8px);
-        flex: 0 1 auto;
-
-        @media (max-width: 599px) {
-            width: 100%;
-            justify-content: flex-start;
-        }
+    .app-section-header__title {
+      font-size: var(--mat-sys-typescale-title-medium-size, 1rem);
     }
 
-    &__divider {
-        margin-top: var(--mat-sys-spacing-small, 8px);
+    .app-section-header__subtitle {
+      font-size: var(--mat-sys-typescale-body-small-size, 0.75rem);
     }
-
-    // Dense Variant Overrides
-    &--dense {
-        .app-section-header__container {
-            padding: var(--mat-sys-spacing-small, 8px) 0;
-            gap: var(--mat-sys-spacing-small, 8px);
-        }
-
-        .app-section-header__title {
-            font-size: var(--mat-sys-typescale-title-medium-size, 1rem);
-        }
-
-        .app-section-header__subtitle {
-            font-size: var(--mat-sys-typescale-body-small-size, 0.75rem);
-        }
-    }
+  }
 }
 
 // Media Query Breakdown Shifts for Tablet / Mobile Layouts
 @media (max-width: 768px) {
-    .app-section-header__container {
-        flex-direction: column;
-        align-items: flex-start;
+  .app-section-header__container {
+    flex-direction: column;
+    align-items: flex-start;
 
-        &--align-center {
-            align-items: center;
-        }
+    &--align-center {
+      align-items: center;
     }
+  }
 
-    .app-section-header__meta-block,
-    .app-section-header__actions-block {
-        width: 100%;
-    }
+  .app-section-header__meta-block,
+  .app-section-header__actions-block {
+    width: 100%;
+  }
 }

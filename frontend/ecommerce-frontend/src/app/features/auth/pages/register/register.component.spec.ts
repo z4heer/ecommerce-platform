@@ -1,8 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { RegisterComponent } from './register.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
@@ -10,10 +11,10 @@ describe('RegisterComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        RegisterComponent,
-        HttpClientTestingModule,
-        RouterTestingModule
+      imports: [RegisterComponent, MatDialogModule],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting
       ]
     }).compileComponents();
 

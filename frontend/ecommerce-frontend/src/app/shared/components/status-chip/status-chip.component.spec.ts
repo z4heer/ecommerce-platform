@@ -1,24 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { StatusChipComponent, StatusChipType, StatusChipAppearance, StatusChipSize } from './status-chip.component';
+import {
+  StatusChipComponent,
+  StatusChipType,
+  StatusChipAppearance,
+  StatusChipSize,
+} from './status-chip.component';
 
 @Component({
   standalone: true,
   imports: [StatusChipComponent],
   template: `
-    <app-status-chip 
-      [label]="label()" 
-      [status]="status()" 
-      [appearance]="appearance()" 
-      [size]="size()" 
-      [icon]="icon()" 
-      [clickable]="clickable()" 
+    <app-status-chip
+      [label]="label()"
+      [status]="status()"
+      [appearance]="appearance()"
+      [size]="size()"
+      [icon]="icon()"
+      [clickable]="clickable()"
       [disabled]="disabled()"
       [ariaLabel]="ariaLabel()"
-      (chipClick)="onClicked()">
+      (chipClick)="onClicked()"
+    >
     </app-status-chip>
-  `
+  `,
 })
 class TestHostComponent {
   readonly label = signal<string>('Test Label');
@@ -43,7 +49,7 @@ describe('StatusChipComponent (Enterprise Test Suite)', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [StatusChipComponent, TestHostComponent]
+      imports: [StatusChipComponent, TestHostComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -103,11 +109,15 @@ describe('StatusChipComponent (Enterprise Test Suite)', () => {
   });
 
   it('should format or fall back context variables for aria labels gracefully', () => {
-    expect(chipDebugElement.nativeElement.getAttribute('aria-label')).toBe('Test Label (neutral status)');
+    expect(chipDebugElement.nativeElement.getAttribute('aria-label')).toBe(
+      'Test Label (neutral status)',
+    );
 
     hostComponent.ariaLabel.set('Custom Diagnostic Tooltip Content');
     fixture.detectChanges();
-    expect(chipDebugElement.nativeElement.getAttribute('aria-label')).toBe('Custom Diagnostic Tooltip Content');
+    expect(chipDebugElement.nativeElement.getAttribute('aria-label')).toBe(
+      'Custom Diagnostic Tooltip Content',
+    );
   });
 
   it('should fire event emissions upon structural mouse click activations', () => {

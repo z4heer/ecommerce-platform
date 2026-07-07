@@ -1,28 +1,28 @@
 <div class="app-section-header__container" [ngClass]="layoutClass()">
-    <div class="app-section-header__content-block">
-        <h2 class="app-section-header__title">{{ title() }}</h2>
-        @if (subtitle()) {
-        <p class="app-section-header__subtitle">{{ subtitle() }}</p>
-        }
-    </div>
+  <div class="app-section-header__content-block">
+    <h2 class="app-section-header__title">{{ title() }}</h2>
+    @if (subtitle()) {
+      <p class="app-section-header__subtitle">{{ subtitle() }}</p>
+    }
+  </div>
 
-    @if (hasMeta()) {
+  @if (hasMeta()) {
     <div class="app-section-header__meta-block">
-        <ng-content select="[section-meta]"></ng-content>
+      <ng-content select="[section-meta]"></ng-content>
     </div>
-    }
+  }
 
-    @if (hasActions() || hasMeta()) {
+  @if (hasActions() || hasMeta()) {
     <div class="app-section-header__spacer"></div>
-    }
+  }
 
-    @if (hasActions()) {
+  @if (hasActions()) {
     <div class="app-section-header__actions-block">
-        <ng-content select="[section-actions]"></ng-content>
+      <ng-content select="[section-actions]"></ng-content>
     </div>
-    }
+  }
 </div>
 
 @if (showDivider()) {
-<mat-divider class="app-section-header__divider"></mat-divider>
+  <mat-divider class="app-section-header__divider"></mat-divider>
 }

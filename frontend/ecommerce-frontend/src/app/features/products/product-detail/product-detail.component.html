@@ -1,66 +1,100 @@
 <app-page-container>
-    <app-page-header title="Product Details" subtitle="Inspect inventory item information and stock availability."></app-page-header>
+  <app-page-header
+    title="Product Details"
+    subtitle="Inspect inventory item information and stock availability."
+  ></app-page-header>
 
-    <section class="detail-content" aria-label="Product detail content">
-        <div class="action-row">
-            <button mat-stroked-button color="primary" class="back-btn" (click)="goBack()" aria-label="Back to products">
-                <mat-icon aria-hidden="true">arrow_back</mat-icon>
-                Back to Products
-            </button>
+  <section class="detail-content" aria-label="Product detail content">
+    <div class="action-row">
+      <button
+        mat-stroked-button
+        color="primary"
+        class="back-btn"
+        (click)="goBack()"
+        aria-label="Back to products"
+      >
+        <mat-icon aria-hidden="true">arrow_back</mat-icon>
+        Back to Products
+      </button>
+    </div>
+
+    <app-loading-skeleton
+      *ngIf="isLoading()"
+      variant="card"
+      [count]="1"
+      class="detail-loading"
+      aria-live="polite"
+      aria-busy="true"
+    >
+    </app-loading-skeleton>
+
+    <app-error-state
+      *ngIf="!isLoading() && error()"
+      title="Unable to load product details"
+      [description]="error()?.message || 'Please try again later.'"
+    >
+    </app-error-state>
+
+    <ng-container *ngIf="!isLoading() && !error()">
+      <app-empty-state
+        *ngIf="!product()"
+        title="Product Not Found"
+        description="The requested inventory item could not be located. Please return to the product catalog."
+      >
+      </app-empty-state>
+
+      <app-card
+        *ngIf="product() as currentProduct"
+        [title]="currentProduct.name"
+        [subtitle]="currentProduct.description"
+        [ariaLabel]="currentProduct.name + ' details'"
+      >
+        <div class="detail-grid">
+          <div class="detail-summary">
+            <div class="detail-field">
+              <span class="detail-label">Product ID</span>
+              <span class="detail-value">{{
+                resolveText(currentProduct.id, 'Not Available')
+              }}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Category</span>
+              <span class="detail-value">{{
+                resolveText(currentProduct.category, 'Uncategorized')
+              }}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Stock Quantity</span>
+              <span class="detail-value">{{ resolveNumeric(currentProduct.stock_quantity) }}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Last Updated</span>
+              <span class="detail-value">{{
+                currentProduct.created_at
+                  ? (currentProduct.created_at | date: 'medium')
+                  : 'Not Available'
+              }}</span>
+            </div>
+          </div>
+
+          <div class="detail-status-panel">
+            <div class="detail-field">
+              <span class="detail-label">Inventory Status</span>
+              <app-status-chip
+                [status]="mapStatusType(currentProduct.status)"
+                [label]="resolveStatusLabel(currentProduct.status)"
+                size="medium"
+                ariaLabel="Inventory status for {{ currentProduct.name }}"
+              >
+              </app-status-chip>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Price</span>
+              <span class="detail-value">{{ currentProduct.price | currency }}</span>
+            </div>
+          </div>
         </div>
-
-        <app-loading-skeleton *ngIf="isLoading()" variant="card" [count]="1" class="detail-loading" aria-live="polite"
-            aria-busy="true">
-        </app-loading-skeleton>
-
-        <app-error-state *ngIf="!isLoading() && error()" title="Unable to load product details"
-            [description]="error()?.message || 'Please try again later.'">
-        </app-error-state>
-
-        <ng-container *ngIf="!isLoading() && !error()">
-            <app-empty-state *ngIf="!product()" title="Product Not Found"
-                description="The requested inventory item could not be located. Please return to the product catalog.">
-            </app-empty-state>
-
-            <app-card *ngIf="product() as currentProduct" [title]="currentProduct.name"
-                [subtitle]="currentProduct.description" [ariaLabel]="currentProduct.name + ' details'">
-
-                <div class="detail-grid">
-                    <div class="detail-summary">
-                        <div class="detail-field">
-                            <span class="detail-label">Product ID</span>
-                            <span class="detail-value">{{ resolveText(currentProduct.id, 'Not Available') }}</span>
-                        </div>
-                        <div class="detail-field">
-                            <span class="detail-label">Category</span>
-                            <span class="detail-value">{{ resolveText(currentProduct.category, 'Uncategorized') }}</span>
-                        </div>
-                        <div class="detail-field">
-                            <span class="detail-label">Stock Quantity</span>
-                            <span class="detail-value">{{ resolveNumeric(currentProduct.stock_quantity) }}</span>
-                        </div>
-                        <div class="detail-field">
-                            <span class="detail-label">Last Updated</span>
-                            <span class="detail-value">{{ currentProduct.created_at ? (currentProduct.created_at | date:'medium') : 'Not Available' }}</span>
-                        </div>
-                    </div>
-
-                    <div class="detail-status-panel">
-                        <div class="detail-field">
-                            <span class="detail-label">Inventory Status</span>
-                            <app-status-chip [status]="mapStatusType(currentProduct.status)"
-                                [label]="resolveStatusLabel(currentProduct.status)"
-                                size="medium"
-                                ariaLabel="Inventory status for {{ currentProduct.name }}">
-                            </app-status-chip>
-                        </div>
-                        <div class="detail-field">
-                            <span class="detail-label">Price</span>
-                            <span class="detail-value">{{ currentProduct.price | currency }}</span>
-                        </div>
-                    </div>
-                </div>
-            </app-card>
-        </ng-container>
-    </section>
+      </app-card>
+    </ng-container>
+  </section>
 </app-page-container>

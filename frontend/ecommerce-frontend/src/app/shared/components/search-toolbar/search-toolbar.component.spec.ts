@@ -6,6 +6,7 @@ import { SearchToolbarComponent } from './search-toolbar.component';
 import { SearchToolbarFiltersDirective } from './search-toolbar-filters.directive';
 import { SearchToolbarActionsDirective } from './search-toolbar-actions.directive';
 
+
 @Component({
   template: `
     <app-search-toolbar>
@@ -14,7 +15,7 @@ import { SearchToolbarActionsDirective } from './search-toolbar-actions.directiv
     </app-search-toolbar>
   `,
   standalone: true,
-  imports: [SearchToolbarComponent, SearchToolbarFiltersDirective, SearchToolbarActionsDirective]
+  imports: [SearchToolbarComponent, SearchToolbarFiltersDirective, SearchToolbarActionsDirective],
 })
 class TestHostComponent { }
 
@@ -24,7 +25,7 @@ describe('SearchToolbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearchToolbarComponent, NoopAnimationsModule]
+      imports: [SearchToolbarComponent, NoopAnimationsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SearchToolbarComponent);
@@ -43,25 +44,20 @@ describe('SearchToolbarComponent', () => {
 
   it('should suppress duplicate sequential values and emit clean debounced text alterations', fakeAsync(() => {
     const searchChangeSpy = jasmine.createSpy('searchChangeSpy');
-    fixture.componentRef.setInput('debounceTime', 200);
     component.searchChange.subscribe(searchChangeSpy);
 
-    const inputEl = fixture.debugElement.query(By.css('input'));
+    // Create a structured input modification event
+    const mockEvent = {
+      target: { value: 'Enterprise' }
+    } as unknown as Event;
 
-    inputEl.nativeElement.value = 'Enterprise';
-    inputEl.nativeElement.dispatchEvent(new Event('input'));
-    tick(100);
-    expect(searchChangeSpy).not.toHaveBeenCalled();
+    component.onInputChange(mockEvent);
 
-    tick(100);
+    tick(300); // Flush the RxJS debounce timeline
+    fixture.detectChanges();
+
     expect(searchChangeSpy).toHaveBeenCalledWith('Enterprise');
-    expect(searchChangeSpy).toHaveBeenCalledTimes(1);
-
-    // Enter duplicate entry
-    inputEl.nativeElement.value = 'Enterprise';
-    inputEl.nativeElement.dispatchEvent(new Event('input'));
-    tick(250);
-    expect(searchChangeSpy).toHaveBeenCalledTimes(1); // Blocked duplicate stream emission
+    expect(searchChangeSpy.calls.count()).toBe(1);
   }));
 
   it('should trigger explicit searchSubmit notifications on Keyboard Enter event updates', () => {

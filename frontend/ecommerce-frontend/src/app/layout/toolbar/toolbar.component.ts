@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Output,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -26,14 +20,13 @@ import { APP_CONSTANTS } from '../../core/constants/app.constants';
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
-    MatDividerModule
+    MatDividerModule,
   ],
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToolbarComponent {
-
   protected readonly appTitle = APP_CONSTANTS.APP_NAME;
 
   private readonly authService = inject(AuthService);
@@ -43,12 +36,9 @@ export class ToolbarComponent {
   }
 
   @Output()
-  readonly menuToggle =
-    new EventEmitter<void>();
+  readonly menuToggle = new EventEmitter<void>();
 
   onMenuClick(): void {
-
     this.menuToggle.emit();
-
   }
 }

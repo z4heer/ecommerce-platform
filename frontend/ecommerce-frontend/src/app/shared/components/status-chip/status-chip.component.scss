@@ -2,142 +2,153 @@
 
 // Host Base Customization
 :host {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 9999px; // Pill shape constraint
-    font-family: var(--mat-sys-body-medium-font, inherit);
-    font-weight: 500;
-    box-sizing: border-box;
-    user-select: none;
-    vertical-align: middle;
-    position: relative;
-    overflow: hidden;
-    transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
-        border-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
-        color 200ms cubic-bezier(0.4, 0, 0.2, 1),
-        box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px; // Pill shape constraint
+  font-family: var(--mat-sys-body-medium-font, inherit);
+  font-weight: 500;
+  box-sizing: border-box;
+  user-select: none;
+  vertical-align: middle;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 200ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .app-status-chip-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    gap: 6px;
-    pointer-events: none; // Delegate interactions straight to the host
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 6px;
+  pointer-events: none; // Delegate interactions straight to the host
 }
 
 // Layout Dimensions & Sizing
 .app-status-chip-small {
-    height: 24px;
-    font-size: 0.75rem; // 12px
-    padding: 0 8px;
+  height: 24px;
+  font-size: 0.75rem; // 12px
+  padding: 0 8px;
 
-    .app-status-chip-icon {
-        font-size: 14px;
-        width: 14px;
-        height: 14px;
-    }
+  .app-status-chip-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
 }
 
 .app-status-chip-medium {
-    height: 32px;
-    font-size: 0.875rem; // 14px
-    padding: 0 12px;
+  height: 32px;
+  font-size: 0.875rem; // 14px
+  padding: 0 12px;
 
-    .app-status-chip-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-    }
+  .app-status-chip-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .app-status-chip-large {
-    height: 40px;
-    font-size: 1rem; // 16px
-    padding: 0 16px;
+  height: 40px;
+  font-size: 1rem; // 16px
+  padding: 0 16px;
 
-    .app-status-chip-icon {
-        font-size: 22px;
-        width: 22px;
-        height: 22px;
-    }
+  .app-status-chip-icon {
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+  }
 }
 
 // Status Color Tokens System Fallback-Mapping Architecture
 // Mapped to standard modern Angular Material systemic semantic design variables
 $status-palette: (
-    success: (bg: var(--sys-success-container, #e8f5e9),
-        text: var(--sys-on-success-container, #1b5e20),
-        border: var(--sys-success, #4caf50)),
-    warning: (bg: var(--sys-warning-container, #fff3e0),
-        text: var(--sys-on-warning-container, #e65100),
-        border: var(--sys-warning, #ff9800)),
-    error: (bg: var(--sys-error-container, #ffebee),
-        text: var(--sys-on-error-container, #c62828),
-        border: var(--sys-error, #f44336)),
-    info: (bg: var(--sys-info-container, #e3f2fd),
-        text: var(--sys-on-info-container, #0d47a1),
-        border: var(--sys-info, #2196f3)),
-    neutral: (bg: var(--mat-sys-surface-variant, #f5f5f5),
-        text: var(--mat-sys-on-surface-variant, #616161),
-        border: var(--mat-sys-outline, #9e9e9e))
+  success: (
+    bg: var(--sys-success-container, #e8f5e9),
+    text: var(--sys-on-success-container, #1b5e20),
+    border: var(--sys-success, #4caf50),
+  ),
+  warning: (
+    bg: var(--sys-warning-container, #fff3e0),
+    text: var(--sys-on-warning-container, #e65100),
+    border: var(--sys-warning, #ff9800),
+  ),
+  error: (
+    bg: var(--sys-error-container, #ffebee),
+    text: var(--sys-on-error-container, #c62828),
+    border: var(--sys-error, #f44336),
+  ),
+  info: (
+    bg: var(--sys-info-container, #e3f2fd),
+    text: var(--sys-on-info-container, #0d47a1),
+    border: var(--sys-info, #2196f3),
+  ),
+  neutral: (
+    bg: var(--mat-sys-surface-variant, #f5f5f5),
+    text: var(--mat-sys-on-surface-variant, #616161),
+    border: var(--mat-sys-outline, #9e9e9e),
+  ),
 );
 
 // Semantic Mapping Generation Strategy
 @each $status, $colors in $status-palette {
-    .app-status-chip-filled.app-status-chip-#{$status} {
-        background-color: map.get($colors, bg);
-        color: map.get($colors, text);
-        border: 1px solid transparent;
+  .app-status-chip-filled.app-status-chip-#{$status} {
+    background-color: map.get($colors, bg);
+    color: map.get($colors, text);
+    border: 1px solid transparent;
 
-        &.app-status-chip-clickable:not(.app-status-chip-disabled) {
-            &:hover {
-                filter: brightness(0.95);
-                cursor: pointer;
-            }
-        }
+    &.app-status-chip-clickable:not(.app-status-chip-disabled) {
+      &:hover {
+        filter: brightness(0.95);
+        cursor: pointer;
+      }
     }
+  }
 
-    .app-status-chip-outlined.app-status-chip-#{$status} {
-        background-color: transparent;
-        color: map.get($colors, text);
-        border: 1px solid map.get($colors, border);
+  .app-status-chip-outlined.app-status-chip-#{$status} {
+    background-color: transparent;
+    color: map.get($colors, text);
+    border: 1px solid map.get($colors, border);
 
-        &.app-status-chip-clickable:not(.app-status-chip-disabled) {
-            &:hover {
-                background-color: rgba(map.get($colors, text), 0.04);
-                cursor: pointer;
-            }
-        }
+    &.app-status-chip-clickable:not(.app-status-chip-disabled) {
+      &:hover {
+        background-color: rgba(map.get($colors, text), 0.04);
+        cursor: pointer;
+      }
     }
+  }
 }
 
 // Interaction & State Styles
 .app-status-chip-clickable:not(.app-status-chip-disabled) {
-    &:focus-visible {
-        outline: 2px solid var(--mat-sys-primary, #3f51b5);
-        outline-offset: 2px;
-        box-shadow: 0 0 0 2px var(--mat-sys-surface, #fff);
-    }
+  &:focus-visible {
+    outline: 2px solid var(--mat-sys-primary, #3f51b5);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--mat-sys-surface, #fff);
+  }
 }
 
 .app-status-chip-disabled {
-    opacity: 0.4;
-    cursor: not-allowed !important;
-    pointer-events: auto !important; // Retain element level interception for system tooltips
-    box-shadow: none !important;
+  opacity: 0.4;
+  cursor: not-allowed !important;
+  pointer-events: auto !important; // Retain element level interception for system tooltips
+  box-shadow: none !important;
 }
 
 // Dark Mode Strategy Tweaks (Fallback-safe context overrides)
 @media (prefers-color-scheme: dark) {
-    @each $status, $colors in $status-palette {
-        .app-status-chip-filled.app-status-chip-#{$status}:not(.app-status-chip-disabled) {
-            &.app-status-chip-clickable:hover {
-                filter: brightness(1.15);
-            }
-        }
+  @each $status, $colors in $status-palette {
+    .app-status-chip-filled.app-status-chip-#{$status}:not(.app-status-chip-disabled) {
+      &.app-status-chip-clickable:hover {
+        filter: brightness(1.15);
+      }
     }
+  }
 }

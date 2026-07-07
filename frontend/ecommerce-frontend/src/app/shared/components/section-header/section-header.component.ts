@@ -1,10 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  input,
-  computed,
-  contentChild
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, computed, contentChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDividerModule } from '@angular/material/divider';
 import { SectionActionsDirective } from './section-actions.directive';
@@ -18,11 +12,11 @@ import { SectionMetaDirective } from './section-meta.directive';
   styleUrls: ['./section-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    'class': 'app-section-header',
+    class: 'app-section-header',
     '[class.app-section-header--dense]': 'dense()',
     '[attr.aria-label]': 'ariaLabel() || null',
-    'role': 'region'
-  }
+    role: 'region',
+  },
 })
 export class SectionHeaderComponent {
   // Required core inputs

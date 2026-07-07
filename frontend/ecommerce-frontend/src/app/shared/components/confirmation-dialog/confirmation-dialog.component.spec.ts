@@ -17,8 +17,8 @@ describe('ConfirmationDialogComponent', () => {
       imports: [ConfirmationDialogComponent, NoopAnimationsModule],
       providers: [
         { provide: MatDialogRef, useValue: mockDialogRef },
-        { provide: MAT_DIALOG_DATA, useValue: dialogData }
-      ]
+        { provide: MAT_DIALOG_DATA, useValue: dialogData },
+      ],
     });
 
     fixture = TestBed.createComponent(ConfirmationDialogComponent);
@@ -32,9 +32,14 @@ describe('ConfirmationDialogComponent', () => {
   });
 
   it('should visually bind title and message expressions explicitly inside template structural markup', () => {
-    initializeComponent({ title: 'System Deletion', message: 'Confirm permanent sweep operations' });
+    initializeComponent({
+      title: 'System Deletion',
+      message: 'Confirm permanent sweep operations',
+    });
 
-    const titleEl = fixture.debugElement.query(By.css('#dialog-title-id .title-text')).nativeElement;
+    const titleEl = fixture.debugElement.query(
+      By.css('#dialog-title-id .title-text'),
+    ).nativeElement;
     const msgEl = fixture.debugElement.query(By.css('#dialog-desc-id .message-text')).nativeElement;
 
     expect(titleEl.textContent).toContain('System Deletion');
@@ -56,7 +61,7 @@ describe('ConfirmationDialogComponent', () => {
       title: 'Kill Task',
       message: 'Run',
       confirmLabel: 'Execute',
-      cancelLabel: 'Halt'
+      cancelLabel: 'Halt',
     });
 
     const cancelBtn = fixture.debugElement.query(By.css('.btn-cancel')).nativeElement;

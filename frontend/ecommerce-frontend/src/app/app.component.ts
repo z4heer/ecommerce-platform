@@ -10,7 +10,7 @@ import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loa
   standalone: true,
   imports: [RouterOutlet, MatButtonModule, LoadingSpinnerComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
 })
 export class AppComponent {
   title = 'ecommerce-frontend';
@@ -18,16 +18,11 @@ export class AppComponent {
   protected readonly logger = inject(LoggerService);
 
   ngOnInit(): void {
-
     this.loadingService.show();
 
     setTimeout(() => {
-
       this.loadingService.hide();
-
     }, 3000);
-
   }
-  constructor() {
-  }
+  constructor() {}
 }

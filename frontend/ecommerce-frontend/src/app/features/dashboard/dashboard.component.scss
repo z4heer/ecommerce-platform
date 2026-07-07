@@ -1,110 +1,110 @@
 :host {
-    display: block;
-    width: 100%;
+  display: block;
+  width: 100%;
 }
 
 .dashboard-loading-grid {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sys-spacing-md, 24px);
-    padding: var(--sys-spacing-sm, 16px) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sys-spacing-md, 24px);
+  padding: var(--sys-spacing-sm, 16px) 0;
 }
 
 .metrics-section,
 .orders-section {
-    margin-bottom: var(--sys-spacing-xl, 40px);
+  margin-bottom: var(--sys-spacing-xl, 40px);
 }
 
 .metrics-grid {
-    display: grid;
-    grid-template-columns: repeat(1, minmax(0, 1fr));
-    gap: var(--sys-spacing-md, 24px);
-    margin-top: var(--sys-spacing-sm, 16px);
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: var(--sys-spacing-md, 24px);
+  margin-top: var(--sys-spacing-sm, 16px);
 
-    @media (min-width: 600px) {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 
-    @media (min-width: 1024px) {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .metric-value-container {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-top: var(--sys-spacing-xs, 8px);
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: var(--sys-spacing-xs, 8px);
 }
 
 .metric-value {
-    font-size: var(--sys-font-size-h2, 32px);
-    font-weight: 700;
-    color: var(--sys-color-on-surface, #1c1b1f);
+  font-size: var(--sys-font-size-h2, 32px);
+  font-weight: 700;
+  color: var(--sys-color-on-surface, #1c1b1f);
 }
 
 .orders-table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    margin-top: var(--sys-spacing-sm, 16px);
-    border: 1px solid var(--sys-color-outline-variant, #cac4d0);
-    border-radius: var(--sys-shape-corner-medium, 8px);
+  width: 100%;
+  overflow-x: auto;
+  margin-top: var(--sys-spacing-sm, 16px);
+  border: 1px solid var(--sys-color-outline-variant, #cac4d0);
+  border-radius: var(--sys-shape-corner-medium, 8px);
 }
 
 .enterprise-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--sys-font-size-body-medium, 14px);
+
+  th {
+    background-color: var(--sys-color-surface-variant, #e7e0ec);
+    color: var(--sys-color-on-surface-variant, #49454f);
+    padding: var(--sys-spacing-sm, 16px);
+    font-weight: 600;
+  }
+
+  td {
+    padding: var(--sys-spacing-sm, 16px);
+    border-bottom: 1px solid var(--sys-color-outline-variant, #cac4d0);
+    color: var(--sys-color-on-surface, #1c1b1f);
+    vertical-align: middle;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  .app-skeleton-card-container {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: var(--sys-spacing-md, 24px);
     width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-    font-size: var(--sys-font-size-body-medium, 14px);
 
-    th {
-        background-color: var(--sys-color-surface-variant, #e7e0ec);
-        color: var(--sys-color-on-surface-variant, #49454f);
-        padding: var(--sys-spacing-sm, 16px);
-        font-weight: 600;
+    @media (min-width: 600px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    td {
-        padding: var(--sys-spacing-sm, 16px);
-        border-bottom: 1px solid var(--sys-color-outline-variant, #cac4d0);
-        color: var(--sys-color-on-surface, #1c1b1f);
-        vertical-align: middle;
+    @media (min-width: 1024px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .animation-pulse {
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-pulse {
+    0% {
+      opacity: 0.6;
     }
 
-    tr:last-child td {
-        border-bottom: none;
+    50% {
+      opacity: 1;
     }
 
-    .app-skeleton-card-container {
-        display: grid;
-        grid-template-columns: repeat(1, minmax(0, 1fr));
-        gap: var(--sys-spacing-md, 24px);
-        width: 100%;
-
-        @media (min-width: 600px) {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        @media (min-width: 1024px) {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-        }
+    100% {
+      opacity: 0.6;
     }
-
-    .animation-pulse {
-        animation: skeleton-pulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes skeleton-pulse {
-        0% {
-            opacity: 0.6;
-        }
-
-        50% {
-            opacity: 1;
-        }
-
-        100% {
-            opacity: 0.6;
-        }
-    }
+  }
 }

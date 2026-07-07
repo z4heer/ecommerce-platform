@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoadingSkeletonComponent, SkeletonVariant } from './loading-skeleton.component';
 import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { MatDialogModule } from '@angular/material/dialog';
 
 describe('LoadingSkeletonComponent', () => {
   let component: LoadingSkeletonComponent;
@@ -10,7 +11,7 @@ describe('LoadingSkeletonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [LoadingSkeletonComponent]
+      imports: [LoadingSkeletonComponent, MatDialogModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoadingSkeletonComponent);
@@ -34,7 +35,9 @@ describe('LoadingSkeletonComponent', () => {
       fixture.componentRef.setInput('variant', variant);
       fixture.detectChanges();
 
-      const containerEl = fixture.debugElement.query(By.css('.app-skeleton-container')).nativeElement;
+      const containerEl = fixture.debugElement.query(
+        By.css('.app-skeleton-container'),
+      ).nativeElement;
       // ✓ Perfect. nativeElement exposes the standard HTMLElement classList API
       expect(containerEl.classList.contains(`app-skeleton-${variant}`)).toBeTrue();
     });
@@ -56,7 +59,8 @@ describe('LoadingSkeletonComponent', () => {
   });
 
   it('should expose container element with expected skeleton classes', () => {
-    const containerEl = fixture.debugElement.query(By.css('.app-skeleton-container')).nativeElement as HTMLElement;
+    const containerEl = fixture.debugElement.query(By.css('.app-skeleton-container'))
+      .nativeElement as HTMLElement;
     expect(containerEl.classList.contains('app-skeleton')).toBeTrue();
   });
 
@@ -64,12 +68,14 @@ describe('LoadingSkeletonComponent', () => {
     fixture.componentRef.setInput('variant', 'custom');
     fixture.detectChanges();
 
-    const containerEl = fixture.debugElement.query(By.css('.app-skeleton-container')).nativeElement as HTMLElement;
+    const containerEl = fixture.debugElement.query(By.css('.app-skeleton-container'))
+      .nativeElement as HTMLElement;
     expect(containerEl.classList.contains('app-skeleton-custom')).toBeTrue();
   });
 
   it('should render container element for accessibility checks', () => {
-    const containerEl = fixture.debugElement.query(By.css('.app-skeleton-container')).nativeElement as HTMLElement;
+    const containerEl = fixture.debugElement.query(By.css('.app-skeleton-container'))
+      .nativeElement as HTMLElement;
     expect(containerEl).toBeTruthy();
   });
 });

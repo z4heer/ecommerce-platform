@@ -32,11 +32,11 @@ export type StatusChipType = 'success' | 'warning' | 'error' | 'info' | 'neutral
     StatusChipComponent,
     SearchToolbarComponent,
     EmptyStateComponent,
-    ErrorStateComponent
+    ErrorStateComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent {
   private readonly dialog = inject(MatDialog);
@@ -53,16 +53,19 @@ export class DashboardComponent {
     this.dashboardService.updateSearchQuery(query || '');
   }
 
-
   /**
    * Safe mapping adapter transforming metric trends into design-system compatible enum types
    */
   protected mapTrendToChipType(trend: MetricItem['trend']): StatusChipType {
     switch (trend) {
-      case 'up': return 'success';
-      case 'down': return 'error';
-      case 'stable': return 'neutral';
-      default: return 'neutral';
+      case 'up':
+        return 'success';
+      case 'down':
+        return 'error';
+      case 'stable':
+        return 'neutral';
+      default:
+        return 'neutral';
     }
   }
 
@@ -71,13 +74,16 @@ export class DashboardComponent {
    */
   protected mapStatusToChipType(status: SystemOrder['status']): StatusChipType {
     switch (status) {
-      case 'completed': return 'success';
-      case 'pending': return 'warning';
-      case 'cancelled': return 'error';
-      default: return 'neutral';
+      case 'completed':
+        return 'success';
+      case 'pending':
+        return 'warning';
+      case 'cancelled':
+        return 'error';
+      default:
+        return 'neutral';
     }
   }
-
 
   public onCancelOrder(orderId: string): void {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
@@ -86,8 +92,8 @@ export class DashboardComponent {
         title: 'Cancel Order',
         message: `Are you sure you want to cancel order ${orderId}? This action cannot be undone.`,
         confirmLabel: 'Cancel Order',
-        cancelLabel: 'Keep Order'
-      }
+        cancelLabel: 'Keep Order',
+      },
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {

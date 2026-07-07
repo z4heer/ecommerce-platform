@@ -13,7 +13,7 @@ import { SectionMetaDirective } from './section-meta.directive';
     </app-section-header>
   `,
   imports: [SectionHeaderComponent, SectionActionsDirective, SectionMetaDirective],
-  standalone: true
+  standalone: true,
 })
 class TestHostComponent {
   titleText = 'Inventory';
@@ -24,7 +24,12 @@ class TestHostComponent {
 describe('SectionHeaderComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SectionHeaderComponent, TestHostComponent, SectionActionsDirective, SectionMetaDirective]
+      imports: [
+        SectionHeaderComponent,
+        TestHostComponent,
+        SectionActionsDirective,
+        SectionMetaDirective,
+      ],
     }).compileComponents();
   });
 
@@ -79,7 +84,9 @@ describe('SectionHeaderComponent', () => {
     fixture.componentRef.setInput('ariaLabel', 'Custom Accessibility Region Descriptor');
     fixture.detectChanges();
 
-    const compiledElement = fixture.nativeElement.querySelector('.app-section-header');
-    expect(compiledElement.getAttribute('aria-label')).toBe('Custom Accessibility Region Descriptor');
+    const compiledElement = fixture.nativeElement as HTMLElement; // Access directly
+    expect(compiledElement.getAttribute('aria-label')).toBe(
+      'Custom Accessibility Region Descriptor',
+    );
   });
 });

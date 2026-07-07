@@ -16,7 +16,7 @@ export interface ProductsQueryState {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
   private readonly http = inject(HttpClient);
@@ -34,7 +34,7 @@ export class ProductService {
   public readonly productsQuery = computed<ProductsQueryState>(() => ({
     data: this.productsState(),
     loading: this.isLoadingState(),
-    error: this.errorState()
+    error: this.errorState(),
   }));
 
   getProducts(): Observable<Product[]> {
@@ -42,27 +42,25 @@ export class ProductService {
     this.isLoadingState.set(true);
     this.errorState.set(null);
 
-    return this.http.get<Product[]>(
-      `${environment.api.baseUrl}/products`
-    ).pipe(
+    return this.http.get<Product[]>(`${environment.api.baseUrl}/products`).pipe(
       retry({
         count: PRODUCT_RETRY_COUNT,
         delay: (error, retryCount) => {
           this.logger.warn(`Retry ${retryCount}/${PRODUCT_RETRY_COUNT} : Products API`);
           return timer(retryCount * PRODUCT_RETRY_DELAY_MS);
-        }
+        },
       }),
       tap({
-        next: (products) => {
+        next: products => {
           this.productsState.set(products);
           this.isLoadingState.set(false);
         },
-        error: (err) => {
+        error: err => {
           this.logger.error('Failed to load products', err);
           this.errorState.set(err);
           this.isLoadingState.set(false);
-        }
-      })
+        },
+      }),
     );
   }
 
@@ -82,6 +80,6 @@ export class ProductService {
     return this.http.delete<void>(`${environment.api.baseUrl}/products/${id}`);
   }
 
-  // NOTE: filterProducts and filterByCategory are no longer needed since the 
+  // NOTE: filterProducts and filterByCategory are no longer needed since the
   // presenting UI components can filter the unified products state signal via pure computed operations.
 }

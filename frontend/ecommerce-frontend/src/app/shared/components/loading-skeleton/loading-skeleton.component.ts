@@ -9,7 +9,7 @@ export type SkeletonVariant = 'text' | 'card' | 'list' | 'table' | 'avatar' | 'c
   imports: [CommonModule],
   templateUrl: './loading-skeleton.component.html',
   styleUrls: ['./loading-skeleton.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoadingSkeletonComponent {
   // Enterprise Component Inputs
@@ -23,7 +23,7 @@ export class LoadingSkeletonComponent {
     const activeVariant = this.variant();
     return {
       'app-skeleton': true,
-      [`app-skeleton-${activeVariant}`]: true
+      [`app-skeleton-${activeVariant}`]: true,
     };
   });
 
@@ -31,20 +31,20 @@ export class LoadingSkeletonComponent {
     return {
       '--skeleton-count': this.count().toString(),
       '--skeleton-rows': this.rows().toString(),
-      '--skeleton-cols': this.columns().toString()
+      '--skeleton-cols': this.columns().toString(),
     };
   });
 
+
   // Structural loops trackers
   public readonly skeletonItems = computed<number[]>(() =>
-    Array.from({ length: this.count() }, (_, i) => i)
+    Array.from({ length: Math.max(1, this.count()) }, (_, i) => i),
   );
-
   public readonly tableRows = computed<number[]>(() =>
-    Array.from({ length: this.rows() }, (_, i) => i)
+    Array.from({ length: this.rows() }, (_, i) => i),
   );
 
   public readonly tableColumns = computed<number[]>(() =>
-    Array.from({ length: this.columns() }, (_, i) => i)
+    Array.from({ length: this.columns() }, (_, i) => i),
   );
 }

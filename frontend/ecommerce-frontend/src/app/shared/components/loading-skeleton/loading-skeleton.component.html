@@ -1,50 +1,45 @@
 <div [ngClass]="cssClasses()" [ngStyle]="computedStyles()" class="app-skeleton-container">
-    @for (item of skeletonItems(); track item) {
+  @for (item of skeletonItems(); track item) {
     <div class="skeleton-row-item">
-        @if (variant() === 'text') {
+      @if (variant() === 'text') {
         <div class="skeleton-bone bone-text"></div>
-        }
-        @else if (variant() === 'card') {
+      } @else if (variant() === 'card') {
         <div class="skeleton-bone bone-card-media"></div>
         <div class="skeleton-bone bone-card-title"></div>
         <div class="skeleton-bone bone-card-text"></div>
-        }
-        @else if (variant() === 'list') {
+      } @else if (variant() === 'list') {
         <div class="skeleton-list-item">
-            <div class="skeleton-bone bone-avatar-sm"></div>
-            <div class="skeleton-bone bone-list-text"></div>
+          <div class="skeleton-bone bone-avatar-sm"></div>
+          <div class="skeleton-bone bone-list-text"></div>
         </div>
-        }
-        @else if (variant() === 'table') {
+      } @else if (variant() === 'table') {
         <table class="skeleton-table">
-            <thead>
-                <tr>
-                    @for (col of tableColumns(); track col) {
-                    <th>
-                        <div class="skeleton-bone bone-th"></div>
-                    </th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @for (row of tableRows(); track row) {
-                <tr>
-                    @for (col of tableColumns(); track col) {
-                    <td>
-                        <div class="skeleton-bone bone-td"></div>
-                    </td>
-                    }
-                </tr>
+          <thead>
+            <tr>
+              @for (col of tableColumns(); track col) {
+                <th>
+                  <div class="skeleton-bone bone-th"></div>
+                </th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of tableRows(); track row) {
+              <tr>
+                @for (col of tableColumns(); track col) {
+                  <td>
+                    <div class="skeleton-bone bone-td"></div>
+                  </td>
                 }
-            </tbody>
+              </tr>
+            }
+          </tbody>
         </table>
-        }
-        @else if (variant() === 'avatar') {
+      } @else if (variant() === 'avatar') {
         <div class="skeleton-bone bone-avatar-lg"></div>
-        }
-        @else if (variant() === 'custom') {
+      } @else if (variant() === 'custom') {
         <ng-content></ng-content>
-        }
+      }
     </div>
-    }
+  }
 </div>

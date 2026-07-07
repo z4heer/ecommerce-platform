@@ -7,13 +7,8 @@ import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'app-product-search',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule
-  ],
-  templateUrl: './product-search.component.html'
+  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule],
+  templateUrl: './product-search.component.html',
 })
 export class ProductSearchComponent {
   // Local signal state tracking input value

@@ -27,11 +27,11 @@ import { ErrorStateComponent } from '../../../shared/components/error-state/erro
     EmptyStateComponent,
     ErrorStateComponent,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './product-detail.component.html',
   styleUrls: ['./product-detail.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
@@ -53,15 +53,15 @@ export class ProductDetailComponent implements OnInit {
     this.error.set(null);
 
     this.productService.getProductById(id).subscribe({
-      next: (product) => {
+      next: product => {
         this.product.set(product);
         this.isLoading.set(false);
       },
-      error: (err) => {
+      error: err => {
         console.error('Error fetching product metadata detail:', err);
         this.error.set(err);
         this.isLoading.set(false);
-      }
+      },
     });
   }
 

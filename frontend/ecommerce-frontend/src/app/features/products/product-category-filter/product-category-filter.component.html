@@ -1,9 +1,9 @@
 <mat-form-field appearance="outline">
-    <mat-label>Category</mat-label>
-    <mat-select (selectionChange)="onCategoryChange($event.value)">
-        <mat-option value="">All Categories</mat-option>
-        @for (category of categories(); track category) {
-        <mat-option [value]="category">{{ category }}</mat-option>
-        }
-    </mat-select>
+  <mat-label>Category</mat-label>
+  <mat-select (selectionChange)="onCategoryChange($event.value)">
+    <mat-option value="">All Categories</mat-option>
+    @for (category of categories(); track category) {
+      <mat-option [value]="category">{{ category }}</mat-option>
+    }
+  </mat-select>
 </mat-form-field>

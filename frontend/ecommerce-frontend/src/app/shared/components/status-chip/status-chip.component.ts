@@ -4,7 +4,7 @@ import {
   input,
   output,
   computed,
-  HostListener
+  HostListener,
 } from '@angular/core';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,9 +28,8 @@ export type StatusChipSize = 'small' | 'medium' | 'large';
     '[class]': 'cssClasses()',
     '[class.app-status-chip-disabled]': 'disabled()',
     '[class.app-status-chip-clickable]': 'isInteractive()',
-    '[matRippleDisabled]': '!isInteractive()',
-    '(click)': 'onChipClick($event)'
-  }
+    '(click)': 'onChipClick($event)',
+  },
 })
 export class StatusChipComponent {
   // Public Inputs
@@ -48,8 +47,8 @@ export class StatusChipComponent {
 
   // Computed Signals
   readonly isInteractive = computed(() => this.clickable() && !this.disabled());
-  readonly role = computed(() => this.clickable() ? 'button' : 'status');
-  readonly tabindex = computed(() => this.isInteractive() ? '0' : null);
+  readonly role = computed(() => (this.clickable() ? 'button' : 'status'));
+  readonly tabindex = computed(() => (this.isInteractive() ? '0' : null));
 
   readonly computedAriaLabel = computed(() => {
     const customizedLabel = this.ariaLabel();
