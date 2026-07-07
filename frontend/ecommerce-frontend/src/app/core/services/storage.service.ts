@@ -108,15 +108,10 @@ export class StorageService {
      * Removes authentication information.
      */
     clearAuthentication(): void {
-
         this.removeAccessToken();
-
         this.removeRefreshToken();
-
         this.clearUser();
-
         this.clearRole();
-
     }
 
     /**
