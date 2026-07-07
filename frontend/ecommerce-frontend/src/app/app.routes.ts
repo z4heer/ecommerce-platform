@@ -39,13 +39,15 @@ export const routes: Routes = [
                 path: 'dashboard',
                 loadChildren: () =>
                     import('./features/dashboard/dashboard.routes')
-                        .then(m => m.DASHBOARD_ROUTES)
+                        .then(m => m.DASHBOARD_ROUTES),
+                canActivate: [authGuard]
             },
             {
                 path: 'products',
                 loadChildren: () =>
                     import('./features/products/product.routes')
-                        .then(m => m.PRODUCT_ROUTES)
+                        .then(m => m.PRODUCT_ROUTES),
+                canActivate: [authGuard]
             },
             /*            {
             

@@ -22,6 +22,7 @@ export const AUTH_ROUTES:
             path: 'register',
             loadComponent: () =>
                 import('./pages/register/register.component')
-                    .then(m => m.RegisterComponent)
+                    .then(m => m.RegisterComponent),
+            canActivate: [authGuard]
         }
     ];
