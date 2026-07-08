@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { signal } from '@angular/core';
+import { signal, WritableSignal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 
 import { CheckoutComponent } from './checkout.component';
@@ -22,7 +22,8 @@ describe('CheckoutComponent', () => {
   let logger: jasmine.SpyObj<LoggerService>;
   let router: jasmine.SpyObj<Router>;
 
-  const cartItemsSignal = signal<CartItem[]>([
+  let cartItemsSignal: WritableSignal<CartItem[]>;
+  cartItemsSignal = signal<CartItem[]>([
     {
       productId: 'P1',
       productName: 'Laptop',
@@ -42,7 +43,6 @@ describe('CheckoutComponent', () => {
       addedAt: new Date('2026-07-08T10:05:00Z')
     }
   ]);
-
   beforeEach(async () => {
 
     cartService = jasmine.createSpyObj<CartService>(

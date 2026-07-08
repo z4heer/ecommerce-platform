@@ -31,10 +31,10 @@ describe('ProductListComponent Integration Paths', () => {
 
   beforeEach(async () => {
     // ProductService exposes a "productsQuery" computed signal (not a method).  
-    mockProductService = { productsQuery: mockQuerySignal } as any;
     mockRouter = jasmine.createSpyObj('Router', ['navigate']);
     const productServiceMock = {
-      getProducts: jasmine.createSpy('getProducts').and.returnValue(of([]))
+      productsQuery: mockQuerySignal,
+      getProducts: jasmine.createSpy('getProducts').and.returnValue(of([])),
     };
     await TestBed.configureTestingModule({
       imports: [ProductListComponent, MatDialogModule],

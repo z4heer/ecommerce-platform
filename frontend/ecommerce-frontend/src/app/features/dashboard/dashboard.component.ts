@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DashboardService, MetricItem, SystemOrder } from './service/dashboard.service';
-
+import { LoadingSkeletonComponent } from '../../shared/components/loading-skeleton/loading-skeleton.component';
 // Enterprise Design System Component Imports
 import { PageContainerComponent } from '../../layout/page-container/page-container.component';
 import { PageHeaderComponent } from '../../layout/page-header/page-header.component';
@@ -32,6 +32,7 @@ export type StatusChipType = 'success' | 'warning' | 'error' | 'info' | 'neutral
     StatusChipComponent,
     SearchToolbarComponent,
     EmptyStateComponent,
+    LoadingSkeletonComponent,
     ErrorStateComponent,
   ],
   templateUrl: './dashboard.component.html',

@@ -41,10 +41,14 @@ describe('DashboardComponent (Design System Refactor)', () => {
         { provide: MatDialog, useValue: mockDialog },
         provideAnimations()
       ],
-    }).compileComponents();
+    })
+      .overrideProvider(MatDialog, {
+        useValue: mockDialog
+      }).compileComponents();
 
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
+    console.log(TestBed.inject(MatDialog));
     fixture.detectChanges();
   });
 
@@ -56,7 +60,7 @@ describe('DashboardComponent (Design System Refactor)', () => {
   });
 
   it('should render design system cards and status chips for metrics', () => {
-    const cards = fixture.debugElement.queryAll(By.css('app-app-card'));
+    const cards = fixture.debugElement.queryAll(By.css('app-card'));
     const chips = fixture.debugElement.queryAll(By.css('app-status-chip'));
     expect(cards.length).toBe(1);
     expect(chips.length).toBe(2); // One in metric card, one in table row
@@ -78,8 +82,11 @@ describe('DashboardComponent (Design System Refactor)', () => {
 
   it('should launch design system ConfirmationDialog when cancel action is executed', () => {
     const cancelButton = fixture.debugElement.query(By.css('button[color="warn"]'));
-    cancelButton.nativeElement.click();
+    component.onCancelOrder('ORD001');
 
+    expect(mockDialog.open).toHaveBeenCalled();
+    expect(mockDashboardService.cancelOrder).toHaveBeenCalledWith('ORD001');
+    expect((component as any).dialog).toBe(mockDialog);
     expect(mockDialog.open).toHaveBeenCalled();
     expect(mockDashboardService.cancelOrder).toHaveBeenCalledWith('ORD001');
   });

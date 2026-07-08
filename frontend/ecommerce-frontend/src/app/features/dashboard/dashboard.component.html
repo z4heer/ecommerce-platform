@@ -1,139 +1,104 @@
 <app-page-container>
-  <app-page-header
-    title="Enterprise Dashboard"
-    subtitle="Real-time operations management and monitoring"
-  >
+  <app-page-header title="Enterprise Dashboard" subtitle="Real-time operations management and monitoring">
   </app-page-header>
 
   @if (error()) {
-    <app-error-state
-      [title]="'Failed to Load Dashboard Data'"
-      [description]="error() || 'An unexpected error occurred. Please try again later.'"
-    >
-    </app-error-state>
+  <app-error-state [title]="'Failed to Load Dashboard Data'"
+    [description]="error() || 'An unexpected error occurred. Please try again later.'">
+  </app-error-state>
   } @else {
-    @if (isLoading()) {
-      <div class="dashboard-loading-grid">
-        <div class="app-skeleton-card-container">
-          <div
-            class="app-skeleton animation-pulse"
-            style="
+  @if (isLoading()) {
+  <app-loading-skeleton variant="card" [count]="4">
+    <div class="app-skeleton-card-container">
+      <div class="app-skeleton animation-pulse" style="
               height: 120px;
               border-radius: 8px;
               background: var(--sys-color-surface-variant, #e7e0ec);
-            "
-          ></div>
-          <div
-            class="app-skeleton animation-pulse"
-            style="
+            "></div>
+      <div class="app-skeleton animation-pulse" style="
               height: 120px;
               border-radius: 8px;
               background: var(--sys-color-surface-variant, #e7e0ec);
-            "
-          ></div>
-          <div
-            class="app-skeleton animation-pulse"
-            style="
+            "></div>
+      <div class="app-skeleton animation-pulse" style="
               height: 120px;
               border-radius: 8px;
               background: var(--sys-color-surface-variant, #e7e0ec);
-            "
-          ></div>
-          <div
-            class="app-skeleton animation-pulse"
-            style="
+            "></div>
+      <div class="app-skeleton animation-pulse" style="
               height: 120px;
               border-radius: 8px;
               background: var(--sys-color-surface-variant, #e7e0ec);
-            "
-          ></div>
+            "></div>
+    </div>
+  </app-loading-skeleton>
+  } @else {
+  <section class="metrics-section" aria-labelledby="metrics-heading">
+    <app-section-header id="metrics-heading" title="Key Performance Indicators">
+    </app-section-header>
+
+    <div class="metrics-grid">
+      @for (metric of metrics(); track metric.id) {
+      <app-card [title]="metric.label">
+        <div class="metric-value-container">
+          <span class="metric-value">{{ metric.value }}</span>
+          <app-status-chip [label]="metric.trend.toUpperCase()" [status]="mapTrendToChipType(metric.trend)">
+          </app-status-chip>
         </div>
-      </div>
+      </app-card>
+      }
+    </div>
+  </section>
+
+  <section class="orders-section" aria-labelledby="orders-heading">
+    <app-section-header id="orders-heading" title="Recent System Orders"> </app-section-header>
+
+    <app-search-toolbar [placeholder]="'Search orders by ID or customer...'" (search)="onSearch($any($event))">
+    </app-search-toolbar>
+
+    @if (recentOrders().length === 0) {
+    <app-empty-state title="No Orders Found"
+      message="There are currently no orders that match your active filters or search criteria.">
+    </app-empty-state>
     } @else {
-      <section class="metrics-section" aria-labelledby="metrics-heading">
-        <app-section-header id="metrics-heading" title="Key Performance Indicators">
-        </app-section-header>
-
-        <div class="metrics-grid">
-          @for (metric of metrics(); track metric.id) {
-            <app-card [title]="metric.label">
-              <div class="metric-value-container">
-                <span class="metric-value">{{ metric.value }}</span>
-                <app-status-chip
-                  [label]="metric.trend.toUpperCase()"
-                  [status]="mapTrendToChipType(metric.trend)"
-                >
-                </app-status-chip>
-              </div>
-            </app-card>
+    <div class="orders-table-wrapper">
+      <table class="enterprise-table" summary="List of recent customer transactions and execution states">
+        <thead>
+          <tr>
+            <th scope="col">Order ID</th>
+            <th scope="col">Customer</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (order of recentOrders(); track order.id) {
+          <tr>
+            <td>
+              <strong>{{ order.id }}</strong>
+            </td>
+            <td>{{ order.customerName }}</td>
+            <td>{{ order.amount | currency }}</td>
+            <td>
+              <app-status-chip [label]="order.status.toUpperCase()" [status]="mapStatusToChipType(order.status)">
+              </app-status-chip>
+            </td>
+            <td>
+              @if (order.canCancel) {
+              <button mat-button color="warn" [attr.aria-label]="'Cancel order ' + order.id"
+                (click)="onCancelOrder(order.id)">
+                Cancel
+              </button>
+              }
+            </td>
+          </tr>
           }
-        </div>
-      </section>
-
-      <section class="orders-section" aria-labelledby="orders-heading">
-        <app-section-header id="orders-heading" title="Recent System Orders"> </app-section-header>
-
-        <app-search-toolbar
-          [placeholder]="'Search orders by ID or customer...'"
-          (search)="onSearch($any($event))"
-        >
-        </app-search-toolbar>
-
-        @if (recentOrders().length === 0) {
-          <app-empty-state
-            title="No Orders Found"
-            message="There are currently no orders that match your active filters or search criteria."
-          >
-          </app-empty-state>
-        } @else {
-          <div class="orders-table-wrapper">
-            <table
-              class="enterprise-table"
-              summary="List of recent customer transactions and execution states"
-            >
-              <thead>
-                <tr>
-                  <th scope="col">Order ID</th>
-                  <th scope="col">Customer</th>
-                  <th scope="col">Amount</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (order of recentOrders(); track order.id) {
-                  <tr>
-                    <td>
-                      <strong>{{ order.id }}</strong>
-                    </td>
-                    <td>{{ order.customerName }}</td>
-                    <td>{{ order.amount | currency }}</td>
-                    <td>
-                      <app-status-chip
-                        [label]="order.status.toUpperCase()"
-                        [status]="mapStatusToChipType(order.status)"
-                      >
-                      </app-status-chip>
-                    </td>
-                    <td>
-                      @if (order.canCancel) {
-                        <button
-                          mat-button
-                          color="warn"
-                          [attr.aria-label]="'Cancel order ' + order.id"
-                          (click)="onCancelOrder(order.id)"
-                        >
-                          Cancel
-                        </button>
-                      }
-                    </td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
-        }
-      </section>
+        </tbody>
+      </table>
+    </div>
     }
+  </section>
+  }
   }
 </app-page-container>

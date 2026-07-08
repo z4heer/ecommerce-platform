@@ -52,12 +52,12 @@ describe('LoadingSkeletonComponent', () => {
     expect(Array.isArray(instances)).toBeTrue();
   });
 
-  it('should gracefully clean up negative or corrupt input counts to a single index element', () => {
+  it('should gracefully clean up negative or corrupt input counts to a single rendered skeleton', () => {
     fixture.componentRef.setInput('count', -5);
     fixture.detectChanges();
-    expect(component.count()).toBe(1);
-  });
 
+    expect(component.skeletonItems()).toEqual([0]);
+  });
   it('should expose container element with expected skeleton classes', () => {
     const containerEl = fixture.debugElement.query(By.css('.app-skeleton-container'))
       .nativeElement as HTMLElement;

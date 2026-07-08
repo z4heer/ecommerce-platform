@@ -17,7 +17,7 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     label: 'Orders',
     icon: 'shopping_cart',
     route: '/orders',
-    enabled: false,
+    enabled: true,
   },
   {
     label: 'Cart',
