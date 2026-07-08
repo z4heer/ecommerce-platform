@@ -12,7 +12,7 @@ import { environment } from '../../../environments/environment';
 
 const BASE_API_URL = environment.api.baseUrl;
 
-export const API_ENDPOINTS = {
+export const API_CONSTANTS = {
   AUTH: {
     LOGIN: `${BASE_API_URL}/auth/login`,
     REGISTER: `${BASE_API_URL}/auth/register`,

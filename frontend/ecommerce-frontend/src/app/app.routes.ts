@@ -2,9 +2,7 @@ import { Routes } from '@angular/router';
 
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
-
 import { authGuard } from './core/guards/auth.guard';
-
 export const routes: Routes = [
   //-------------------------------------------------------
   // Authentication Area
@@ -46,17 +44,17 @@ export const routes: Routes = [
         path: 'cart',
         loadChildren: () => import('./features/cart/cart.routes').then(m => m.CART_ROUTES),
       },
-      /*            {
-            
-                            path: 'orders',
-            
-                            loadChildren: () =>
-                                import('./features/orders/order.routes')
-                                    .then(m => m.ORDER_ROUTES)
-            
-                        },
-            
-            */
+      {
+        path: 'orders',
+        loadChildren: () =>
+          import('./features/orders/orders.routes')
+            .then(m => m.ORDERS_ROUTES),
+      }, {
+        path: 'checkout',
+        loadChildren: () =>
+          import('./features/checkout/checkout.routes')
+            .then(m => m.CHECKOUT_ROUTES),
+      }
     ],
   },
 

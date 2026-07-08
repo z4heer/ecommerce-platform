@@ -7,6 +7,7 @@ export interface Product {
   stock_quantity: number;
   imageUrl?: string;
   created_at?: string;
-  status?: string; // e.g., 'In Stock', 'Low Stock', 'Out of Stock'
+  updatedAt?: string;
+  status?: ProductStatus; // e.g., 'In Stock', 'Low Stock', 'Out of Stock'
 }
 export type ProductStatus = 'In Stock' | 'Low Stock' | 'Out of Stock' | 'Unknown';

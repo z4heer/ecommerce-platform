@@ -1,0 +1,153 @@
+:host {
+    display: block;
+}
+
+.checkout-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px;
+}
+
+.page-header {
+    margin-bottom: 24px;
+
+    h1 {
+        margin: 0;
+    }
+
+    p {
+        margin-top: 8px;
+        opacity: 0.72;
+    }
+}
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 2fr 360px;
+    gap: 24px;
+    align-items: start;
+}
+
+.checkout-items,
+.checkout-summary {
+    min-width: 0;
+}
+
+.checkout-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+}
+
+.item-info {
+    flex: 1;
+
+    h3 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    p {
+        margin: 0;
+        opacity: 0.72;
+        font-size: 0.875rem;
+    }
+}
+
+.item-price {
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    strong {
+        font-size: 1rem;
+    }
+}
+
+.checkout-button {
+    width: 100%;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 48px 24px;
+
+    mat-icon {
+        width: 64px;
+        height: 64px;
+        font-size: 64px;
+        margin-bottom: 16px;
+        opacity: 0.6;
+    }
+
+    h2 {
+        margin: 0 0 8px;
+    }
+
+    p {
+        margin: 0 0 24px;
+        opacity: 0.72;
+    }
+}
+
+mat-progress-spinner {
+    flex-shrink: 0;
+}
+
+button:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+@media (max-width: 960px) {
+
+    .checkout-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-summary {
+        order: -1;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .checkout-page {
+        padding: 16px;
+    }
+
+    .checkout-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .item-price {
+        align-self: flex-end;
+    }
+
+    .page-header {
+        margin-bottom: 16px;
+    }
+}

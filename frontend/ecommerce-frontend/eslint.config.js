@@ -1,33 +1,44 @@
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import angular from 'angular-eslint';
-import prettier from 'eslint-config-prettier';
+// @ts-check
+const eslint = require("@eslint/js");
+const { defineConfig } = require("eslint/config");
+const tseslint = require("typescript-eslint");
+const angular = require("angular-eslint");
 
-export default tseslint.config(
-    {
-        files: ['**/*.ts'],
-        extends: [
-            eslint.configs.recommended,
-            ...tseslint.configs.recommended,
-            ...tseslint.configs.stylistic,
-            ...angular.configs.tsRecommended,
-        ],
-        processor: angular.processInlineTemplates,
-        rules: {
-            '@angular-eslint/directive-selector': [
-                'error',
-                { type: 'attribute', prefix: 'app', style: 'camelCase' },
-            ],
-            '@angular-eslint/component-selector': [
-                'error',
-                { type: 'element', prefix: 'app', style: 'kebab-case' },
-            ],
+module.exports = defineConfig([
+  {
+    files: ["**/*.ts"],
+    extends: [
+      eslint.configs.recommended,
+      tseslint.configs.recommended,
+      tseslint.configs.stylistic,
+      angular.configs.tsRecommended,
+    ],
+    processor: angular.processInlineTemplates,
+    rules: {
+      "@angular-eslint/directive-selector": [
+        "error",
+        {
+          type: "attribute",
+          prefix: "app",
+          style: "camelCase",
         },
+      ],
+      "@angular-eslint/component-selector": [
+        "error",
+        {
+          type: "element",
+          prefix: "app",
+          style: "kebab-case",
+        },
+      ],
     },
-    {
-        files: ['**/*.html'],
-        extends: [...angular.configs.htmlRecommended, ...angular.configs.htmlTemplateDriven],
-        rules: {},
-    },
-    prettier
-);
+  },
+  {
+    files: ["**/*.html"],
+    extends: [
+      angular.configs.templateRecommended,
+      angular.configs.templateAccessibility,
+    ],
+    rules: {},
+  }
+]);

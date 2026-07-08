@@ -1,0 +1,92 @@
+<app-page-container>
+
+    <app-page-header [title]="'My Orders'" [subtitle]="'View and track your order history.'">
+    </app-page-header>
+
+    @if (isLoading()) {
+
+    <app-loading-spinner></app-loading-spinner>
+
+    } @else if (orders().length === 0) {
+
+    <app-empty-state title="No Orders Found" description="You haven't placed any orders yet." icon="shopping_bag">
+
+        <div appEmptyActions>
+
+            <button mat-flat-button color="primary" routerLink="/products">
+
+                Start Shopping
+
+            </button>
+
+        </div>
+
+    </app-empty-state>
+
+    } @else {
+
+    <div class="orders-list">
+
+        @for (
+        order of orders();
+        track trackByOrderId($index, order)
+        ) {
+
+        <app-card appearance="outlined" [clickable]="true" title="Order #{{ order.id }}"
+            subtitle="{{ order.createdAt | date:'medium' }}" (cardClick)="openOrder(order)">
+
+            <div class="order-content">
+
+                <div class="order-info">
+
+                    <div class="info-row">
+
+                        <span class="label">
+                            Status
+                        </span>
+
+                        <mat-chip>
+
+                            {{ order.status }}
+
+                        </mat-chip>
+
+                    </div>
+
+                    <div class="info-row">
+
+                        <span class="label">
+                            Total
+                        </span>
+
+                        <strong>
+
+                            {{ order.totalAmount | currency:'INR' }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div appCardActions>
+
+                <button mat-button color="primary">
+
+                    View Details
+
+                </button>
+
+            </div>
+
+        </app-card>
+
+        }
+
+    </div>
+
+    }
+
+</app-page-container>

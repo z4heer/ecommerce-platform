@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { RegisterRequest } from '../models/register-request.model';
 import { AuthResponse } from '../models/auth.model';
 
-import { API_ENDPOINTS } from '../../../core/constants/api-endpoints.constants';
+import { API_CONSTANTS } from '../../constants/api.constants';
 import { LoginRequest } from '../models/auth.model';
 import { StorageService } from '../../services/storage.service';
 import { LoggerService } from '../../../core/services/logger.service';
@@ -42,7 +42,7 @@ export class AuthService {
   register(request: RegisterRequest): Observable<AuthResponse> {
     this.logger.info('Register request started.');
 
-    return this.http.post<AuthResponse>(API_ENDPOINTS.AUTH.REGISTER, request);
+    return this.http.post<AuthResponse>(API_CONSTANTS.AUTH.REGISTER, request);
   }
 
   /**
@@ -54,7 +54,7 @@ export class AuthService {
   login(request: LoginRequest): Observable<AuthResponse> {
     this.logger.info('Login request started.');
 
-    return this.http.post<AuthResponse>(API_ENDPOINTS.AUTH.LOGIN, request).pipe(
+    return this.http.post<AuthResponse>(API_CONSTANTS.AUTH.LOGIN, request).pipe(
       tap(response => {
         this.storage.setAccessToken(response.access_token);
 

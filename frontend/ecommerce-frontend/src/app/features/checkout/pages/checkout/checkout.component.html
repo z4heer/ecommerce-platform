@@ -1,0 +1,107 @@
+<app-page-container>
+
+    <app-page-header title="Checkout" subtitle="Review your order before placing it">
+    </app-page-header>
+
+    @if (isSubmitting()) {
+
+    <app-loading-spinner></app-loading-spinner>
+
+    } @else if (cartItems().length === 0) {
+
+    <app-empty-state icon="shopping_cart" title="Your cart is empty"
+        description="Add products before proceeding to checkout." actionLabel="Continue Shopping"
+        actionRoute="/products">
+    </app-empty-state>
+
+    } @else {
+
+    <div class="checkout-grid">
+
+        <app-card>
+
+            <h2 class="section-title">
+                Order Items
+            </h2>
+
+            @for (
+            item of cartItems();
+            track trackByProductId($index, item)
+            ) {
+
+            <div class="checkout-item">
+
+                <div>
+
+                    <div class="product-name">
+                        {{ item.productName }}
+                    </div>
+
+                    <div class="product-meta">
+
+                        Qty:
+                        {{ item.quantity }}
+
+                    </div>
+
+                </div>
+
+                <div class="price">
+
+                    {{ item.unitPrice | currency:'INR' }}
+
+                </div>
+
+            </div>
+
+            <mat-divider></mat-divider>
+
+            }
+
+        </app-card>
+
+        <app-card>
+
+            <h2 class="section-title">
+
+                Order Summary
+
+            </h2>
+
+            <div class="summary-row">
+
+                <span>Total Items</span>
+
+                <strong>
+
+                    {{ totalItems() }}
+
+                </strong>
+
+            </div>
+
+            <div class="summary-row">
+
+                <span>Total Amount</span>
+
+                <strong>
+
+                    {{ totalAmount() | currency:'INR' }}
+
+                </strong>
+
+            </div>
+
+            <button mat-flat-button color="primary" class="checkout-button" (click)="placeOrder()">
+
+                Place Order
+
+            </button>
+
+        </app-card>
+
+    </div>
+
+    }
+
+</app-page-container>

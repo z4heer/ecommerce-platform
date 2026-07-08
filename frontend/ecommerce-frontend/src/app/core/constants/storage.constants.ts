@@ -25,7 +25,9 @@ export const STORAGE_KEYS = {
     PERMISSIONS: 'user_permissions',
     ROLE: 'user_role',
   },
-
+  CART: {
+    ITEMS: 'cart_items'
+  },
   APP: {
     THEME: 'app_theme',
     LANGUAGE: 'app_language',

@@ -14,18 +14,18 @@ import { STORAGE_KEYS } from '../constants/storage.constants';
   providedIn: 'root',
 })
 export class StorageService {
+  private readonly storage = window.localStorage;
   /**
    * Stores any serializable value.
    */
   setItem<T>(key: string, value: T): void {
-    localStorage.setItem(key, JSON.stringify(value));
+    this.storage.setItem(key, JSON.stringify(value));
   }
-  private readonly storage = window.localStorage;
   /**
    * Retrieves a value from storage.
    */
   getItem<T>(key: string): T | null {
-    const item = localStorage.getItem(key);
+    const item = this.storage.getItem(key);
 
     if (!item) {
       return null;
@@ -38,42 +38,42 @@ export class StorageService {
    * Removes a storage item.
    */
   removeItem(key: string): void {
-    localStorage.removeItem(key);
+    this.storage.removeItem(key);
   }
 
   /**
    * Clears browser storage.
    */
   clear(): void {
-    localStorage.clear();
+    this.storage.clear();
   }
 
   /**
    * Stores JWT Access Token.
    */
   setAccessToken(token: string): void {
-    localStorage.setItem(STORAGE_KEYS.AUTH.ACCESS_TOKEN, token);
+    this.storage.setItem(STORAGE_KEYS.AUTH.ACCESS_TOKEN, token);
   }
 
   /**
    * Returns JWT Access Token.
    */
   getAccessToken(): string | null {
-    return localStorage.getItem(STORAGE_KEYS.AUTH.ACCESS_TOKEN);
+    return this.storage.getItem(STORAGE_KEYS.AUTH.ACCESS_TOKEN);
   }
 
   /**
    * Stores Refresh Token.
    */
   setRefreshToken(token: string): void {
-    localStorage.setItem(STORAGE_KEYS.AUTH.REFRESH_TOKEN, token);
+    this.storage.setItem(STORAGE_KEYS.AUTH.REFRESH_TOKEN, token);
   }
 
   /**
    * Returns Refresh Token.
    */
   getRefreshToken(): string | null {
-    return localStorage.getItem(STORAGE_KEYS.AUTH.REFRESH_TOKEN);
+    return this.storage.getItem(STORAGE_KEYS.AUTH.REFRESH_TOKEN);
   }
 
   /**

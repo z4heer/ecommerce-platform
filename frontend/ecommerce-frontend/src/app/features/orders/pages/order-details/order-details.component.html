@@ -1,0 +1,171 @@
+<app-page-container>
+
+    <app-page-header [title]="'Order Details'" [subtitle]="'Review your order information.'">
+    </app-page-header>
+
+    @if (isLoading()) {
+
+    <app-loading-spinner></app-loading-spinner>
+
+    } @else if (!order()) {
+
+    <app-empty-state title="Order Not Found" description="The requested order could not be loaded." icon="receipt_long">
+
+        <div appEmptyActions>
+
+            <button mat-flat-button color="primary" (click)="backToOrders()">
+
+                Back to Orders
+
+            </button>
+
+        </div>
+
+    </app-empty-state>
+
+    } @else {
+
+    <div class="order-details-layout">
+
+        <!-- Order Summary -->
+
+        <app-card title="Order Summary" appearance="outlined">
+
+            <div class="summary-grid">
+
+                <div class="summary-item">
+
+                    <span class="label">
+
+                        Order ID
+
+                    </span>
+
+                    <strong>
+
+                        {{ order()!.id }}
+
+                    </strong>
+
+                </div>
+
+                <div class="summary-item">
+
+                    <span class="label">
+
+                        Status
+
+                    </span>
+
+                    <mat-chip>
+
+                        {{ order()!.status }}
+
+                    </mat-chip>
+
+                </div>
+
+                <div class="summary-item">
+
+                    <span class="label">
+
+                        Created
+
+                    </span>
+
+                    <strong>
+
+                        {{ order()!.createdAt | date:'medium' }}
+
+                    </strong>
+
+                </div>
+
+                <div class="summary-item">
+
+                    <span class="label">
+
+                        Total Amount
+
+                    </span>
+
+                    <strong>
+
+                        {{ order()!.totalAmount | currency:'INR' }}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </app-card>
+
+        <!-- Order Items -->
+
+        <app-card title="Order Items" appearance="outlined">
+
+            @for (
+            item of order()!.items;
+            track item.productId
+            ) {
+
+            <div class="order-item">
+
+                <div class="item-details">
+
+                    <div class="product-name">
+
+                        {{ item.productName }}
+
+                    </div>
+
+                    <div class="product-meta">
+
+                        Qty:
+                        {{ item.quantity }}
+
+                        &nbsp;•&nbsp;
+
+                        Unit Price:
+                        {{ item.unitPrice | currency:'INR' }}
+
+                    </div>
+
+                </div>
+
+                <div class="item-total">
+
+                    {{ item.subtotal | currency:'INR' }}
+
+                </div>
+
+            </div>
+
+            @if (!$last) {
+
+            <mat-divider></mat-divider>
+
+            }
+
+            }
+
+        </app-card>
+
+        <!-- Actions -->
+
+        <div class="actions">
+
+            <button mat-stroked-button (click)="backToOrders()">
+
+                Back to Orders
+
+            </button>
+
+        </div>
+
+    </div>
+
+    }
+
+</app-page-container>
