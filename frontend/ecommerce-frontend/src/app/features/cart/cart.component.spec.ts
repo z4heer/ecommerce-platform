@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal, WritableSignal } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
+import { of } from 'rxjs';
 import { CartComponent } from './cart.component';
 import { CartService } from './services/cart.service';
-
+import { MatDialog } from '@angular/material/dialog';
 import { CartItem } from '../../core/models/cart.model';
 
 describe('CartComponent', () => {
 
   let component: CartComponent;
   let fixture: ComponentFixture<CartComponent>;
-
+  let dialog: jasmine.SpyObj<MatDialog>;
   let cartService: jasmine.SpyObj<CartService>;
 
   let cartItemsSignal: WritableSignal<CartItem[]>;
@@ -22,7 +22,8 @@ describe('CartComponent', () => {
   let estimatedTaxSignal: WritableSignal<number>;
   let grandTotalSignal: WritableSignal<number>;
   let isEmptySignal: WritableSignal<boolean>;
-
+  let router: Router;
+  dialog = jasmine.createSpyObj('MatDialog', ['open']);
   beforeEach(async () => {
 
     // Fresh signals for every test
@@ -87,6 +88,10 @@ describe('CartComponent', () => {
       providers: [
         provideRouter([]),
         {
+          provide: MatDialog,
+          useValue: dialog
+        },
+        {
           provide: CartService,
           useValue: cartService
         }
@@ -95,6 +100,8 @@ describe('CartComponent', () => {
 
     fixture = TestBed.createComponent(CartComponent);
     component = fixture.componentInstance;
+    router = TestBed.inject(Router);
+    spyOn(router, 'navigate');
     fixture.detectChanges();
   });
 
@@ -146,12 +153,20 @@ describe('CartComponent', () => {
       .toHaveBeenCalledOnceWith('P001');
   });
 
-  it('should clear cart', () => {
+
+  it('should clear cart after confirmation', () => {
+
+    dialog.open.and.returnValue({
+      afterClosed: () => of(true)
+    } as any);
 
     component.clearCart();
 
+    expect(dialog.open).toHaveBeenCalled();
+
     expect(cartService.clearCart)
-      .toHaveBeenCalled();
+      .toHaveBeenCalledOnceWith();
+
   });
 
   it('should return product id from trackByProductId', () => {
@@ -187,11 +202,25 @@ describe('CartComponent', () => {
     expect(component.isEmpty()).toBeTrue();
   });
 
-  it('should not throw when proceedToCheckout is called', () => {
+  it('should navigate to checkout', () => {
 
-    expect(() =>
-      component.proceedToCheckout()
-    ).not.toThrow();
+    component.proceedToCheckout();
+
+    expect(router.navigate)
+      .toHaveBeenCalledWith(['/checkout']);
+
   });
 
+  it('should not clear cart when dialog is cancelled', () => {
+
+    dialog.open.and.returnValue({
+      afterClosed: () => of(false)
+    } as any);
+
+    component.clearCart();
+
+    expect(cartService.clearCart)
+      .not.toHaveBeenCalled();
+
+  });
 });

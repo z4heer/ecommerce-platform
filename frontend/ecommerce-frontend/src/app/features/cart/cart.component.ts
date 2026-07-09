@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -16,6 +16,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { CartService } from './services/cart.service';
 import { CartItem } from '../../core/models/cart.model';
+import { ConfirmationDialogComponent } from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-cart',
@@ -37,7 +39,7 @@ import { CartItem } from '../../core/models/cart.model';
 export class CartComponent {
 
   readonly cartService = inject(CartService);
-
+  private readonly dialog = inject(MatDialog);
   /**
    * Expose computed signals to template.
    */
@@ -48,7 +50,7 @@ export class CartComponent {
   readonly estimatedTax = this.cartService.estimatedTax;
   readonly grandTotal = this.cartService.grandTotal;
   readonly isEmpty = this.cartService.isEmpty;
-
+  private readonly router = inject(Router);
   /**
    * TrackBy for efficient rendering.
    */
@@ -92,18 +94,31 @@ export class CartComponent {
   /**
    * Clear cart.
    */
-  clearCart(): void {
+  public clearCart(): void {
 
-    this.cartService.clearCart();
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '420px',
+      data: {
+        title: 'Clear Shopping Cart',
+        message: 'Are you sure you want to remove all items from your cart?',
+        confirmText: 'Clear Cart',
+        cancelText: 'Cancel'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.cartService.clearCart();
+      }
+    });
   }
-
   /**
    * Checkout placeholder.
    * Will be connected during Checkout sprint.
    */
   proceedToCheckout(): void {
-
     // TODO
+    this.router.navigate(['/checkout']);
   }
 
 }

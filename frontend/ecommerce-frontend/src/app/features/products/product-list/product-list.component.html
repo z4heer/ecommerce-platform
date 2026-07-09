@@ -1,22 +1,13 @@
 <app-page-container>
-  <app-page-header
-    title="Product Catalog"
-    subtitle="Manage and view enterprise inventory items."
-  ></app-page-header>
+  <app-page-header title="Product Catalog" subtitle="Manage and view enterprise inventory items."></app-page-header>
 
   <section class="controls-section" aria-label="Catalog filters and search">
     <div class="search-filter-grid">
-      <app-search-toolbar
-        [placeholder]="'Search products by name or description...'"
-        (searchChange)="onSearch($event)"
-      >
+      <app-search-toolbar [placeholder]="'Search products by name or description...'" (searchChange)="onSearch($event)">
       </app-search-toolbar>
 
       <div class="filter-column" aria-label="Product category filter">
-        <app-product-category-filter
-          [categories]="categories()"
-          (categoryChange)="onCategorySelect($event)"
-        >
+        <app-product-category-filter [categories]="categories()" (categoryChange)="onCategorySelect($event)">
         </app-product-category-filter>
       </div>
     </div>
@@ -25,55 +16,35 @@
   <hr class="section-divider" />
 
   <!-- Loading View Wrapper -->
-  <app-loading-skeleton
-    *ngIf="isLoading()"
-    [variant]="'card'"
-    [count]="6"
-    class="grid-container"
-    aria-live="polite"
-    aria-busy="true"
-  >
+  <app-loading-skeleton *ngIf="isLoading()" [variant]="'card'" [count]="6" class="grid-container" aria-live="polite"
+    aria-busy="true">
   </app-loading-skeleton>
 
   <!-- Error View Wrapper -->
-  <app-error-state
-    *ngIf="!isLoading() && error()"
-    title="Data Retrieval Error"
-    [description]="error()?.message || 'Failed to retrieve product data. Please try again later.'"
-  >
+  <app-error-state *ngIf="!isLoading() && error()" title="Data Retrieval Error"
+    [description]="error()?.message || 'Failed to retrieve product data. Please try again later.'">
   </app-error-state>
 
   <!-- Content State Grid Frame -->
   <ng-container *ngIf="!isLoading() && !error()">
     <!-- Empty State Fallback -->
-    <app-empty-state
-      *ngIf="filteredProducts().length === 0"
-      title="No Products Found"
-      description="We couldn't find any items matching your selected criteria or search terms. Try adjusting your filters."
-    >
+    <app-empty-state *ngIf="filteredProducts().length === 0" title="No Products Found"
+      description="We couldn't find any items matching your selected criteria or search terms. Try adjusting your filters.">
     </app-empty-state>
 
     <!-- Active Grid View: Flattened structure to guarantee rendering visibility when elements populate -->
     <div *ngIf="filteredProducts().length > 0" class="grid-container">
-      <app-card
-        *ngFor="let product of filteredProducts()"
-        (click)="navigateToDetail(product.id)"
-        [clickable]="true"
+      <app-card *ngFor="let product of filteredProducts()" (click)="navigateToDetail(product.id)" [clickable]="true"
         [attr.aria-label]="
           product.name +
           ', stock ' +
           resolveNumeric(product.stock_quantity) +
           ', ' +
           resolveStatusLabel(product.status)
-        "
-      >
+        ">
         <div class="product-card-content">
           <div class="image-wrapper" *ngIf="product.imageUrl; else imagePlaceholder">
-            <img
-              [src]="product.imageUrl"
-              [alt]="'Image representation of ' + product.name"
-              class="product-image"
-            />
+            <img [src]="product.imageUrl" [alt]="'Image representation of ' + product.name" class="product-image" />
           </div>
 
           <ng-template #imagePlaceholder>
@@ -83,7 +54,7 @@
           <div class="product-details">
             <span class="product-category">{{
               resolveText(product.category, 'Uncategorized')
-            }}</span>
+              }}</span>
             <h3 class="product-title">{{ product.name || 'Untitled Product' }}</h3>
             <p class="product-description">
               {{ resolveText(product.description, 'No description available.') }}
@@ -97,7 +68,7 @@
                 <span class="meta-label">Updated</span>
                 <span class="meta-value">{{
                   resolveText(product.created_at, 'Not Available')
-                }}</span>
+                  }}</span>
               </div>
             </div>
           </div>
@@ -105,20 +76,21 @@
           <div class="product-footer">
             <span class="product-price">{{
               product.price !== undefined && product.price !== null
-                ? (product.price | currency)
-                : 'N/A'
-            }}</span>
-            <app-status-chip
-              [status]="mapStatusType(product.status)"
-              [label]="resolveStatusLabel(product.status)"
-              ariaLabel="Inventory status for {{ product.name }}"
-            >
+              ? (product.price | currency)
+              : 'N/A'
+              }}</span>
+            <app-status-chip [status]="mapStatusType(product.status)" [label]="resolveStatusLabel(product.status)"
+              ariaLabel="Inventory status for {{ product.name }}">
             </app-status-chip>
           </div>
         </div>
 
         <div card-actions class="product-card-action">
-          <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+          <button mat-flat-button type="button" color="primary" (click)="$event.stopPropagation(); onAddToCart(product)"
+            [disabled]="product.stock_quantity <= 0" [attr.aria-label]="'Add ' + product.name + ' to cart'">
+            <mat-icon>shopping_cart</mat-icon>
+            Add to Cart
+          </button>
         </div>
       </app-card>
     </div>

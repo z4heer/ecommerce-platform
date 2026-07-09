@@ -24,6 +24,9 @@ import { EmptyStateComponent } from '../../../shared/components/empty-state/empt
 import { ErrorStateComponent } from '../../../shared/components/error-state/error-state.component';
 import { ProductCategoryFilterComponent } from '../product-category-filter/product-category-filter.component';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { CartService } from '../../cart/services/cart.service';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-product-list',
@@ -40,6 +43,7 @@ import { MatIconModule } from '@angular/material/icon';
     EmptyStateComponent,
     ErrorStateComponent,
     MatIconModule,
+    MatButtonModule
   ],
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
@@ -57,6 +61,8 @@ export class ProductListComponent implements OnInit {
   // Look how simple your component's computed signals become:
   public readonly isLoading = computed(() => this.productsQuery().loading);
   public readonly error = computed(() => this.productsQuery().error);
+  private readonly cartService = inject(CartService);
+  private readonly notificationService = inject(NotificationService);
 
   public readonly filteredProducts = computed(() => {
     const data = this.productsQuery().data;
@@ -97,6 +103,10 @@ export class ProductListComponent implements OnInit {
 
   public onCategorySelect(category: string): void {
     this.selectedCategory.set(category);
+  }
+
+  public onAddToCart(product: Product): void {
+    this.cartService.addToCart(product);
   }
 
   public navigateToDetail(productId: string): void {

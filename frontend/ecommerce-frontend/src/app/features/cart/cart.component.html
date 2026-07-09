@@ -230,7 +230,8 @@
 
         </div>
 
-        <button mat-flat-button color="primary" class="checkout-btn" (click)="proceedToCheckout()">
+        <button mat-flat-button color="primary" class="checkout-btn" [disabled]="isEmpty()"
+          (click)="proceedToCheckout()">
 
           Proceed to Checkout
 
