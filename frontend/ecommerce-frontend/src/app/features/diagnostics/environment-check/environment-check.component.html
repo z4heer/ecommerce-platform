@@ -1,0 +1,48 @@
+@if (loading()) {
+
+<app-loading-skeleton />
+
+} @else {
+
+@if (environment()) {
+
+<mat-card>
+
+    <mat-card-title>
+        Environment Status
+    </mat-card-title>
+
+    <mat-card-content>
+
+        <p>
+            API:
+            {{ environment()?.api }}
+        </p>
+
+        <p>
+            PostgreSQL:
+            {{ environment()?.postgres }}
+        </p>
+
+        <p>
+            Redis:
+            {{ environment()?.redis }}
+        </p>
+
+    </mat-card-content>
+
+</mat-card>
+
+}
+
+@if (error()) {
+
+<mat-card>
+
+    {{ error() }}
+
+</mat-card>
+
+}
+
+}

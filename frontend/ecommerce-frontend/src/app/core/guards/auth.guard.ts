@@ -11,7 +11,10 @@ import { LoggerService } from '../services/logger.service';
  * Prevents unauthenticated users from accessing
  * protected routes.
  */
-export const authGuard: CanActivateFn = (): boolean | UrlTree => {
+export const authGuard: CanActivateFn = (
+  _route,
+  _state
+): boolean | UrlTree => {
   const authService = inject(AuthService);
   const router = inject(Router);
   const logger = inject(LoggerService);

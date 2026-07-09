@@ -76,19 +76,9 @@ export class AuthService {
    */
 
   logout(): void {
-    this.logger.info('Storage before logout', {
-      accessToken: this.storage.getAccessToken(),
-      refreshToken: this.storage.getRefreshToken(),
-      user: this.storage.getUser(),
-    });
     this.storage.clearAuthentication();
     this.authenticatedSubject.next(false);
     this.logger.info('User logged out..');
-    this.logger.info('Storage After logout', {
-      accessToken: this.storage.getAccessToken(),
-      refreshToken: this.storage.getRefreshToken(),
-      user: this.storage.getUser(),
-    });
   }
 
   /**
