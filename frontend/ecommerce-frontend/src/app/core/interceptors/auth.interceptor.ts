@@ -32,6 +32,8 @@ export const AuthInterceptor: HttpInterceptorFn = (request, next) => {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-
+  console.log('AuthInterceptor: Attaching Authorization header to request.',
+    authenticatedRequest.headers.get('Authorization')
+  );
   return next(authenticatedRequest);
 };

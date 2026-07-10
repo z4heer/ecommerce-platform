@@ -85,14 +85,20 @@ class ProductService:
             page=page,
             size=size
         )
-
         serialized = [
+
             {
                 "id": str(p.id),
                 "name": p.name,
                 "description": p.description,
                 "category": p.category,
-                "price": float(p.price)
+                "price": float(p.price),
+                "stock_quantity": p.inventory.stock_quantity if p.inventory else 0,
+                "status": "Out of Stock"
+                            if p.inventory.stock_quantity == 0
+                            else "Low Stock"
+                            if p.inventory.stock_quantity < 10
+                            else "In Stock"
             }
             for p in products
         ]
@@ -103,17 +109,44 @@ class ProductService:
             ex=300
         )
 
-        return products
+        return serialized
 
     def get_product(
         self,
         db,
         product_id
     ):
-        return self.product_repo.get_by_id(
+        product = self.product_repo.get_by_id(
             db,
             product_id
         )
+
+        if not product:
+            return None
+
+        stock = (
+            product.inventory.stock_quantity
+            if product.inventory
+            else 0
+        )
+
+        status = (
+            "Out of Stock"
+            if stock == 0
+            else "Low Stock"
+            if stock < 10
+            else "In Stock"
+        )
+        
+        return {
+            "id": str(product.id),
+            "name": product.name,
+            "description": product.description,
+            "category": product.category,
+            "price": float(product.price),
+            "stock_quantity": stock,
+            "status": status
+        }
 
     def update_product(
         self,

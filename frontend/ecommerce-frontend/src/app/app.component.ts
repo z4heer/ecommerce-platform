@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterOutlet } from '@angular/router';
 import { LoadingService } from './core/services/loading.service';
@@ -19,7 +19,7 @@ import { SecurityAuditService } from './core/security/SecurityAuditService';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'ecommerce-frontend';
   protected readonly loadingService = inject(LoadingService);
   protected readonly logger = inject(LoggerService);

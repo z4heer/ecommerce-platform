@@ -69,13 +69,13 @@ export class OrdersListComponent {
       )
       .subscribe({
 
-        next: response => {
+        next: orders => {
 
-          this.orders.set(response.orders);
+          this.orders.set(orders);
 
           this.logger.info(
             '[Orders] Loaded successfully.',
-            response.orders
+            orders
           );
 
         },

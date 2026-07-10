@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,6 +13,8 @@ import { StatusChipComponent } from '../../../shared/components/status-chip/stat
 import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
 import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
 import { ErrorStateComponent } from '../../../shared/components/error-state/error-state.component';
+import { CartService } from '../../../features/cart/services/cart.service';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -37,10 +39,26 @@ export class ProductDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly productService = inject(ProductService);
-
+  private readonly cartService = inject(CartService);
+  private readonly notification = inject(NotificationService);
   public readonly product = signal<Product | null>(null);
   public readonly isLoading = signal<boolean>(false);
   public readonly error = signal<any | null>(null);
+
+  readonly isInCart = computed(() => {
+    const product = this.product();
+
+    if (!product) {
+      return false;
+    }
+
+    return this.cartService.isInCart(product.id);
+  });
+
+  readonly isOutOfStock = computed(() => {
+    const product = this.product();
+    return !product || product.stock_quantity === 0;
+  });
 
   public ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -48,6 +66,7 @@ export class ProductDetailComponent implements OnInit {
       this.error.set({ message: 'Invalid product identifier.' });
       return;
     }
+
 
     this.isLoading.set(true);
     this.error.set(null);
@@ -65,6 +84,23 @@ export class ProductDetailComponent implements OnInit {
     });
   }
 
+  addToCart(): void {
+
+    const product = this.product();
+
+    if (!product) {
+      return;
+    }
+
+    this.cartService.addToCart(product);
+
+  }
+
+  goToCart(): void {
+
+    this.router.navigate(['/cart']);
+
+  }
   public goBack(): void {
     this.router.navigate(['/products']);
   }

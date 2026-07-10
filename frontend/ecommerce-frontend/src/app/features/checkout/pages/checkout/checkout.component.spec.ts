@@ -1,29 +1,40 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { signal, WritableSignal } from '@angular/core';
+import { signal } from '@angular/core';
 import { of, throwError } from 'rxjs';
 
 import { CheckoutComponent } from './checkout.component';
 
 import { CartService } from '../../../cart/services/cart.service';
-import { CheckoutService } from '../../services/checkout.service';
+import { OrderService } from '../../../orders/services/order.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { LoggerService } from '../../../../core/services/logger.service';
 
-import { OrderResponse } from '../../../../core/models/order.model';
-import { CartItem } from '../../../../core/models/cart.model';
+import {
+  CartItem
+} from '../../../../core/models/cart.model';
+
+import {
+  OrderResponse
+} from '../../../../core/models/order.model';
 
 describe('CheckoutComponent', () => {
 
   let component: CheckoutComponent;
+
   let fixture: ComponentFixture<CheckoutComponent>;
 
   let cartService: jasmine.SpyObj<CartService>;
-  let checkoutService: jasmine.SpyObj<CheckoutService>;
+
+  let orderService: jasmine.SpyObj<OrderService>;
+
+  let notification: jasmine.SpyObj<NotificationService>;
+
   let logger: jasmine.SpyObj<LoggerService>;
+
   let router: jasmine.SpyObj<Router>;
 
-  let cartItemsSignal: WritableSignal<CartItem[]>;
-  cartItemsSignal = signal<CartItem[]>([
+  const cartItemsSignal = signal<CartItem[]>([
     {
       productId: 'P1',
       productName: 'Laptop',
@@ -31,7 +42,7 @@ describe('CheckoutComponent', () => {
       unitPrice: 100,
       stockQuantity: 50,
       status: 'In Stock',
-      addedAt: new Date('2026-07-08T10:00:00Z')
+      addedAt: new Date()
     },
     {
       productId: 'P2',
@@ -40,44 +51,79 @@ describe('CheckoutComponent', () => {
       unitPrice: 250,
       stockQuantity: 100,
       status: 'In Stock',
-      addedAt: new Date('2026-07-08T10:05:00Z')
+      addedAt: new Date()
     }
   ]);
+
   beforeEach(async () => {
 
-    cartService = jasmine.createSpyObj<CartService>(
+    cartService = jasmine.createSpyObj(
       'CartService',
-      [],
+      [
+        'clearCart'
+      ],
       {
-        cartItems: cartItemsSignal
+        cartItems: cartItemsSignal,
+
+        itemCount: signal(3),
+
+        subtotal: signal(450),
+
+        estimatedTax: signal(36),
+
+        grandTotal: signal(486),
+
+        isEmpty: signal(false)
       }
     );
 
-    checkoutService = jasmine.createSpyObj<CheckoutService>(
-      'CheckoutService',
-      ['checkout']
+    orderService = jasmine.createSpyObj(
+      'OrderService',
+      [
+        'createOrder'
+      ]
     );
 
-    logger = jasmine.createSpyObj<LoggerService>(
+    notification = jasmine.createSpyObj(
+      'NotificationService',
+      [
+        'success',
+        'warning',
+        'error'
+      ]
+    );
+
+    logger = jasmine.createSpyObj(
       'LoggerService',
-      ['info', 'error']
+      [
+        'info',
+        'error'
+      ]
     );
 
-    router = jasmine.createSpyObj<Router>(
+    router = jasmine.createSpyObj(
       'Router',
-      ['navigate']
+      [
+        'navigate'
+      ]
     );
 
-    checkoutService.checkout.and.returnValue(
+    orderService.createOrder.and.returnValue(
+
       of({
+
         id: 'ORDER-100'
+
       } as OrderResponse)
+
     );
 
     await TestBed.configureTestingModule({
 
       imports: [
+
         CheckoutComponent
+
       ],
 
       providers: [
@@ -88,8 +134,13 @@ describe('CheckoutComponent', () => {
         },
 
         {
-          provide: CheckoutService,
-          useValue: checkoutService
+          provide: OrderService,
+          useValue: orderService
+        },
+
+        {
+          provide: NotificationService,
+          useValue: notification
         },
 
         {
@@ -106,11 +157,13 @@ describe('CheckoutComponent', () => {
 
     }).compileComponents();
 
-    fixture = TestBed.createComponent(
-      CheckoutComponent
-    );
+    fixture =
+      TestBed.createComponent(
+        CheckoutComponent
+      );
 
-    component = fixture.componentInstance;
+    component =
+      fixture.componentInstance;
 
     fixture.detectChanges();
 
@@ -122,38 +175,115 @@ describe('CheckoutComponent', () => {
 
   });
 
-  it('should calculate total items using computed signal', () => {
+  it('should expose cart signals', () => {
 
-    expect(component.totalItems()).toBe(3);
+    expect(component.itemCount()).toBe(3);
+
+    expect(component.subtotal()).toBe(450);
+
+    expect(component.estimatedTax()).toBe(36);
+
+    expect(component.grandTotal()).toBe(486);
 
   });
 
-  it('should calculate total amount using computed signal', () => {
+  it('should create checkout form', () => {
 
-    expect(component.totalAmount()).toBe(450);
+    expect(component.checkoutForm).toBeTruthy();
+
+  });
+
+  it('should be invalid initially', () => {
+
+    expect(component.checkoutForm.invalid).toBeTrue();
+
+  });
+
+  it('should become valid when mandatory fields are populated', () => {
+
+    component.checkoutForm.patchValue({
+
+      customer: {
+
+        name: 'John Doe',
+
+        email: 'john@test.com',
+
+        phone: '9876543210'
+
+      },
+
+      shipping: {
+
+        addressLine1: 'MG Road',
+
+        city: 'Pune',
+
+        state: 'Maharashtra',
+
+        pinCode: '411001'
+
+      },
+
+      deliveryMethod: 'STANDARD'
+
+    });
+
+    expect(
+
+      component.checkoutForm.valid
+
+    ).toBeTrue();
 
   });
 
   it('should place order successfully', () => {
 
+    component.checkoutForm.patchValue({
+
+      customer: {
+        name: 'John Doe',
+        email: 'john@test.com',
+        phone: '9876543210'
+      },
+
+      shipping: {
+        addressLine1: 'MG Road',
+        city: 'Pune',
+        state: 'Maharashtra',
+        pinCode: '411001'
+      },
+
+      deliveryMethod: 'STANDARD'
+
+    });
+
     const response = {
       id: 'ORDER-999'
     } as OrderResponse;
 
-    checkoutService.checkout.and.returnValue(
+    orderService.createOrder.and.returnValue(
       of(response)
     );
 
     component.placeOrder();
 
-    expect(checkoutService.checkout)
+    expect(orderService.createOrder)
       .toHaveBeenCalled();
 
     expect(logger.info)
       .toHaveBeenCalledWith(
-        '[CheckoutComponent] Order placed successfully.',
+        '[Checkout] Order created.',
         response
       );
+
+    expect(notification.success)
+      .toHaveBeenCalledWith(
+        'Order placed successfully.'
+      );
+
+    expect(cartService.clearCart)
+      .toHaveBeenCalled();
 
     expect(router.navigate)
       .toHaveBeenCalledWith([
@@ -161,49 +291,122 @@ describe('CheckoutComponent', () => {
         'ORDER-999'
       ]);
 
-    expect(component.isSubmitting()).toBeFalse();
-
   });
 
-  it('should log error when checkout fails', () => {
+  it('should warn when cart is empty', () => {
 
-    const error = new Error('Checkout Failed');
-
-    checkoutService.checkout.and.returnValue(
-      throwError(() => error)
+    Object.defineProperty(
+      cartService,
+      'isEmpty',
+      {
+        value: signal(true)
+      }
     );
+
+    fixture = TestBed.createComponent(
+      CheckoutComponent
+    );
+
+    component = fixture.componentInstance;
+
+    fixture.detectChanges();
+
+    component.checkoutForm.patchValue({
+
+      customer: {
+        name: 'John Doe',
+        email: 'john@test.com',
+        phone: '9876543210'
+      },
+
+      shipping: {
+        addressLine1: 'Street',
+        city: 'Pune',
+        state: 'MH',
+        pinCode: '411001'
+      }
+
+    });
 
     component.placeOrder();
 
-    expect(logger.error)
+    expect(notification.warning)
       .toHaveBeenCalledWith(
-        '[CheckoutComponent] Checkout failed.',
-        error
+        'Your cart is empty.'
       );
 
-    expect(component.isSubmitting()).toBeFalse();
-
   });
-
-  it('should prevent duplicate submissions', () => {
+  it('should prevent duplicate submission', () => {
 
     component.isSubmitting.set(true);
 
     component.placeOrder();
 
-    expect(checkoutService.checkout)
+    expect(orderService.createOrder)
       .not.toHaveBeenCalled();
 
   });
+  it('should log error when order creation fails', () => {
 
-  it('should set submitting flag during checkout', () => {
+    component.checkoutForm.patchValue({
+
+      customer: {
+        name: 'John Doe',
+        email: 'john@test.com',
+        phone: '9876543210'
+      },
+
+      shipping: {
+        addressLine1: 'Street',
+        city: 'Pune',
+        state: 'MH',
+        pinCode: '411001'
+      }
+
+    });
+
+    const error = new Error('Server Error');
+
+    orderService.createOrder.and.returnValue(
+
+      throwError(() => error)
+
+    );
 
     component.placeOrder();
 
-    expect(component.isSubmitting()).toBeFalse();
+    expect(logger.error)
+      .toHaveBeenCalled();
+
+    expect(notification.error)
+      .toHaveBeenCalled();
 
   });
+  it('should reset submitting flag', () => {
 
+    component.checkoutForm.patchValue({
+
+      customer: {
+        name: 'John Doe',
+        email: 'john@test.com',
+        phone: '9876543210'
+      },
+
+      shipping: {
+        addressLine1: 'Street',
+        city: 'Pune',
+        state: 'MH',
+        pinCode: '411001'
+      }
+
+    });
+
+    component.placeOrder();
+
+    expect(component.isSubmitting())
+      .toBeFalse();
+
+  });
   it('should return product id from trackByProductId', () => {
 
     expect(
@@ -221,25 +424,51 @@ describe('CheckoutComponent', () => {
     ).toBe('ABC');
 
   });
+  it('should build request from cart items', () => {
 
-  it('should recompute totals when cart signal changes', () => {
+    component.checkoutForm.patchValue({
 
-    cartItemsSignal.set([
-      {
-        productId: 'P3',
-        productName: 'A Mouse',
-        quantity: 2,
-        unitPrice: 250,
-        stockQuantity: 100,
-        status: 'In Stock',
-        addedAt: new Date('2026-07-08T10:05:00Z')
+      customer: {
+        name: 'John Doe',
+        email: 'john@test.com',
+        phone: '9876543210'
+      },
+
+      shipping: {
+        addressLine1: 'Street',
+        city: 'Pune',
+        state: 'MH',
+        pinCode: '411001'
       }
-    ]);
 
-    expect(component.totalItems()).toBe(2);
+    });
 
-    expect(component.totalAmount()).toBe(500);
+    component.placeOrder();
+
+    expect(orderService.createOrder)
+      .toHaveBeenCalledWith({
+
+        items: [
+
+          {
+
+            product_id: 'P1',
+
+            quantity: 2
+
+          },
+
+          {
+
+            product_id: 'P2',
+
+            quantity: 1
+
+          }
+
+        ]
+
+      });
 
   });
-
 });

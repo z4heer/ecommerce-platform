@@ -1,6 +1,6 @@
 <app-page-container>
 
-    <app-page-header title="Checkout" subtitle="Review your order before placing it">
+    <app-page-header title="Checkout" subtitle="Review your items before placing your order">
     </app-page-header>
 
     @if (isSubmitting()) {
@@ -74,7 +74,7 @@
 
                 <strong>
 
-                    {{ totalItems() }}
+                    {{ itemCount() }}
 
                 </strong>
 
@@ -86,13 +86,14 @@
 
                 <strong>
 
-                    {{ totalAmount() | currency:'INR' }}
+                    {{ grandTotal() | currency:'INR' }}
 
                 </strong>
 
             </div>
 
-            <button mat-flat-button color="primary" class="checkout-button" (click)="placeOrder()">
+            <button mat-flat-button color="primary" class="checkout-button" (click)="placeOrder()" [disabled]="isSubmitting()
+             || isEmpty()">
 
                 Place Order
 

@@ -27,8 +27,7 @@ describe('OrderService', () => {
     let service: OrderService;
     let httpMock: HttpTestingController;
 
-    const apiUrl =
-        `${environment.api.baseUrl}${API_CONSTANTS.ORDERS}`;
+    const apiUrl = API_CONSTANTS.ORDERS.BASE;
 
     beforeEach(() => {
 
@@ -112,14 +111,27 @@ describe('OrderService', () => {
 
         it('should GET all orders', () => {
 
-            const response = {} as OrderListResponse;
+            const response = [
+                {
+                    id: 'ORDER-1',
+                    total_amount: 1200,
+                    status: 'PENDING',
+                    created_at: '2026-07-09'
+                }
+            ];
 
-            service.getMyOrders()
-                .subscribe(res => {
+            service.getMyOrders().subscribe(res => {
 
-                    expect(res).toEqual(response);
+                expect(res.length).toBe(1);
 
+                expect(res[0]).toEqual({
+                    id: 'ORDER-1',
+                    totalAmount: 1200,
+                    status: 'PENDING',
+                    createdAt: '2026-07-09'
                 });
+
+            });
 
             const req = httpMock.expectOne(apiUrl);
 
@@ -131,21 +143,15 @@ describe('OrderService', () => {
 
         it('should handle empty response', () => {
 
-            const response = {
-                orders: [],
-                total: 0
-            } as OrderListResponse;
+            service.getMyOrders().subscribe(res => {
 
-            service.getMyOrders()
-                .subscribe(res => {
+                expect(res.length).toBe(0);
 
-                    expect(res.orders.length).toBe(0);
-
-                });
+            });
 
             const req = httpMock.expectOne(apiUrl);
 
-            req.flush(response);
+            req.flush([]);
 
         });
 
@@ -157,15 +163,33 @@ describe('OrderService', () => {
 
             const orderId = 'ORDER-123';
 
-            const response = {} as OrderResponse;
+            const response = {
+                id: 'ORDER-123',
+                status: 'PENDING',
+                total_amount: 1200,
+                created_at: '2026-07-10',
+                items: [
+                    {
+                        product_id: 'PROD-1',
+                        quantity: 2,
+                        unit_price: 600
+                    }
+                ]
+            };
 
-            service.getOrderById(orderId)
-                .subscribe(res => {
+            service.getOrderById(orderId).subscribe(res => {
 
-                    expect(res).toEqual(response);
+                expect(res.id).toBe('ORDER-123');
+                expect(res.totalAmount).toBe(1200);
 
-                });
+                expect(res.items.length).toBe(1);
 
+                expect(res.items[0].productId).toBe('PROD-1');
+                expect(res.items[0].quantity).toBe(2);
+                expect(res.items[0].unitPrice).toBe(600);
+                expect(res.items[0].subtotal).toBe(1200);
+
+            });
             const req = httpMock.expectOne(
                 `${apiUrl}/${orderId}`
             );

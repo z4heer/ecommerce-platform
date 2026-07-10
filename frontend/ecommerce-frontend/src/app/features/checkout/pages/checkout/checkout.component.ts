@@ -1,25 +1,41 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   inject,
   signal
 } from '@angular/core';
+
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
+
 import { finalize } from 'rxjs/operators';
 
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+
 import { CartService } from '../../../cart/services/cart.service';
-import { CheckoutService } from '../../services/checkout.service';
 import { LoggerService } from '../../../../core/services/logger.service';
+
 import { PageContainerComponent } from '../../../../layout/page-container/page-container.component';
 import { PageHeaderComponent } from '../../../../layout/page-header/page-header.component';
+
 import { AppCardComponent } from '../../../../shared/components/app-card/app-card.component';
 import { EmptyStateComponent } from '../../../../shared/components/empty-state/empty-state.component';
 import { LoadingSpinnerComponent } from '../../../../shared/components/loading-spinner/loading-spinner.component';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
+import { OrderService } from '../../../orders/services/order.service';
+import { NotificationService } from '../../../../core/services/notification.service';
+import {
+  CreateOrderRequest
+} from '../../../../core/models/order.model';
 
 @Component({
   selector: 'app-checkout',
@@ -27,14 +43,20 @@ import { MatDividerModule } from '@angular/material/divider';
   imports: [
     CommonModule,
     RouterModule,
+    ReactiveFormsModule,
+
     PageContainerComponent,
     PageHeaderComponent,
-
     AppCardComponent,
     EmptyStateComponent,
     LoadingSpinnerComponent,
+
     MatButtonModule,
     MatDividerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+
     CurrencyPipe
   ],
   templateUrl: './checkout.component.html',
@@ -43,49 +65,159 @@ import { MatDividerModule } from '@angular/material/divider';
 })
 export class CheckoutComponent {
 
+  private readonly fb = inject(FormBuilder);
+
   private readonly cartService = inject(CartService);
-  private readonly checkoutService = inject(CheckoutService);
+
   private readonly router = inject(Router);
+
   private readonly logger = inject(LoggerService);
 
   readonly isSubmitting = signal(false);
 
+  // -------------------------------------------------------------------------
+  // Cart Signals (reuse existing CartService calculations)
+  // -------------------------------------------------------------------------
+
   readonly cartItems = this.cartService.cartItems;
 
-  readonly totalItems = computed(() =>
-    this.cartItems().reduce(
-      (total, item) => total + item.quantity,
-      0
-    )
-  );
+  readonly itemCount = this.cartService.itemCount;
 
-  readonly totalAmount = computed(() =>
-    this.cartItems().reduce(
-      (total, item) => total + item.unitPrice * item.quantity,
-      0
-    )
-  );
+  readonly subtotal = this.cartService.subtotal;
+
+  readonly estimatedTax = this.cartService.estimatedTax;
+
+  readonly grandTotal = this.cartService.grandTotal;
+
+  readonly isEmpty = this.cartService.isEmpty;
+  private readonly orderService =
+    inject(OrderService);
+
+  private readonly notification =
+    inject(NotificationService);
+  // -------------------------------------------------------------------------
+  // Checkout Form
+  // -------------------------------------------------------------------------
+
+  readonly checkoutForm = this.fb.nonNullable.group({
+
+    customer: this.fb.nonNullable.group({
+
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3)
+        ]
+      ],
+
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
+
+      phone: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[6-9]\d{9}$/)
+        ]
+      ]
+
+    }),
+
+    shipping: this.fb.nonNullable.group({
+
+      addressLine1: [
+        '',
+        Validators.required
+      ],
+
+      addressLine2: [''],
+
+      city: [
+        '',
+        Validators.required
+      ],
+
+      state: [
+        '',
+        Validators.required
+      ],
+
+      pinCode: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^[1-9][0-9]{5}$/)
+        ]
+      ]
+
+    }),
+
+    deliveryMethod: this.fb.nonNullable.control('STANDARD')
+
+  });
+
+  // -------------------------------------------------------------------------
+  // Place Order
+  // -------------------------------------------------------------------------
 
   placeOrder(): void {
 
-    if (this.isSubmitting()) {
+    /*  if (this.checkoutForm.invalid) {
+  
+        this.checkoutForm.markAllAsTouched();
+  
+        return;
+  
+      } */
+
+    if (this.isEmpty()) {
+
+      this.notification.warning(
+        'Your cart is empty.'
+      );
+
       return;
+
+    }
+
+    if (this.isSubmitting()) {
+
+      return;
+
     }
 
     this.isSubmitting.set(true);
 
-    this.checkoutService
-      .checkout()
+    const request =
+      this.buildOrderRequest();
+
+    this.orderService
+      .createOrder(request)
       .pipe(
-        finalize(() => this.isSubmitting.set(false))
+        finalize(() =>
+          this.isSubmitting.set(false)
+        )
       )
       .subscribe({
+
         next: order => {
 
           this.logger.info(
-            '[CheckoutComponent] Order placed successfully.',
+            '[Checkout] Order created.',
             order
           );
+
+          this.notification.success(
+            'Order placed successfully.'
+          );
+
+          this.cartService.clearCart();
 
           this.router.navigate([
             '/orders',
@@ -93,18 +225,46 @@ export class CheckoutComponent {
           ]);
 
         },
+
         error: error => {
 
           this.logger.error(
-            '[CheckoutComponent] Checkout failed.',
+            '[Checkout] Order creation failed.',
             error
           );
 
+          this.notification.error(
+            'Unable to place your order. Please try again.'
+          );
+
         }
+
       });
+
   }
 
-  trackByProductId(_: number, item: { productId: string }): string {
+  trackByProductId(
+    _: number,
+    item: { productId: string }
+  ): string {
+
     return item.productId;
+
+  }
+
+  private buildOrderRequest(): CreateOrderRequest {
+
+    return {
+
+      items: this.cartItems().map(item => ({
+
+        product_id: item.productId,
+
+        quantity: item.quantity
+
+      }))
+
+    };
+
   }
 }

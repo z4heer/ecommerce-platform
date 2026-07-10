@@ -39,9 +39,7 @@ describe('OrdersListComponent', () => {
     );
 
     orderService.getMyOrders.and.returnValue(
-      of({
-        orders: []
-      } as OrderListResponse)
+      of([])
     );
 
     await TestBed.configureTestingModule({
@@ -108,23 +106,17 @@ describe('OrdersListComponent', () => {
     ];
 
     orderService.getMyOrders.and.returnValue(
-      of({
-        orders
-      })
+      of(orders)
     );
-
     component.loadOrders();
-
     expect(component.orders()).toEqual(orders);
-
   });
 
   it('should set loading false after successful load', () => {
+    const orders: OrderSummary[] = [];
 
     orderService.getMyOrders.and.returnValue(
-      of({
-        orders: []
-      })
+      of(orders)
     );
 
     component.loadOrders();
@@ -138,9 +130,7 @@ describe('OrdersListComponent', () => {
     const orders: OrderSummary[] = [];
 
     orderService.getMyOrders.and.returnValue(
-      of({
-        orders
-      })
+      of(orders)
     );
 
     component.loadOrders();

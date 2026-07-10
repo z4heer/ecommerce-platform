@@ -2,6 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.modules.catalog.models.product import Product
 from app.core.logger import logger
+from sqlalchemy.orm import joinedload
 
 class ProductRepository:
     def __init__(
@@ -28,6 +29,9 @@ class ProductRepository:
         logger.info(f"Fetching product with ID: {product_id}")    
         return (
             db.query(Product)
+            .options(
+                joinedload(Product.inventory)
+            )
             .filter(
                 Product.id == product_id,
                 Product.is_active.is_(True)
@@ -47,7 +51,12 @@ class ProductRepository:
         size=20
     ):
 
-        query = db.query(Product)
+        query = (
+            db.query(Product)
+                .options(
+                    joinedload(Product.inventory)
+                )
+        ) 
 
         query = query.filter(
             Product.is_active.is_(True)
