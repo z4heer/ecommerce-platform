@@ -1,104 +1,75 @@
-<app-page-container>
-  <app-page-header title="Enterprise Dashboard" subtitle="Real-time operations management and monitoring">
-  </app-page-header>
+<div class="page-container">
+  <!-- Clean Integrated Header Shell -->
+  <header class="dashboard-header">
+    <div class="header-main-row">
+      <div class="title-block">
+        <h1 class="page-title">Enterprise Dashboard</h1>
+        <p class="page-subtitle">Real-time overview of your shopping profile and actions</p>
+      </div>
 
-  @if (error()) {
-  <app-error-state [title]="'Failed to Load Dashboard Data'"
-    [description]="error() || 'An unexpected error occurred. Please try again later.'">
-  </app-error-state>
-  } @else {
-  @if (isLoading()) {
-  <app-loading-skeleton variant="card" [count]="4">
-    <div class="app-skeleton-card-container">
-      <div class="app-skeleton animation-pulse" style="
-              height: 120px;
-              border-radius: 8px;
-              background: var(--sys-color-surface-variant, #e7e0ec);
-            "></div>
-      <div class="app-skeleton animation-pulse" style="
-              height: 120px;
-              border-radius: 8px;
-              background: var(--sys-color-surface-variant, #e7e0ec);
-            "></div>
-      <div class="app-skeleton animation-pulse" style="
-              height: 120px;
-              border-radius: 8px;
-              background: var(--sys-color-surface-variant, #e7e0ec);
-            "></div>
-      <div class="app-skeleton animation-pulse" style="
-              height: 120px;
-              border-radius: 8px;
-              background: var(--sys-color-surface-variant, #e7e0ec);
-            "></div>
     </div>
-  </app-loading-skeleton>
-  } @else {
-  <section class="metrics-section" aria-labelledby="metrics-heading">
-    <app-section-header id="metrics-heading" title="Key Performance Indicators">
-    </app-section-header>
+  </header>
 
-    <div class="metrics-grid">
-      @for (metric of metrics(); track metric.id) {
-      <app-card [title]="metric.label">
-        <div class="metric-value-container">
-          <span class="metric-value">{{ metric.value }}</span>
-          <app-status-chip [label]="metric.trend.toUpperCase()" [status]="mapTrendToChipType(metric.trend)">
-          </app-status-chip>
+  <hr class="section-divider" />
+
+  <!-- Main Content Body with restricted structural spacing -->
+  <main class="dashboard-content">
+
+    <!-- Section 1: Dashboard Overview -->
+    <section class="dashboard-section">
+      <h2 class="section-heading">Dashboard Overview</h2>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="card-body">
+            <span class="metric-label">Total Products</span>
+            <div class="metric-value-row">
+              <span class="metric-number">{{totalProductsCount()}}</span>
+              <span class="metric-badge status-catalog">CATALOG</span>
+            </div>
+          </div>
         </div>
-      </app-card>
-      }
-    </div>
-  </section>
 
-  <section class="orders-section" aria-labelledby="orders-heading">
-    <app-section-header id="orders-heading" title="Recent System Orders"> </app-section-header>
+        <div class="metric-card">
+          <div class="card-body">
+            <span class="metric-label">Cart Items</span>
+            <div class="metric-value-row">
+              <span class="metric-number highlight-purple">{{cartItemsCount()}}</span>
+              <span class="metric-badge status-active">ACTIVE</span>
+            </div>
+          </div>
+        </div>
 
-    <app-search-toolbar [placeholder]="'Search orders by ID or customer...'" (search)="onSearch($any($event))">
-    </app-search-toolbar>
+        <div class="metric-card">
+          <div class="card-body">
+            <span class="metric-label">My Orders</span>
+            <div class="metric-value-row">
+              <span class="metric-number highlight-purple">{{myOrdersCount()}}</span>
+              <span class="metric-badge status-fulfilled">FULFILLED</span>
+            </div>
+          </div>
+        </div>
 
-    @if (recentOrders().length === 0) {
-    <app-empty-state title="No Orders Found"
-      message="There are currently no orders that match your active filters or search criteria.">
-    </app-empty-state>
-    } @else {
-    <div class="orders-table-wrapper">
-      <table class="enterprise-table" summary="List of recent customer transactions and execution states">
-        <thead>
-          <tr>
-            <th scope="col">Order ID</th>
-            <th scope="col">Customer</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Status</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (order of recentOrders(); track order.id) {
-          <tr>
-            <td>
-              <strong>{{ order.id }}</strong>
-            </td>
-            <td>{{ order.customerName }}</td>
-            <td>{{ order.amount | currency }}</td>
-            <td>
-              <app-status-chip [label]="order.status.toUpperCase()" [status]="mapStatusToChipType(order.status)">
-              </app-status-chip>
-            </td>
-            <td>
-              @if (order.canCancel) {
-              <button mat-button color="warn" [attr.aria-label]="'Cancel order ' + order.id"
-                (click)="onCancelOrder(order.id)">
-                Cancel
-              </button>
-              }
-            </td>
-          </tr>
-          }
-        </tbody>
-      </table>
-    </div>
-    }
-  </section>
-  }
-  }
-</app-page-container>
+        <div class="metric-card">
+          <div class="card-body">
+            <span class="metric-label">Current Cart Total</span>
+            <div class="metric-value-row">
+              <span class="metric-number">₹{{currentCartTotal() | currency:'INR'}}</span>
+              <span class="metric-badge status-valuation">VALUATION</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Quick Actions Section immediately following -->
+    <section class="dashboard-section">
+      <h2 class="section-heading">Quick Actions</h2>
+      <div class="quick-actions-bar">
+        <button class="action-btn outline-btn" routerLink="/products">Browse Products</button>
+        <button class="action-btn outline-btn" routerLink="/cart">View Cart</button>
+        <button class="action-btn solid-btn" routerLink="/orders">Track Orders</button>
+      </div>
+    </section>
+  </main>
+</div>
