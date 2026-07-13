@@ -11,9 +11,12 @@ from app.modules.orders.routers.admin_order_router import (
 )
 from app.modules.orders.routers.order_router import router as order_router
 from fastapi.middleware.cors import CORSMiddleware
+from app.core.handlers import register_exception_handlers
+
 
 app = FastAPI(title="E-Commerce Platform API", version="1.0.0")
 
+register_exception_handlers(app)  # Register exception handlers 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:4200"],
