@@ -1,5 +1,4 @@
 from uuid import UUID
-from sqlalchemy.orm import Session
 from sqlalchemy import select
 from app.modules.orders.models.order import Order, OrderStatus
 from sqlalchemy.ext.asyncio import AsyncSession

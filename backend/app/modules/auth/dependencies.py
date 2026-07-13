@@ -1,5 +1,4 @@
 from fastapi import Depends, HTTPException, status
-from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session, joinedload
 from app.database.session import get_db

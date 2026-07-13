@@ -1,4 +1,3 @@
-from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.modules.catalog.models.product import Product
 from app.core.logger import logger

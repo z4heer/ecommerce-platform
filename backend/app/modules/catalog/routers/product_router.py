@@ -8,7 +8,7 @@ from app.modules.catalog.schemas.product_request import ProductCreate, ProductUp
 
 from app.modules.catalog.services.product_service import ProductService
 
-from app.modules.auth.dependencies import require_admin, require_customer
+from app.modules.auth.dependencies import require_admin
 from app.modules.catalog.repositories.product_repository import ProductRepository
 from app.modules.catalog.repositories.inventory_repository import InventoryRepository
 from app.core.logger import logger

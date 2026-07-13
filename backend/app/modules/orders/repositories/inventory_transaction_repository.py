@@ -1,5 +1,4 @@
 from uuid import UUID
-from sqlalchemy.orm import Session
 from sqlalchemy import select
 from app.modules.catalog.models.inventory import Inventory  # Presumed system location
 from sqlalchemy.ext.asyncio import AsyncSession

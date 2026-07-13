@@ -4,8 +4,6 @@ from uuid import UUID
 
 from app.database.session import get_db  # standard pattern dependency
 from app.modules.auth.dependencies import (
-    get_current_user,
-    require_admin,
     require_customer,
 )
 from app.modules.orders.schemas.order_request import CreateOrderRequest
