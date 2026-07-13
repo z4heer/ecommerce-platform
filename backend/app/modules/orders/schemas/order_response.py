@@ -3,6 +3,7 @@ from uuid import UUID
 from datetime import datetime
 from app.modules.orders.models.order import OrderStatus
 
+
 class OrderItemResponse(BaseModel):
     product_id: UUID
     quantity: int
@@ -10,6 +11,7 @@ class OrderItemResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
 
 class OrderResponse(BaseModel):
     id: UUID
@@ -19,6 +21,7 @@ class OrderResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
 
 class OrderDetailResponse(BaseModel):
     id: UUID

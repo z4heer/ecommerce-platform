@@ -6,10 +6,7 @@ from pydantic import Field
 
 class ProductCreate(BaseModel):
 
-    name: str = Field(
-        min_length=2,
-        max_length=255
-    )
+    name: str = Field(min_length=2, max_length=255)
 
     description: str
 
@@ -17,9 +14,7 @@ class ProductCreate(BaseModel):
 
     price: Decimal
 
-    stock_quantity: int = Field(
-        ge=0
-    )
+    stock_quantity: int = Field(ge=0)
 
 
 class ProductUpdate(BaseModel):

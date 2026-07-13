@@ -10,19 +10,8 @@ from app.database.base import Base
 class Role(Base):
     __tablename__ = "roles"
 
-    id: Mapped[str] = mapped_column(
-        UUID(as_uuid=True),
-        primary_key=True,
-        default=uuid4
-    )
+    id: Mapped[str] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid4)
 
-    name: Mapped[str] = mapped_column(
-        String(50),
-        unique=True,
-        nullable=False
-    )
+    name: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
 
-    users = relationship(
-        "User",
-        back_populates="role"
-    )
+    users = relationship("User", back_populates="role")
