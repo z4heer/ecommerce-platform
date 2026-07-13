@@ -48,8 +48,7 @@ def health_check():
         if check_database():
             postgres_status = "UP"
     except Exception as e:
-        postgres_error = str(e)
-
+        postgres_status = "DOWN" 
     try:
         if check_redis():
             redis_status = "UP"

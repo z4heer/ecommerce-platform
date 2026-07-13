@@ -22,7 +22,6 @@ class ProductRepository:
             .filter(Product.id == product_id, Product.is_active.is_(True))
             .first()
         )
-        logger.info(f"Product fetched: {product}")  # Log the fetched product
 
     def get_products(
         self,
