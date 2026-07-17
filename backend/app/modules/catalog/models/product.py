@@ -25,7 +25,16 @@ class Product(Base):
 
     category: Mapped[str] = mapped_column(String(100), nullable=False)
 
+    # Mapping fix: column already exists in DB (migration d8a6f0b93c41) but
+    # was never mapped on the ORM model — reads/writes of Product.sku were
+    # silently unavailable until now.
+    sku: Mapped[str | None] = mapped_column(
+        String(64), unique=True, nullable=True, index=True
+    )
+
     price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)
+
+    image_url: Mapped[str | None] = mapped_column(String(2048), nullable=True)
 
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
 

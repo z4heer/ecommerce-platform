@@ -3,7 +3,8 @@ from enum import Enum
 from datetime import datetime
 from sqlalchemy import String, Numeric, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.database.base import Base  # Assuming standard SQLAlchemy 2.0 Base
+from app.database.base import Base
+from app.modules.orders.models.order_item import OrderItem 
 
 
 class OrderStatus(str, Enum):
@@ -24,6 +25,7 @@ class Order(Base):
     status: Mapped[OrderStatus] = mapped_column(
         String, default=OrderStatus.PENDING, nullable=False
     )
+    shipping_address: Mapped[str] = mapped_column(String(500), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime, default=datetime.utcnow, nullable=False
     )

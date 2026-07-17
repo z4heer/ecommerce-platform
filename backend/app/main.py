@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI 
 
 from app.core.health import check_database
 from app.core.redis_client import check_redis
@@ -42,12 +42,10 @@ def health_check():
     postgres_status = "DOWN"
     redis_status = "DOWN"
 
-    postgres_error = None
-
     try:
         if check_database():
             postgres_status = "UP"
-    except Exception as e:
+    except Exception:
         postgres_status = "DOWN" 
     try:
         if check_redis():

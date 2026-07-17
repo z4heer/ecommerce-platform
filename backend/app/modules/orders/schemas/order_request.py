@@ -17,6 +17,20 @@ class OrderItemRequest(BaseModel):
 
 class CreateOrderRequest(BaseModel):
     items: list[OrderItemRequest]
+    shipping_address: str = Field(
+        ...,
+        min_length=1,
+        max_length=500,
+        description="Delivery address for the order",
+    )
+
+    @field_validator("shipping_address")
+    @classmethod
+    def validate_shipping_address(cls, v: str) -> str:
+        stripped = v.strip()
+        if not stripped:
+            raise ValueError("Shipping address must not be blank")
+        return stripped
 
 
 class OrderStatusUpdateRequest(BaseModel):

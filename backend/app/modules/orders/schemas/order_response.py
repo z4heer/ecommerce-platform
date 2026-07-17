@@ -17,6 +17,7 @@ class OrderResponse(BaseModel):
     id: UUID
     total_amount: float
     status: OrderStatus
+    shipping_address: str
     created_at: datetime
 
     class Config:
@@ -27,6 +28,7 @@ class OrderDetailResponse(BaseModel):
     id: UUID
     status: OrderStatus
     total_amount: float
+    shipping_address: str
     created_at: datetime
     items: list[OrderItemResponse]
 

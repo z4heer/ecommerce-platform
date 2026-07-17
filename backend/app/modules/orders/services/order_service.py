@@ -61,9 +61,9 @@ class OrderService:
                 user_id=user_id,
                 total_amount=total_amount,
                 status=OrderStatus.PENDING,
+                shipping_address=request.shipping_address,
                 items=order_items_entities,
             )
-
             # 4. Save to DB
             saved_order = self.order_repo.create_order(new_order)
 
