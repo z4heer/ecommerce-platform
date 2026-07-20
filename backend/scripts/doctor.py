@@ -16,14 +16,11 @@ if str(PROJECT_ROOT) not in sys.path:
 from pathlib import Path
 import os
 import shutil
-import subprocess
 import sys
 from sqlalchemy import text
 from redis import Redis
 from app.core.config import settings
-from app.database.session import engine
-from redis import Redis
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine
 
 PASS = "[PASS]"
 FAIL = "[FAIL]"

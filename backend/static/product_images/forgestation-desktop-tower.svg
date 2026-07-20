@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300"><rect width="300" height="300" rx="18" fill="#E4E0FB"/>
+        <rect x="100" y="70" width="100" height="66" rx="4" fill="#6C4FD6"/>
+        <rect x="108" y="78" width="84" height="50" fill="#E4E0FB"/>
+        <path d="M85 150 h130 l-10 18 h-110 z" fill="#6C4FD6"/>
+    <rect x="20" y="240" width="260" height="46" rx="23.0" fill="#ffffff" fill-opacity="0.9"/><text x="150" y="260" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#2B2B2B" text-anchor="middle">ForgeStation Desktop</text><text x="150" y="276" font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#2B2B2B" text-anchor="middle">Tower</text></svg>
