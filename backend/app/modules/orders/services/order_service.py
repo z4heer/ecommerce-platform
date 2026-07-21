@@ -10,7 +10,16 @@ from app.modules.catalog.repositories.product_repository import (
     ProductRepository,
 )  # Presumed
 from app.core.logger import logger
+from decimal import Decimal
+from datetime import datetime
+import random
 
+from app.modules.catalog.models.product import Product
+from app.modules.orders.models.order import (
+    PaymentMethod,
+    PaymentStatus,
+    Currency,
+)
 
 class OrderService:
     def __init__(
@@ -58,15 +67,31 @@ class OrderService:
 
             # 3. Formulate Order object
             new_order = Order(
+                order_number=self.generate_order_number(),
                 user_id=user_id,
-                total_amount=total_amount,
                 status=OrderStatus.PENDING,
+                total_amount=Decimal("0.00"),
                 shipping_address=request.shipping_address,
-                items=order_items_entities,
+                payment_method=PaymentMethod.COD,
+                payment_status=PaymentStatus.PENDING,
+                currency=Currency.INR,
+            )            
+            subtotal = Decimal(product.price) * item.quantity
+
+            order_item = OrderItem(
+                product_id=product.id,
+                quantity=item.quantity,
+                unit_price=product.price,
+                subtotal=subtotal,
+                product_name=product.name,
+                product_sku=product.sku or "",
+            )
+            new_order.items.append(order_item)
+            new_order.total_amount = sum(
+                item.subtotal for item in new_order.items
             )
             # 4. Save to DB
             saved_order = self.order_repo.create_order(new_order)
-
             # 5. Commit everything as an atomic transaction
             self.db.commit()
             return saved_order
@@ -115,3 +140,13 @@ class OrderService:
         updated_order = self.order_repo.update_status(order, new_status)
         self.db.commit()
         return updated_order
+    
+    def generate_order_number(self) -> str:
+        """
+        Temporary implementation.
+        Later we can replace this with a sequence/table.
+        """
+        return (
+            f"ORD-{datetime.utcnow():%Y%m%d}-"
+            f"{random.randint(100000,999999)}"
+        )

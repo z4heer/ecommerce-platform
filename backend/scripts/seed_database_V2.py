@@ -66,16 +66,20 @@ from app.modules.catalog.models.product import Product
 from app.modules.catalog.models.inventory import Inventory
 from app.modules.catalog.repositories.product_repository import ProductRepository
 from app.modules.catalog.repositories.inventory_repository import InventoryRepository
-from app.modules.orders.models.order import Order, OrderStatus
 from app.modules.orders.models.order_item import OrderItem
 from app.modules.orders.repositories.order_repository import OrderRepository
 from app.modules.auth.models.user import User
 from app.modules.auth.models.roles import Role
-
 from scripts.generate_placeholder_images import generate_product_svgs
 from seed_data.categories import CATEGORIES
 from seed_data.products import PRODUCTS
-
+from app.modules.orders.models.order import (
+    Order,
+    OrderStatus,
+    PaymentMethod,
+    PaymentStatus,
+    Currency,
+)
 ADMIN_EMAIL = "admin@test.com"
 ADMIN_PASSWORD = "Admin@12345"          # rotate before using outside local/demo
 CUSTOMER_EMAIL = "cust01@company.com"
@@ -211,6 +215,9 @@ def seed_users(db) -> tuple:
     return admin.id, customer.id
 
 
+
+    print(f"  seeded {created} demo orders across {len(statuses)} statuses")
+
 def seed_orders(db, customer_id, product_ids: list) -> None:
     order_repo = OrderRepository(db)
 
@@ -221,39 +228,75 @@ def seed_orders(db, customer_id, product_ids: list) -> None:
     statuses = list(ORDER_STATUS_WEIGHTS.keys())
     weights = list(ORDER_STATUS_WEIGHTS.values())
 
-    price_lookup = {p.id: p.price for p in db.query(Product).all()}
+    # Load complete Product objects once
+    products = db.query(Product).filter(Product.id.in_(product_ids)).all()
+
+    product_lookup = {
+        product.id: product
+        for product in products
+    }
 
     created = 0
-    for _ in range(DEMO_ORDER_COUNT):
-        status = random.choices(statuses, weights=weights, k=1)[0]
-        chosen_products = random.sample(product_ids, k=random.randint(1, 3))
 
-        items = [
-            OrderItem(
-                product_id=pid,
-                quantity=random.randint(1, 3),
-                unit_price=price_lookup[pid],
-				subtotal= price_lookup[pid] * random.randint(1, 3),
-				product_name=pid.name,
-				product_sku=pid.sku or ""
+    for order_index in range(DEMO_ORDER_COUNT):
+
+        status = random.choices(
+            statuses,
+            weights=weights,
+            k=1
+        )[0]
+
+        chosen_products = random.sample(
+            product_ids,
+            k=random.randint(1, 3)
+        )
+
+        items = []
+        total_amount = Decimal("0.00")
+
+        for pid in chosen_products:
+
+            product = product_lookup[pid]
+
+            quantity = random.randint(1, 3)
+
+            unit_price = Decimal(product.price)
+
+            subtotal = unit_price * quantity
+
+            item = OrderItem(
+                product_id=product.id,
+                quantity=quantity,
+                unit_price=unit_price,
+                subtotal=subtotal,
+                product_name=product.name,
+                product_sku=product.sku or "",
             )
-            for pid in chosen_products
-        ]
-        total_amount = sum(item.unit_price * item.quantity for item in items)
+
+            items.append(item)
+
+            total_amount += subtotal
 
         order = Order(
+            order_number=f"ORD-{100000 + order_index}",
             user_id=customer_id,
             status=status,
             total_amount=total_amount,
             shipping_address=random.choice(DEMO_SHIPPING_ADDRESSES),
+            payment_method=PaymentMethod.COD,
+            payment_status=PaymentStatus.PENDING,
+            currency=Currency.INR,
             items=items,
         )
+
         order_repo.create_order(order)
+
         created += 1
 
-    print(f"  seeded {created} demo orders across {len(statuses)} statuses")
-
-
+    print(
+        f"  seeded {created} demo orders across {len(statuses)} statuses"
+    )
+    
 def run() -> None:
     print("Ensuring tables exist (create_all)...")
     Base.metadata.create_all(bind=engine)

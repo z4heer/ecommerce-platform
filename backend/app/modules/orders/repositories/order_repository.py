@@ -1,11 +1,10 @@
 from uuid import UUID
 from sqlalchemy import select
 from app.modules.orders.models.order import Order, OrderStatus
-from sqlalchemy.ext.asyncio import AsyncSession
-
+from sqlalchemy.orm import Session
 
 class OrderRepository:
-    def __init__(self, db: AsyncSession):
+    def __init__(self, db: Session):
         self.db = db
 
     def create_order(self, order: Order) -> Order:
