@@ -1,11 +1,10 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from app.modules.catalog.models.product import Product
 from app.core.logger import logger
 from sqlalchemy.orm import joinedload
-
+from sqlalchemy.orm import Session
 
 class ProductRepository:
-    def __init__(self, db: AsyncSession):
+    def __init__(self, db: Session):
         self.db = db
 
     def create(self, db, product: Product):

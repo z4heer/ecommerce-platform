@@ -27,7 +27,9 @@ class ProductService:
             description=payload.description,
             category=payload.category,
             price=payload.price,
-        )
+            sku=payload.sku,
+            image_url=payload.image_url,
+            )
 
         self.product_repo.create(db, product)
 
@@ -38,9 +40,9 @@ class ProductService:
         self.inventory_repo.create(db, inventory)
 
         db.commit()
+        db.refresh(product)
 
         redis_client.delete(self.CACHE_KEY)
-
         return product
 
     def get_products(
@@ -81,7 +83,8 @@ class ProductService:
                     if p.inventory.stock_quantity == 0
                     else "Low Stock" if p.inventory.stock_quantity < 10 else "In Stock"
                 ),
-            }
+                "sku" : p.sku,
+                "image_url" : p.image_url,            }
             for p in products
         ]
 
@@ -109,8 +112,12 @@ class ProductService:
             "price": float(product.price),
             "stock_quantity": stock,
             "status": status,
+            "sku" : product.sku,
+            "image_url" : product.image_url
         }
-
+    def get_product_entity(self, db, product_id):
+        return self.product_repo.get_by_id(db, product_id)
+    
     def update_product(self, db, product, payload):
 
         if payload.name:
@@ -125,9 +132,20 @@ class ProductService:
         if payload.price:
             product.price = payload.price
 
+        if payload.sku is not None:
+            product.sku = payload.sku
+
+        if payload.image_url is not None:
+            product.image_url = payload.image_url
+
+        if payload.stock_quantity is not None and product.inventory:
+            product.inventory.stock_quantity = payload.stock_quantity
+
         self.product_repo.update(db, product)
 
         db.commit()
+
+        db.refresh(product)
 
         redis_client.delete(self.CACHE_KEY)
 
