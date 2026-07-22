@@ -8,7 +8,6 @@ import { OrderService } from '../../services/order.service';
 import { LoggerService } from '../../../../core/services/logger.service';
 
 import {
-  OrderListResponse,
   OrderSummary
 } from '../../../../core/models/order.model';
 

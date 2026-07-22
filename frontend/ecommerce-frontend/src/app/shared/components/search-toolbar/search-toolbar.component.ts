@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { SearchToolbarFiltersDirective } from './search-toolbar-filters.directive';
 import { SearchToolbarActionsDirective } from './search-toolbar-actions.directive';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

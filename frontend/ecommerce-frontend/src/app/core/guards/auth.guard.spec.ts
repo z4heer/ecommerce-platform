@@ -5,8 +5,8 @@ import { authGuard } from './auth.guard';
 import { AuthService } from '../auth/services/auth.service';
 import { LoggerService } from '../services/logger.service';
 import {
-    ActivatedRouteSnapshot,
-    RouterStateSnapshot
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot
 } from '@angular/router';
 
 const route = {} as ActivatedRouteSnapshot;
@@ -14,75 +14,75 @@ const state = {} as RouterStateSnapshot;
 
 describe('AuthGuard', () => {
 
-    let authService: jasmine.SpyObj<AuthService>;
-    let router: jasmine.SpyObj<Router>;
-    let logger: jasmine.SpyObj<LoggerService>;
-    authGuard
-    beforeEach(() => {
+  let authService: jasmine.SpyObj<AuthService>;
+  let router: jasmine.SpyObj<Router>;
+  let logger: jasmine.SpyObj<LoggerService>;
 
-        authService = jasmine.createSpyObj<AuthService>(
-            'AuthService',
-            ['isAuthenticated']
-        );
+  beforeEach(() => {
 
-        router = jasmine.createSpyObj<Router>(
-            'Router',
-            ['createUrlTree']
-        );
+    authService = jasmine.createSpyObj<AuthService>(
+      'AuthService',
+      ['isAuthenticated']
+    );
 
-        logger = jasmine.createSpyObj<LoggerService>(
-            'LoggerService',
-            ['debug', 'warn']
-        );
+    router = jasmine.createSpyObj<Router>(
+      'Router',
+      ['createUrlTree']
+    );
 
-        TestBed.configureTestingModule({
-            providers: [
-                {
-                    provide: AuthService,
-                    useValue: authService
-                },
-                {
-                    provide: Router,
-                    useValue: router
-                },
-                {
-                    provide: LoggerService,
-                    useValue: logger
-                }
-            ]
-        });
+    logger = jasmine.createSpyObj<LoggerService>(
+      'LoggerService',
+      ['debug', 'warn']
+    );
 
+    TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: AuthService,
+          useValue: authService
+        },
+        {
+          provide: Router,
+          useValue: router
+        },
+        {
+          provide: LoggerService,
+          useValue: logger
+        }
+      ]
     });
 
-    it('should allow authenticated users', () => {
+  });
 
-        authService.isAuthenticated.and.returnValue(true);
+  it('should allow authenticated users', () => {
 
-        const result = TestBed.runInInjectionContext(() => authGuard(route, state));
+    authService.isAuthenticated.and.returnValue(true);
 
-        expect(result).toBeTrue();
-        expect(logger.debug).toHaveBeenCalledWith('Authentication successful.');
+    const result = TestBed.runInInjectionContext(() => authGuard(route, state));
 
-    });
+    expect(result).toBeTrue();
+    expect(logger.debug).toHaveBeenCalledWith('Authentication successful.');
 
-    it('should redirect unauthenticated users to login', () => {
+  });
 
-        const urlTree = {} as UrlTree;
+  it('should redirect unauthenticated users to login', () => {
 
-        authService.isAuthenticated.and.returnValue(false);
+    const urlTree = {} as UrlTree;
 
-        router.createUrlTree.and.returnValue(urlTree);
+    authService.isAuthenticated.and.returnValue(false);
 
-        const result = TestBed.runInInjectionContext(() => authGuard(route, state));
+    router.createUrlTree.and.returnValue(urlTree);
 
-        expect(router.createUrlTree)
-            .toHaveBeenCalledWith(['/login']);
+    const result = TestBed.runInInjectionContext(() => authGuard(route, state));
 
-        expect(result).toBe(urlTree);
+    expect(router.createUrlTree)
+      .toHaveBeenCalledWith(['/login']);
 
-        expect(logger.warn)
-            .toHaveBeenCalledWith('Unauthorized access. Redirecting to login.');
+    expect(result).toBe(urlTree);
 
-    });
+    expect(logger.warn)
+      .toHaveBeenCalledWith('Unauthorized access. Redirecting to login.');
+
+  });
 
 });

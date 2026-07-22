@@ -1,7 +1,6 @@
 import { inject, Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, retry, timer } from 'rxjs';
-
 import { environment } from '../../../../environments/environment';
 import { Product } from '../../../core/models/product.model';
 import { LoggerService } from '../../../core/services/logger.service';

@@ -1,4 +1,3 @@
-import { InjectionToken } from '@angular/core';
 import { ConfirmationDialogData } from './confirmation-dialog.models';
 
 export const DEFAULT_CONFIRMATION_DIALOG_CONFIG: Required<

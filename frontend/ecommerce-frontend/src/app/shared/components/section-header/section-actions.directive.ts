@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[section-actions]',
+  selector: '[appSectionActions]',
   standalone: true,
 })
-export class SectionActionsDirective {}
+export class SectionActionsDirective { }
