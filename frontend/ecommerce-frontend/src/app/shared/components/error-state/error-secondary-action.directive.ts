@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[error-secondary-action]',
+  selector: '[appSecondaryAction]',
   standalone: true,
 })
-export class ErrorSecondaryActionDirective {}
+export class ErrorSecondaryActionDirective { }

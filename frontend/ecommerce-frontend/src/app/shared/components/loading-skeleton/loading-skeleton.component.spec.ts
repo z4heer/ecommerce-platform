@@ -1,7 +1,6 @@
 // src/app/shared/components/loading-skeleton/loading-skeleton.component.spec.ts
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoadingSkeletonComponent, SkeletonVariant } from './loading-skeleton.component';
-import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { MatDialogModule } from '@angular/material/dialog';
 

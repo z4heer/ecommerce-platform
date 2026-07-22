@@ -9,16 +9,6 @@ import { CartService } from '../cart/services/cart.service';
 import { OrderService } from '../orders/services/order.service';
 
 // Enterprise Design System Layout & Shared Component Imports
-import { PageContainerComponent } from '../../layout/page-container/page-container.component';
-import { PageHeaderComponent } from '../../layout/page-header/page-header.component';
-import { SectionHeaderComponent } from '../../shared/components/section-header/section-header.component';
-import { AppCardComponent } from '../../shared/components/app-card/app-card.component';
-import { StatusChipComponent } from '../../shared/components/status-chip/status-chip.component';
-import { SearchToolbarComponent } from '../../shared/components/search-toolbar/search-toolbar.component';
-import { EmptyStateComponent } from '../../shared/components/empty-state/empty-state.component';
-import { ErrorStateComponent } from '../../shared/components/error-state/error-state.component';
-import { LoadingSkeletonComponent } from '../../shared/components/loading-skeleton/loading-skeleton.component';
-
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';

@@ -41,6 +41,4 @@ export class AppComponent implements OnInit {
       this.loadingService.hide();
     }, 3000);
   }
-
-  constructor() { }
 }

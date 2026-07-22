@@ -9,6 +9,7 @@ breakdown so you can confirm the dashboard has data to show.
 
 Uses the same SessionLocal as seed_database.py (app.database.session).
 """
+
 import sys
 from collections import Counter
 from pathlib import Path
@@ -63,7 +64,9 @@ def run() -> None:
         print("=" * 44)
 
         if counts["Products"] == 0 or counts["Users"] == 0:
-            print("\nWARNING: core tables look empty — run scripts/seed_database.py first.")
+            print(
+                "\nWARNING: core tables look empty — run scripts/seed_database.py first."
+            )
     finally:
         db.close()
 

@@ -12,6 +12,8 @@ from app.modules.auth.dependencies import require_admin
 from app.modules.catalog.repositories.product_repository import ProductRepository
 from app.modules.catalog.repositories.inventory_repository import InventoryRepository
 from app.core.logger import logger
+from fastapi import status
+from app.modules.catalog.schemas.product_response import ProductResponse
 
 router = APIRouter(prefix="/api/v1/products", tags=["Products"])
 
@@ -62,7 +64,7 @@ def get_product(product_id: UUID, db=Depends(get_db)):
         raise HTTPException(status_code=400, detail=str(ex))
 
 
-@router.post("")
+@router.post("", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
 def create_product(
     payload: ProductCreate, db=Depends(get_db), current_user=Depends(require_admin)
 ):
@@ -78,7 +80,11 @@ def create_product(
         raise HTTPException(status_code=400, detail=str(ex))
 
 
-@router.put("/{product_id}")
+@router.put(
+    "/{product_id}",
+    response_model=ProductResponse,
+    status_code=status.HTTP_200_OK,
+)
 def update_product(
     product_id: UUID,
     payload: ProductUpdate,
@@ -90,13 +96,7 @@ def update_product(
         service = ProductService(
             product_repo=ProductRepository(db), inventory_repo=InventoryRepository(db)
         )
-        product = service.get_product(db, product_id)
-
-        if not product:
-            raise HTTPException(status_code=404, detail="Product not found")
-
-        return service.update_product(db, product, payload)
-        product = service.get_product(db, product_id)
+        product = service.get_product_entity(db, product_id)
 
         if not product:
             raise HTTPException(status_code=404, detail="Product not found")
@@ -106,7 +106,10 @@ def update_product(
         raise HTTPException(status_code=400, detail=str(ex))
 
 
-@router.delete("/{product_id}")
+@router.delete(
+    "/{product_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
 def delete_product(
     product_id: UUID, db=Depends(get_db), urrent_user=Depends(require_admin)
 ):
@@ -114,7 +117,7 @@ def delete_product(
         service = ProductService(
             product_repo=ProductRepository(db), inventory_repo=InventoryRepository(db)
         )
-        product = service.get_product(db, product_id)
+        product = service.get_product_entity(db, product_id)
 
         if not product:
             raise HTTPException(status_code=404, detail="Product not found")

@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[toolbar-actions]',
+  selector: '[appToolbarActions]',
   standalone: true,
 })
-export class SearchToolbarActionsDirective {}
+export class SearchToolbarActionsDirective { }

@@ -12,7 +12,7 @@ describe('CartComponent', () => {
 
   let component: CartComponent;
   let fixture: ComponentFixture<CartComponent>;
-  let dialog: jasmine.SpyObj<MatDialog>;
+  const dialog: jasmine.SpyObj<MatDialog> = jasmine.createSpyObj('MatDialog', ['open']);;
   let cartService: jasmine.SpyObj<CartService>;
 
   let cartItemsSignal: WritableSignal<CartItem[]>;
@@ -23,7 +23,7 @@ describe('CartComponent', () => {
   let grandTotalSignal: WritableSignal<number>;
   let isEmptySignal: WritableSignal<boolean>;
   let router: Router;
-  dialog = jasmine.createSpyObj('MatDialog', ['open']);
+
   beforeEach(async () => {
 
     // Fresh signals for every test

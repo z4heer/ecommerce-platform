@@ -37,7 +37,7 @@ def get_current_user(
 
 
 def require_admin(current_user=Depends(get_current_user)):
-    if current_user.role.name != "ADMIN":
+    if current_user.role.name.upper() != "ADMIN":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required"
         )
@@ -45,7 +45,7 @@ def require_admin(current_user=Depends(get_current_user)):
 
 
 def require_customer(current_user=Depends(get_current_user)):
-    if current_user.role.name != "CUSTOMER":
+    if current_user.role.name.upper() != "CUSTOMER":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Customer access required"
         )

@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[section-meta]',
+  selector: '[appSectionMeta]',
   standalone: true,
 })
-export class SectionMetaDirective {}
+export class SectionMetaDirective { }

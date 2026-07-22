@@ -12,6 +12,7 @@ Usage (from seed_database.py):
     from scripts.generate_placeholder_images import generate_product_svgs
     image_map = generate_product_svgs(PRODUCTS)   # {sku: image_url}
 """
+
 import re
 from pathlib import Path
 
@@ -20,10 +21,10 @@ OUTPUT_DIR = Path(__file__).resolve().parent.parent / "static" / "product_images
 # Pastel background + accent icon colour per category.
 CATEGORY_STYLE = {
     "Electronics": {"bg": "#DCE9FF", "accent": "#3B6FE0"},
-    "Computers":   {"bg": "#E4E0FB", "accent": "#6C4FD6"},
-    "Footwear":    {"bg": "#FDE8D8", "accent": "#D97A2E"},
-    "Home":        {"bg": "#E1F3E6", "accent": "#2F9E5C"},
-    "Audio":       {"bg": "#F8E1EE", "accent": "#C43E80"},
+    "Computers": {"bg": "#E4E0FB", "accent": "#6C4FD6"},
+    "Footwear": {"bg": "#FDE8D8", "accent": "#D97A2E"},
+    "Home": {"bg": "#E1F3E6", "accent": "#2F9E5C"},
+    "Audio": {"bg": "#F8E1EE", "accent": "#C43E80"},
 }
 DEFAULT_STYLE = {"bg": "#EDEDED", "accent": "#666666"}
 
@@ -104,15 +105,17 @@ def build_svg(name: str, category: str) -> str:
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="300" height="300">'
         f'<rect width="300" height="300" rx="18" fill="{style["bg"]}"/>'
-        f'{icon}'
+        f"{icon}"
         f'<rect x="20" y="{pill_y}" width="260" height="{pill_height}" rx="{pill_height/2}" '
         f'fill="#ffffff" fill-opacity="0.9"/>'
-        f'{text_elements}'
-        f'</svg>'
+        f"{text_elements}"
+        f"</svg>"
     )
 
 
-def generate_product_svgs(products: list[dict], output_dir: Path = OUTPUT_DIR) -> dict[str, str]:
+def generate_product_svgs(
+    products: list[dict], output_dir: Path = OUTPUT_DIR
+) -> dict[str, str]:
     """Writes one .svg per product and returns a {sku: relative_image_url} map."""
     output_dir.mkdir(parents=True, exist_ok=True)
     image_map: dict[str, str] = {}
@@ -121,7 +124,9 @@ def generate_product_svgs(products: list[dict], output_dir: Path = OUTPUT_DIR) -
         slug = _slugify(product["name"])
         filename = f"{slug}.svg"
         filepath = output_dir / filename
-        filepath.write_text(build_svg(product["name"], product["category"]), encoding="utf-8")
+        filepath.write_text(
+            build_svg(product["name"], product["category"]), encoding="utf-8"
+        )
         image_map[product["sku"]] = f"/static/product_images/{filename}"
 
     return image_map
@@ -129,10 +134,15 @@ def generate_product_svgs(products: list[dict], output_dir: Path = OUTPUT_DIR) -
 
 if __name__ == "__main__":
     import sys
+
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
     from seed_data.products import PRODUCTS
 
     mapping = generate_product_svgs(PRODUCTS)
-    total_bytes = sum((OUTPUT_DIR / Path(url).name).stat().st_size for url in mapping.values())
+    total_bytes = sum(
+        (OUTPUT_DIR / Path(url).name).stat().st_size for url in mapping.values()
+    )
     print(f"Generated {len(mapping)} SVG placeholders in {OUTPUT_DIR}")
-    print(f"Total size: {total_bytes / 1024:.1f} KB (avg {total_bytes / len(mapping):.0f} bytes/file)")
+    print(
+        f"Total size: {total_bytes / 1024:.1f} KB (avg {total_bytes / len(mapping):.0f} bytes/file)"
+    )

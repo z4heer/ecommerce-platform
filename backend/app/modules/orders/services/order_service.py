@@ -14,12 +14,13 @@ from decimal import Decimal
 from datetime import datetime
 import random
 
-from app.modules.catalog.models.product import Product
 from app.modules.orders.models.order import (
     PaymentMethod,
     PaymentStatus,
     Currency,
 )
+from datetime import UTC
+
 
 class OrderService:
     def __init__(
@@ -33,74 +34,6 @@ class OrderService:
         self.order_repo = order_repo
         self.inventory_service = inventory_service
         self.product_repo = product_repo
-
-    def create_order(self, user_id: UUID, request: CreateOrderRequest) -> Order:
-        try:
-            logger.info(
-                f"Starting order creation for user: {user_id} with items: {request.items}"
-            )
-            # 1. Row locking & Inventory validation occurs inside an active Unit of Work context
-            self.inventory_service.validate_and_deduct_stock(request.items)
-
-            total_amount = 0.0
-            order_items_entities = []
-
-            # 2. Extract historical product prices
-            for item in request.items:
-                logger.info(
-                    f"Fetching product details for product_id: {item.product_id}"
-                )
-                product = self.product_repo.get_by_id(self.db, item.product_id)
-                if not product:
-                    raise HTTPException(status_code=400, detail="Product invalid")
-
-                item_price = float(product.price)
-                total_amount += item_price * item.quantity
-
-                order_items_entities.append(
-                    OrderItem(
-                        product_id=item.product_id,
-                        quantity=item.quantity,
-                        unit_price=item_price,
-                    )
-                )
-
-            # 3. Formulate Order object
-            new_order = Order(
-                order_number=self.generate_order_number(),
-                user_id=user_id,
-                status=OrderStatus.PENDING,
-                total_amount=Decimal("0.00"),
-                shipping_address=request.shipping_address,
-                payment_method=PaymentMethod.COD,
-                payment_status=PaymentStatus.PENDING,
-                currency=Currency.INR,
-            )            
-            subtotal = Decimal(product.price) * item.quantity
-
-            order_item = OrderItem(
-                product_id=product.id,
-                quantity=item.quantity,
-                unit_price=product.price,
-                subtotal=subtotal,
-                product_name=product.name,
-                product_sku=product.sku or "",
-            )
-            new_order.items.append(order_item)
-            new_order.total_amount = sum(
-                item.subtotal for item in new_order.items
-            )
-            # 4. Save to DB
-            saved_order = self.order_repo.create_order(new_order)
-            # 5. Commit everything as an atomic transaction
-            self.db.commit()
-            return saved_order
-
-        except Exception as e:
-            self.db.rollback()  # If anything went wrong above, undo all database changes
-            if isinstance(e, HTTPException):
-                raise e
-            raise HTTPException(status_code=500, detail=f"Transaction Failed: {str(e)}")
 
     def get_order_history(self, user_id: UUID) -> list[Order]:
         return self.order_repo.get_orders_by_user(user_id)
@@ -140,13 +73,86 @@ class OrderService:
         updated_order = self.order_repo.update_status(order, new_status)
         self.db.commit()
         return updated_order
-    
+
     def generate_order_number(self) -> str:
         """
         Temporary implementation.
         Later we can replace this with a sequence/table.
         """
-        return (
-            f"ORD-{datetime.utcnow():%Y%m%d}-"
-            f"{random.randint(100000,999999)}"
-        )
+        return f"ORD-{datetime.now(UTC):%Y%m%d}-" f"{random.randint(100000,999999)}"
+
+    def create_order(
+        self,
+        user_id: UUID,
+        request: CreateOrderRequest,
+    ) -> Order:
+        try:
+            logger.info(
+                "Starting order creation for user %s",
+                user_id,
+            )
+
+            # Validate inventory (row locking happens inside InventoryService)
+            self.inventory_service.validate_and_deduct_stock(request.items)
+
+            new_order = Order(
+                order_number=self.generate_order_number(),
+                user_id=user_id,
+                status=OrderStatus.PENDING,
+                shipping_address=request.shipping_address,
+                payment_method=PaymentMethod.COD,
+                payment_status=PaymentStatus.PENDING,
+                currency=Currency.INR,
+                total_amount=Decimal("0.00"),
+            )
+
+            total_amount: Decimal = Decimal("0.00")
+
+            for item in request.items:
+
+                product = self.product_repo.get_by_id(
+                    self.db,
+                    item.product_id,
+                )
+
+                if product is None:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Invalid product.",
+                    )
+
+                subtotal = Decimal(product.price) * item.quantity
+
+                order_item = OrderItem(
+                    product_id=product.id,
+                    quantity=item.quantity,
+                    unit_price=product.price,
+                    subtotal=subtotal,
+                    product_name=product.name,
+                    product_sku=product.sku or "",
+                )
+
+                new_order.items.append(order_item)
+                total_amount += subtotal
+            new_order.total_amount = Decimal(total_amount)
+
+            saved_order = self.order_repo.create_order(new_order)
+
+            self.db.commit()
+            self.db.refresh(saved_order)
+
+            return saved_order
+
+        except HTTPException:
+            self.db.rollback()
+            raise
+
+        except Exception as ex:
+            self.db.rollback()
+
+            logger.exception("Order creation failed")
+
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Transaction Failed: {str(ex)}",
+            )

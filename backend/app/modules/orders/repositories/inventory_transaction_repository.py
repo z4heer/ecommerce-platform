@@ -1,11 +1,11 @@
 from uuid import UUID
 from sqlalchemy import select
 from app.modules.catalog.models.inventory import Inventory  # Presumed system location
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session
 
 
 class InventoryTransactionRepository:
-    def __init__(self, db: AsyncSession):
+    def __init__(self, db: Session):
         self.db = db
 
     def get_inventory_for_update(self, product_id: UUID) -> Inventory | None:

@@ -1,7 +1,7 @@
 import { Directive } from '@angular/core';
 
 @Directive({
-  selector: '[toolbar-filters]',
+  selector: '[appToolbarFilters]',
   standalone: true,
 })
-export class SearchToolbarFiltersDirective {}
+export class SearchToolbarFiltersDirective { }

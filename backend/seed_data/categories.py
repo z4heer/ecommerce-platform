@@ -9,9 +9,21 @@ consistent until/unless a category_id FK migration lands.
 """
 
 CATEGORIES = [
-    {"name": "Electronics", "description": "Phones, cameras, wearables, and everyday gadgets."},
-    {"name": "Computers", "description": "Laptops, desktops, monitors, and PC peripherals."},
-    {"name": "Footwear", "description": "Shoes and boots for sport, work, and everyday wear."},
-    {"name": "Home", "description": "Small appliances, furniture, and household essentials."},
+    {
+        "name": "Electronics",
+        "description": "Phones, cameras, wearables, and everyday gadgets.",
+    },
+    {
+        "name": "Computers",
+        "description": "Laptops, desktops, monitors, and PC peripherals.",
+    },
+    {
+        "name": "Footwear",
+        "description": "Shoes and boots for sport, work, and everyday wear.",
+    },
+    {
+        "name": "Home",
+        "description": "Small appliances, furniture, and household essentials.",
+    },
     {"name": "Audio", "description": "Speakers, headphones, and other listening gear."},
 ]

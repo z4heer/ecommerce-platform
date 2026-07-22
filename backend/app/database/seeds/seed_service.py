@@ -80,7 +80,6 @@ def seed_products(db: Session, product_seeds: list[dict]) -> SeedSummary:
             product.category = payload["category"]
             product.price = payload["price"]
             product.image_url = payload["image_url"]
-            product.image_alt = payload["image_alt"]
             product.is_active = True
             db.flush()
             summary.products_updated += 1

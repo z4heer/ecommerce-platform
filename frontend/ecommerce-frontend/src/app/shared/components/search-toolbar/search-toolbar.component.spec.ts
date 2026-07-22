@@ -10,8 +10,8 @@ import { SearchToolbarActionsDirective } from './search-toolbar-actions.directiv
 @Component({
   template: `
     <app-search-toolbar>
-      <div toolbar-filters class="test-filter">Filter Element</div>
-      <div toolbar-actions class="test-action">Action Element</div>
+      <div toolbarFilters class="test-filter">Filter Element</div>
+      <div toolbarActions class="test-action">Action Element</div>
     </app-search-toolbar>
   `,
   standalone: true,
