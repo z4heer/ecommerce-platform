@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+# ruff: noqa: E402
 from pathlib import Path
 import sys
 

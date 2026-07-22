@@ -29,10 +29,7 @@ class Settings(BaseSettings):
 
     @property
     def redis_url(self) -> str:
-        return (
-            f"redis://"
-            f"{self.REDIS_HOST}:"
-            f"{self.REDIS_PORT}"
-        )
-        
+        return f"redis://" f"{self.REDIS_HOST}:" f"{self.REDIS_PORT}"
+
+
 settings = Settings()

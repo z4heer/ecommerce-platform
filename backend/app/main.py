@@ -1,4 +1,4 @@
-from fastapi import FastAPI 
+from fastapi import FastAPI
 
 from app.core.health import check_database
 from app.core.redis_client import check_redis
@@ -13,10 +13,9 @@ from app.modules.orders.routers.order_router import router as order_router
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.handlers import register_exception_handlers
 
-
 app = FastAPI(title="E-Commerce Platform API", version="1.0.0")
 
-register_exception_handlers(app)  # Register exception handlers 
+register_exception_handlers(app)  # Register exception handlers
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:4200"],
@@ -46,7 +45,7 @@ def health_check():
         if check_database():
             postgres_status = "UP"
     except Exception:
-        postgres_status = "DOWN" 
+        postgres_status = "DOWN"
     try:
         if check_redis():
             redis_status = "UP"

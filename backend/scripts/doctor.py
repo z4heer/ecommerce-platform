@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-
-#"""
-#Repository Doctor
+# ruff: noqa: E402
+# """
+# Repository Doctor
 #
-#Quick health check for the Enterprise E-Commerce Platform.
-#"""
+# Quick health check for the Enterprise E-Commerce Platform.
+# """
 from pathlib import Path
 import sys
 
@@ -12,15 +12,15 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
-    
+
 from pathlib import Path
-import os
-import shutil
-import sys
-from sqlalchemy import text
-from redis import Redis
-from app.core.config import settings
-from sqlalchemy import create_engine
+import os  # noqa: E402
+import shutil  # noqa: E402
+import sys  # noqa: E402
+from sqlalchemy import text  # noqa: E402
+from redis import Redis  # noqa: E402
+from app.core.config import settings  # noqa: E402
+from sqlalchemy import create_engine  # noqa: E402
 
 PASS = "[PASS]"
 FAIL = "[FAIL]"
@@ -31,9 +31,13 @@ def check_python():
     version = sys.version_info
 
     if version >= (3, 12):
-        print(f"{PASS} Python Version      : {version.major}.{version.minor}.{version.micro}")
+        print(
+            f"{PASS} Python Version      : {version.major}.{version.minor}.{version.micro}"
+        )
     else:
-        print(f"{FAIL} Python Version      : {version.major}.{version.minor}.{version.micro}")
+        print(
+            f"{FAIL} Python Version      : {version.major}.{version.minor}.{version.micro}"
+        )
 
 
 def check_venv():
@@ -83,6 +87,7 @@ def check_postgres():
     except Exception as e:
         print(f"{FAIL} PostgreSQL         : {e}")
 
+
 def check_redis():
     try:
         host = settings.REDIS_HOST
@@ -100,6 +105,7 @@ def check_redis():
         print(f"{PASS} Redis              : Reachable")
     except Exception as e:
         print(f"{FAIL} Redis              : {e}")
+
 
 def main():
     print("=" * 52)

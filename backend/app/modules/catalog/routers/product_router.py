@@ -64,11 +64,7 @@ def get_product(product_id: UUID, db=Depends(get_db)):
         raise HTTPException(status_code=400, detail=str(ex))
 
 
-@router.post(
-    "",
-    response_model=ProductResponse,
-    status_code=status.HTTP_201_CREATED
-)
+@router.post("", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
 def create_product(
     payload: ProductCreate, db=Depends(get_db), current_user=Depends(require_admin)
 ):

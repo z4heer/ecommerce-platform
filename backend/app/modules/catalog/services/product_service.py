@@ -29,7 +29,7 @@ class ProductService:
             price=payload.price,
             sku=payload.sku,
             image_url=payload.image_url,
-            )
+        )
 
         self.product_repo.create(db, product)
 
@@ -83,8 +83,9 @@ class ProductService:
                     if p.inventory.stock_quantity == 0
                     else "Low Stock" if p.inventory.stock_quantity < 10 else "In Stock"
                 ),
-                "sku" : p.sku,
-                "image_url" : p.image_url,            }
+                "sku": p.sku,
+                "image_url": p.image_url,
+            }
             for p in products
         ]
 
@@ -112,12 +113,13 @@ class ProductService:
             "price": float(product.price),
             "stock_quantity": stock,
             "status": status,
-            "sku" : product.sku,
-            "image_url" : product.image_url
+            "sku": product.sku,
+            "image_url": product.image_url,
         }
+
     def get_product_entity(self, db, product_id):
         return self.product_repo.get_by_id(db, product_id)
-    
+
     def update_product(self, db, product, payload):
 
         if payload.name:

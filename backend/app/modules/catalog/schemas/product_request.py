@@ -18,6 +18,7 @@ class ProductCreate(BaseModel):
     sku: str | None = None
     image_url: str | None = None
 
+
 class ProductUpdate(BaseModel):
 
     name: str | None = None

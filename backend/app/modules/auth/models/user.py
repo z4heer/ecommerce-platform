@@ -3,7 +3,6 @@ from uuid import uuid4
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
 from app.database.base import Base
 
 

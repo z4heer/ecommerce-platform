@@ -3,11 +3,9 @@ from sqlalchemy import Numeric, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.base import Base
 from sqlalchemy import (
-    ForeignKey,
-    Integer,
-    Numeric,
     String,
 )
+from decimal import Decimal
 
 class OrderItem(Base):
     __tablename__ = "order_items"
@@ -20,11 +18,16 @@ class OrderItem(Base):
         ForeignKey("products.id"), nullable=False
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
-    unit_price: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
-
-    subtotal: Mapped[float] = mapped_column(
-        Numeric(10, 2),
+    unit_price: Mapped[Decimal] = mapped_column(
+        Numeric(12, 2),
         nullable=False,
+        default=Decimal("0.00"),
+    )
+
+    subtotal: Mapped[Decimal] = mapped_column(
+        Numeric(12, 2),
+        nullable=False,
+        default=Decimal("0.00"),
     )
 
     product_name: Mapped[str] = mapped_column(

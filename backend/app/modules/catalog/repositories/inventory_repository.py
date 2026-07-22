@@ -1,6 +1,7 @@
 from app.modules.catalog.models.inventory import Inventory
 from sqlalchemy.orm import Session
 
+
 class InventoryRepository:
 
     def __init__(self, db: Session):

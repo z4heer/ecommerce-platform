@@ -1,7 +1,6 @@
 import uuid
 from unittest.mock import MagicMock
 
-import pytest
 
 from app.modules.orders.models.order import Order
 from app.modules.orders.schemas.order_request import (
@@ -9,11 +8,15 @@ from app.modules.orders.schemas.order_request import (
     OrderItemRequest,
 )
 from app.modules.orders.services.order_service import OrderService
+from decimal import Decimal
 
 
 class _FakeProduct:
     def __init__(self, price: float) -> None:
-        self.price = price
+        self.id = uuid.uuid4()
+        self.price = Decimal(str(price))
+        self.name = "Test Product"
+        self.sku = "TEST-001"
 
 
 def _build_service(product_price: float):
@@ -52,8 +55,8 @@ def test_order_item_snapshots_price_at_creation_time() -> None:
     order = service.create_order(user_id=uuid.uuid4(), request=request)
 
     assert len(order.items) == 1
-    assert order.items[0].unit_price == pytest.approx(19.99)
-    assert order.total_amount == pytest.approx(39.98)
+    assert order.items[0].unit_price == Decimal("19.99")
+    assert order.items[0].subtotal == Decimal("39.98")
 
 
 def test_order_total_is_immune_to_later_price_changes() -> None:

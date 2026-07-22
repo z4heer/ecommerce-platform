@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# ruff: noqa: E402
 """
 scripts/seed_database.py
 
@@ -50,6 +51,7 @@ script uses a sync Session throughout, matching what the repo methods
 actually do rather than their type hints. Worth fixing the type hints
 project-wide at some point.
 """
+
 import random
 import sys
 from decimal import Decimal
@@ -80,12 +82,13 @@ from app.modules.orders.models.order import (
     PaymentStatus,
     Currency,
 )
+
 ADMIN_EMAIL = "admin@test.com"
-ADMIN_PASSWORD = "Admin@12345"          # rotate before using outside local/demo
+ADMIN_PASSWORD = "Admin@12345"  # rotate before using outside local/demo
 CUSTOMER_EMAIL = "cust01@company.com"
 CUSTOMER_PASSWORD = "Customer@12345"
-ADMIN_ROLE_NAME = "admin"               # verify against your existing roles table
-CUSTOMER_ROLE_NAME = "customer"         # verify against your existing roles table
+ADMIN_ROLE_NAME = "admin"  # verify against your existing roles table
+CUSTOMER_ROLE_NAME = "customer"  # verify against your existing roles table
 
 DEMO_ORDER_COUNT = 8
 # Your OrderStatus only has these 4 values (no PROCESSING).
@@ -165,13 +168,15 @@ def seed_products(db) -> list:
         product = Product(
             name=item["name"],
             description=item["description"],
-            category=item["category"],           # plain string, see module docstring
+            category=item["category"],  # plain string, see module docstring
             sku=item["sku"],
             price=Decimal(item["price"]),
             image_url=image_map[item["sku"]],
             is_active=True,
         )
-        product = product_repo.create(db, product)  # matches their (db, product) signature
+        product = product_repo.create(
+            db, product
+        )  # matches their (db, product) signature
 
         inventory = Inventory(
             product_id=product.id,
@@ -215,9 +220,6 @@ def seed_users(db) -> tuple:
     return admin.id, customer.id
 
 
-
-    print(f"  seeded {created} demo orders across {len(statuses)} statuses")
-
 def seed_orders(db, customer_id, product_ids: list) -> None:
     order_repo = OrderRepository(db)
 
@@ -231,25 +233,15 @@ def seed_orders(db, customer_id, product_ids: list) -> None:
     # Load complete Product objects once
     products = db.query(Product).filter(Product.id.in_(product_ids)).all()
 
-    product_lookup = {
-        product.id: product
-        for product in products
-    }
+    product_lookup = {product.id: product for product in products}
 
     created = 0
 
     for order_index in range(DEMO_ORDER_COUNT):
 
-        status = random.choices(
-            statuses,
-            weights=weights,
-            k=1
-        )[0]
+        status = random.choices(statuses, weights=weights, k=1)[0]
 
-        chosen_products = random.sample(
-            product_ids,
-            k=random.randint(1, 3)
-        )
+        chosen_products = random.sample(product_ids, k=random.randint(1, 3))
 
         items = []
         total_amount = Decimal("0.00")
@@ -293,10 +285,9 @@ def seed_orders(db, customer_id, product_ids: list) -> None:
 
         created += 1
 
-    print(
-        f"  seeded {created} demo orders across {len(statuses)} statuses"
-    )
-    
+    print(f"  seeded {created} demo orders across {len(statuses)} statuses")
+
+
 def run() -> None:
     print("Ensuring tables exist (create_all)...")
     Base.metadata.create_all(bind=engine)
@@ -322,7 +313,9 @@ def run() -> None:
         print("\nDatabase seed complete.")
         print(f"  Admin login:    {ADMIN_EMAIL} / {ADMIN_PASSWORD}")
         print(f"  Customer login: {CUSTOMER_EMAIL} / {CUSTOMER_PASSWORD}")
-        print("  (rotate these passwords before using outside a local/demo environment)")
+        print(
+            "  (rotate these passwords before using outside a local/demo environment)"
+        )
     except Exception:
         db.rollback()
         raise

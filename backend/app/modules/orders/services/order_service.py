@@ -14,12 +14,13 @@ from decimal import Decimal
 from datetime import datetime
 import random
 
-from app.modules.catalog.models.product import Product
 from app.modules.orders.models.order import (
     PaymentMethod,
     PaymentStatus,
     Currency,
 )
+from datetime import UTC
+
 
 class OrderService:
     def __init__(
@@ -72,16 +73,13 @@ class OrderService:
         updated_order = self.order_repo.update_status(order, new_status)
         self.db.commit()
         return updated_order
-    
+
     def generate_order_number(self) -> str:
         """
         Temporary implementation.
         Later we can replace this with a sequence/table.
         """
-        return (
-            f"ORD-{datetime.utcnow():%Y%m%d}-"
-            f"{random.randint(100000,999999)}"
-        )
+        return f"ORD-{datetime.now(UTC):%Y%m%d}-" f"{random.randint(100000,999999)}"
 
     def create_order(
         self,
@@ -108,7 +106,7 @@ class OrderService:
                 total_amount=Decimal("0.00"),
             )
 
-            total_amount = Decimal("0.00")
+            total_amount: Decimal = Decimal("0.00")
 
             for item in request.items:
 
@@ -136,8 +134,7 @@ class OrderService:
 
                 new_order.items.append(order_item)
                 total_amount += subtotal
-
-            new_order.total_amount = total_amount
+            new_order.total_amount = Decimal(total_amount)
 
             saved_order = self.order_repo.create_order(new_order)
 

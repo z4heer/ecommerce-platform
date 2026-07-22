@@ -11,7 +11,7 @@ class OrderItemResponse(BaseModel):
     product_name: str
     product_sku: str
     subtotal: float
-    
+
     class Config:
         from_attributes = True
 

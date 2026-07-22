@@ -3,6 +3,7 @@ from app.core.logger import logger
 from sqlalchemy.orm import joinedload
 from sqlalchemy.orm import Session
 
+
 class ProductRepository:
     def __init__(self, db: Session):
         self.db = db

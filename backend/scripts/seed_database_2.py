@@ -50,6 +50,7 @@ script uses a sync Session throughout, matching what the repo methods
 actually do rather than their type hints. Worth fixing the type hints
 project-wide at some point.
 """
+
 import random
 import sys
 from decimal import Decimal
@@ -77,11 +78,11 @@ from seed_data.categories import CATEGORIES
 from seed_data.products import PRODUCTS
 
 ADMIN_EMAIL = "admin@test.com"
-ADMIN_PASSWORD = "Admin@12345"          # rotate before using outside local/demo
+ADMIN_PASSWORD = "Admin@12345"  # rotate before using outside local/demo
 CUSTOMER_EMAIL = "cust01@company.com"
 CUSTOMER_PASSWORD = "Customer@12345"
-ADMIN_ROLE_NAME = "admin"               # verify against your existing roles table
-CUSTOMER_ROLE_NAME = "customer"         # verify against your existing roles table
+ADMIN_ROLE_NAME = "admin"  # verify against your existing roles table
+CUSTOMER_ROLE_NAME = "customer"  # verify against your existing roles table
 
 DEMO_ORDER_COUNT = 8
 # Your OrderStatus only has these 4 values (no PROCESSING).
@@ -161,13 +162,15 @@ def seed_products(db) -> list:
         product = Product(
             name=item["name"],
             description=item["description"],
-            category=item["category"],           # plain string, see module docstring
+            category=item["category"],  # plain string, see module docstring
             sku=item["sku"],
             price=Decimal(item["price"]),
             image_url=image_map[item["sku"]],
             is_active=True,
         )
-        product = product_repo.create(db, product)  # matches their (db, product) signature
+        product = product_repo.create(
+            db, product
+        )  # matches their (db, product) signature
 
         inventory = Inventory(
             product_id=product.id,
@@ -233,9 +236,9 @@ def seed_orders(db, customer_id, product_ids: list) -> None:
                 product_id=pid,
                 quantity=random.randint(1, 3),
                 unit_price=price_lookup[pid],
-				subtotal= price_lookup[pid] * random.randint(1, 3),
-				product_name=pid.name,
-				product_sku=pid.sku or ""
+                subtotal=price_lookup[pid] * random.randint(1, 3),
+                product_name=pid.name,
+                product_sku=pid.sku or "",
             )
             for pid in chosen_products
         ]
@@ -279,7 +282,9 @@ def run() -> None:
         print("\nDatabase seed complete.")
         print(f"  Admin login:    {ADMIN_EMAIL} / {ADMIN_PASSWORD}")
         print(f"  Customer login: {CUSTOMER_EMAIL} / {CUSTOMER_PASSWORD}")
-        print("  (rotate these passwords before using outside a local/demo environment)")
+        print(
+            "  (rotate these passwords before using outside a local/demo environment)"
+        )
     except Exception:
         db.rollback()
         raise

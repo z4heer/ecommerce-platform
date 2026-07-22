@@ -48,7 +48,9 @@ def upgrade() -> None:
             "inventory",
             sa.Column("id", postgresql.UUID(as_uuid=True), nullable=False),
             sa.Column("product_id", postgresql.UUID(as_uuid=True), nullable=False),
-            sa.Column("stock_quantity", sa.Integer(), nullable=False, server_default="0"),
+            sa.Column(
+                "stock_quantity", sa.Integer(), nullable=False, server_default="0"
+            ),
             sa.Column(
                 "reserved_quantity", sa.Integer(), nullable=False, server_default="0"
             ),

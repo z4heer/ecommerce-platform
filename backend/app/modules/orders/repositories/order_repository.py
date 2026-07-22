@@ -3,6 +3,7 @@ from sqlalchemy import select
 from app.modules.orders.models.order import Order, OrderStatus
 from sqlalchemy.orm import Session
 
+
 class OrderRepository:
     def __init__(self, db: Session):
         self.db = db

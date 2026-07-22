@@ -4,20 +4,12 @@ from datetime import datetime
 from sqlalchemy import String, Numeric, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.base import Base
-from app.modules.orders.models.order_item import OrderItem 
+from app.modules.orders.models.order_item import OrderItem
+from datetime import UTC
 from sqlalchemy import (
-    String,
-    Text,
-    Numeric,
-    DateTime,
-    ForeignKey,
     Enum as SqlEnum,
 )
-from sqlalchemy.orm import (
-    Mapped,
-    mapped_column,
-    relationship,
-)
+from decimal import Decimal
 
 class OrderStatus(str, Enum):
     PENDING = "PENDING"
@@ -46,6 +38,7 @@ class Currency(str, Enum):
     INR = "INR"
     USD = "USD"
 
+
 class Order(Base):
     __tablename__ = "orders"
 
@@ -53,13 +46,17 @@ class Order(Base):
     user_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("users.id", ondelete="CASCADE"), nullable=False
     )
-    total_amount: Mapped[float] = mapped_column(Numeric(12, 2), nullable=False)
+    total_amount: Mapped[Decimal] = mapped_column(
+        Numeric(12, 2),
+        nullable=False,
+        default=Decimal("0.00"),
+    )
     status: Mapped[OrderStatus] = mapped_column(
         String, default=OrderStatus.PENDING, nullable=False
     )
     shipping_address: Mapped[str] = mapped_column(String(500), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=datetime.utcnow, nullable=False
+        DateTime, default=datetime.now(UTC), nullable=False
     )
 
     order_number: Mapped[str] = mapped_column(
@@ -67,34 +64,6 @@ class Order(Base):
         unique=True,
         index=True,
         nullable=False,
-    )
-
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"),
-        nullable=False,
-    )
-
-    status: Mapped[OrderStatus] = mapped_column(
-        SqlEnum(OrderStatus),
-        default=OrderStatus.PENDING,
-        nullable=False,
-    )
-
-    total_amount: Mapped[float] = mapped_column(
-        Numeric(10, 2),
-        default=0,
-        nullable=False,
-    )
-
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime,
-        default=datetime.utcnow,
-        nullable=False,
-    )
-
-    shipping_address: Mapped[str | None] = mapped_column(
-        Text,
-        nullable=True,
     )
 
     payment_method: Mapped[PaymentMethod] = mapped_column(
