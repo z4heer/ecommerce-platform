@@ -167,8 +167,8 @@ export class CheckoutComponent {
   // -------------------------------------------------------------------------
 
   placeOrder(): void {
-    if (this.checkoutForm.invalid) {
-      this.checkoutForm.markAllAsTouched();
+    if (this.checkoutForm.controls.shipping.invalid) {
+      this.checkoutForm.controls.shipping.markAllAsTouched();
       this.notification.warning('Please fill in all required shipping address fields.');
       return;
     }
