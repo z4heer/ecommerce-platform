@@ -3,7 +3,7 @@
 
   <section class="login-page" aria-label="Login">
     <app-card class="login-card" appearance="elevated" ariaLabel="Login form">
-      <!-- Loading -->
+      <!-- Loading Skeleton -->
       <app-loading-skeleton
         *ngIf="loading()"
         [variant]="'card'"
@@ -13,15 +13,17 @@
       >
       </app-loading-skeleton>
 
-      <!-- Error -->
-      <app-error-state
-        *ngIf="error() && !loading()"
-        title="Login failed"
-        [description]="error() ?? undefined"
-      ></app-error-state>
-
-      <!-- Form -->
+      <!-- Form & Inline Error Banner -->
       <ng-container *ngIf="!loading()">
+        <!-- Error Alert Banner -->
+        <div *ngIf="error()" class="login-error-banner" role="alert">
+          <mat-icon class="error-icon">error_outline</mat-icon>
+          <div class="error-content">
+            <strong class="error-title">Login failed</strong>
+            <span class="error-desc">{{ error() }}</span>
+          </div>
+        </div>
+
         <form [formGroup]="loginForm" (ngSubmit)="login()">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Email Address</mat-label>

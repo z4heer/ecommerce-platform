@@ -1,7 +1,5 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-
 import { inject } from '@angular/core';
-
 import { StorageService } from '../services/storage.service';
 
 /**
@@ -10,30 +8,27 @@ import { StorageService } from '../services/storage.service';
  * Authentication Interceptor
  * ============================================================
  *
- * Automatically attaches JWT access token to outgoing requests.
+ * Automatically attaches JWT access token to outgoing requests
+ * except for public authentication endpoints (login/register).
  */
 export const AuthInterceptor: HttpInterceptorFn = (request, next) => {
   const storageService = inject(StorageService);
-
   const accessToken = storageService.getAccessToken();
 
-  /**
-   * Skip Authorization header if no token exists.
-   */
-  if (!accessToken) {
+  // Skip attaching Authorization header if no token or for public auth endpoints
+  if (
+    !accessToken ||
+    request.url.includes('/auth/login') ||
+    request.url.includes('/auth/register')
+  ) {
     return next(request);
   }
 
-  /**
-   * Clone immutable request.
-   */
   const authenticatedRequest = request.clone({
     setHeaders: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  console.log('AuthInterceptor: Attaching Authorization header to request.',
-    authenticatedRequest.headers.get('Authorization')
-  );
+
   return next(authenticatedRequest);
 };
