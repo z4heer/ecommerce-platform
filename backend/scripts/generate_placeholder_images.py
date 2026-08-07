@@ -152,10 +152,40 @@ def _slugify(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
+def _wrap_label(name: str, max_chars: int = 24) -> list[str]:
+    """Greedy word-wrap for caption pill (max 2 lines)."""
+    words = name.split()
+    lines: list[str] = []
+    current = ""
+    for word in words:
+        candidate = f"{current} {word}".strip()
+        if len(candidate) > max_chars and current:
+            lines.append(current)
+            current = word
+        else:
+            current = candidate
+    if current:
+        lines.append(current)
+    return lines[:2]
+
+
 def build_svg(name: str, category: str) -> str:
     style = CATEGORY_STYLE.get(category, DEFAULT_STYLE)
     icon_tmpl = CATEGORY_ICONS.get(category, CATEGORY_ICONS.get(category.split()[0], DEFAULT_ICON))
     icon = icon_tmpl.format(**style)
+    lines = _wrap_label(name)
+
+    line_height = 14
+    pill_height = 26 + (len(lines) - 1) * line_height
+    pill_y = 200 - pill_height - 10
+    start_text_y = pill_y + pill_height / 2 - (len(lines) - 1) * line_height / 2 + 4
+
+    text_elements = "".join(
+        f'<text x="160" y="{start_text_y + i * line_height:.0f}" '
+        f'font-family="system-ui, -apple-system, sans-serif" font-size="11" '
+        f'font-weight="700" fill="{style["text"]}" text-anchor="middle">{line}</text>'
+        for i, line in enumerate(lines)
+    )
 
     return (
         f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">\n'
@@ -165,12 +195,16 @@ def build_svg(name: str, category: str) -> str:
         f'      <stop offset="100%" stop-color="#FFFFFF"/>\n'
         f'    </linearGradient>\n'
         f'    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">\n'
-        f'      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.07"/>\n'
+        f'      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.08"/>\n'
         f'    </filter>\n'
         f'  </defs>\n'
         f'  <rect width="320" height="200" rx="14" fill="url(#bg-grad-{_slugify(category)})"/>\n'
         f'  <g filter="url(#shadow)">\n'
         f'    {icon}\n'
+        f'  </g>\n'
+        f'  <g filter="url(#shadow)">\n'
+        f'    <rect x="20" y="{pill_y}" width="280" height="{pill_height}" rx="{pill_height/2}" fill="#FFFFFF" fill-opacity="0.94" stroke="{style["card"]}" stroke-opacity="0.2" stroke-width="1"/>\n'
+        f'    {text_elements}\n'
         f'  </g>\n'
         f'</svg>'
     )
