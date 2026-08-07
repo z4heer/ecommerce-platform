@@ -3,27 +3,23 @@ import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
 import { authGuard } from './core/guards/auth.guard';
-import { guestGuard } from './core/guards/guest.guard';
-import { rootGuard } from './core/guards/root.guard';
 
 export const routes: Routes = [
   //-------------------------------------------------------
-  // Root URL Dynamic Redirect (http://localhost:4200/)
+  // Root URL Redirect (http://localhost:4200/ -> /login)
   //-------------------------------------------------------
   {
     path: '',
     pathMatch: 'full',
-    canActivate: [rootGuard],
-    children: [],
+    redirectTo: 'login',
   },
 
   //-------------------------------------------------------
-  // Authentication Area (Guest Only: /login, /register)
+  // Authentication Area (/login, /register)
   //-------------------------------------------------------
   {
     path: '',
     component: AuthLayoutComponent,
-    canActivate: [guestGuard],
     children: [
       {
         path: '',
@@ -33,7 +29,7 @@ export const routes: Routes = [
   },
 
   //-------------------------------------------------------
-  // Protected Area (Auth Only: /products, /dashboard, etc.)
+  // Protected Area (Auth Guard Protected)
   //-------------------------------------------------------
   {
     path: '',
@@ -72,7 +68,6 @@ export const routes: Routes = [
   //-------------------------------------------------------
   {
     path: '**',
-    canActivate: [rootGuard],
-    children: [],
+    redirectTo: 'login',
   },
 ];
