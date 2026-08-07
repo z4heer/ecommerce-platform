@@ -84,7 +84,7 @@
           <div class="product-footer">
             <span class="product-price">{{
               product.price !== undefined && product.price !== null
-              ? (product.price | currency)
+              ? (product.price | currency:'INR')
               : 'N/A'
               }}</span>
             <app-status-chip [status]="mapStatusType(product.status)" [label]="resolveStatusLabel(product.status)"
