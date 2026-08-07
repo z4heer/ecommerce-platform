@@ -466,9 +466,10 @@ describe('CheckoutComponent', () => {
 
           }
 
-        ]
+        ],
+        shipping_address: 'Street, Pune, MH - 411001'
 
-      });
+      } as any);
 
   });
 });
