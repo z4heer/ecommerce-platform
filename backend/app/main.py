@@ -1,5 +1,7 @@
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.core.health import check_database
 from app.core.redis_client import check_redis
@@ -14,6 +16,11 @@ from app.modules.orders.routers.dashboard_router import router as dashboard_rout
 from app.core.handlers import register_exception_handlers
 
 app = FastAPI(title="E-Commerce Platform API", version="1.0.0")
+
+# Mount Static Files Directory
+static_dir = Path(__file__).resolve().parent.parent / "static"
+static_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 # Register CORS Middleware FIRST so headers are always attached
 app.add_middleware(
@@ -35,6 +42,7 @@ app.include_router(product_router)
 app.include_router(order_router)
 app.include_router(admin_order_router)
 app.include_router(dashboard_router)
+
 
 
 @app.get("/")

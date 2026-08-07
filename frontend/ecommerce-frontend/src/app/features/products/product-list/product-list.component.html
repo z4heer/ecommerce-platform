@@ -43,8 +43,8 @@
           resolveStatusLabel(product.status)
         ">
         <div class="product-card-content">
-          <div class="image-wrapper" *ngIf="product.imageUrl; else imagePlaceholder">
-            <img [src]="product.imageUrl" [alt]="'Image representation of ' + product.name" class="product-image" />
+          <div class="image-wrapper" *ngIf="resolveImageUrl(product); else imagePlaceholder">
+            <img [src]="resolveImageUrl(product)" [alt]="'Image representation of ' + product.name" class="product-image" />
           </div>
 
           <ng-template #imagePlaceholder>

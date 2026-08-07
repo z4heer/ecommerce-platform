@@ -1,6 +1,6 @@
 import { inject, Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, retry, timer } from 'rxjs';
+import { Observable, tap, retry, timer, map } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { Product } from '../../../core/models/product.model';
 import { LoggerService } from '../../../core/services/logger.service';
@@ -36,6 +36,16 @@ export class ProductService {
     error: this.errorState(),
   }));
 
+  private normalizeProduct(product: Product): Product {
+    if (!product) return product;
+    const rawUrl = product.imageUrl || product.image_url;
+    return {
+      ...product,
+      imageUrl: rawUrl,
+      image_url: rawUrl,
+    };
+  }
+
   getProducts(): Observable<Product[]> {
     this.logger.info('Fetching products from API');
     this.isLoadingState.set(true);
@@ -49,6 +59,7 @@ export class ProductService {
           return timer(retryCount * PRODUCT_RETRY_DELAY_MS);
         },
       }),
+      map(products => (Array.isArray(products) ? products.map(p => this.normalizeProduct(p)) : [])),
       tap({
         next: products => {
           this.productsState.set(products);
@@ -64,8 +75,11 @@ export class ProductService {
   }
 
   getProductById(id: string): Observable<Product> {
-    return this.http.get<Product>(`${environment.api.baseUrl}/products/${id}`);
+    return this.http.get<Product>(`${environment.api.baseUrl}/products/${id}`).pipe(
+      map(p => this.normalizeProduct(p))
+    );
   }
+
 
   createProduct(product: Product): Observable<Product> {
     return this.http.post<Product>(`${environment.api.baseUrl}/products`, product);

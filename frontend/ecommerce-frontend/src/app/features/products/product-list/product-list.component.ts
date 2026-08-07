@@ -142,4 +142,19 @@ export class ProductListComponent implements OnInit {
   public resolveNumeric(value: number | undefined, fallback = 'N/A'): string {
     return value !== undefined && value !== null ? `${value}` : fallback;
   }
+
+  public resolveImageUrl(product: Product): string | null {
+    if (!product) return null;
+    const rawUrl = product.imageUrl || product.image_url;
+    if (!rawUrl) return null;
+    if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://') || rawUrl.startsWith('data:')) {
+      return rawUrl;
+    }
+    if (rawUrl.startsWith('/static/product_images/')) {
+      const filename = rawUrl.split('/').pop();
+      return `/assets/product_images/${filename}`;
+    }
+    return rawUrl;
+  }
 }
+

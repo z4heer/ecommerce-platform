@@ -107,4 +107,12 @@ describe('ProductListComponent', () => {
     expect(component.resolveStatusLabel('Unknown')).toBe('Not Available');
     expect(component.resolveStatusLabel(undefined)).toBe('Not Available');
   });
+
+  it('should resolve image URL correctly', () => {
+    const p1: Product = { id: '1', name: 'P1', description: '', category: 'C', price: 10, stock_quantity: 5, imageUrl: '/static/product_images/pulse-6-smartphone.svg' };
+    expect(component.resolveImageUrl(p1)).toBe('/assets/product_images/pulse-6-smartphone.svg');
+
+    const p2: Product = { id: '2', name: 'P2', description: '', category: 'C', price: 10, stock_quantity: 5, image_url: 'https://example.com/item.svg' };
+    expect(component.resolveImageUrl(p2)).toBe('https://example.com/item.svg');
+  });
 });
