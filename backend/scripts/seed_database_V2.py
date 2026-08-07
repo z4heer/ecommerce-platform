@@ -162,6 +162,7 @@ def seed_products(db) -> list:
     for item in PRODUCTS:
         existing = db.query(Product).filter(Product.sku == item["sku"]).first()
         if existing:
+            existing.image_url = image_map[item["sku"]]
             product_ids.append(existing.id)
             continue
 

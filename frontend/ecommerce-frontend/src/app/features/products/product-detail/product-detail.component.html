@@ -63,7 +63,7 @@
             </div>
             <div class="detail-field">
               <span class="detail-label">Price</span>
-              <span class="detail-value">{{ currentProduct.price | currency }}</span>
+              <span class="detail-value">{{ currentProduct.price | currency:'INR' }}</span>
             </div>
             <div class="product-actions">
               @if (!isInCart()) {
