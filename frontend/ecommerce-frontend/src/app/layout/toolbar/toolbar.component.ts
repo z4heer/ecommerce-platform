@@ -7,7 +7,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../core/auth/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { APP_CONSTANTS } from '../../core/constants/app.constants';
 
 @Component({
@@ -21,6 +23,7 @@ import { APP_CONSTANTS } from '../../core/constants/app.constants';
     MatIconModule,
     MatMenuModule,
     MatDividerModule,
+    MatTooltipModule,
   ],
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss'],
@@ -30,6 +33,7 @@ export class ToolbarComponent {
   protected readonly appTitle = APP_CONSTANTS.APP_NAME;
 
   private readonly authService = inject(AuthService);
+  protected readonly themeService = inject(ThemeService);
 
   protected logout(): void {
     this.authService.logout();

@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
@@ -20,6 +21,8 @@ export class AuthService {
   private readonly storage = inject(StorageService);
 
   private readonly logger = inject(LoggerService);
+
+  private readonly router = inject(Router);
 
   /**
    * ===================================================
@@ -78,7 +81,8 @@ export class AuthService {
   logout(): void {
     this.storage.clearAuthentication();
     this.authenticatedSubject.next(false);
-    this.logger.info('User logged out..');
+    this.logger.info('User logged out.');
+    this.router.navigate(['/login']);
   }
 
   /**

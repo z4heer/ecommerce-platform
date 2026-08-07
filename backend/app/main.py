@@ -1,33 +1,40 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.health import check_database
 from app.core.redis_client import check_redis
 
 from app.modules.auth.routers.auth_router import router as auth_router
 from app.modules.catalog.routers.product_router import router as product_router
-from app.modules.orders.routers.order_router import router as customer_router
 from app.modules.orders.routers.admin_order_router import (
     admin_router as admin_order_router,
 )
 from app.modules.orders.routers.order_router import router as order_router
-from fastapi.middleware.cors import CORSMiddleware
+from app.modules.orders.routers.dashboard_router import router as dashboard_router
 from app.core.handlers import register_exception_handlers
 
 app = FastAPI(title="E-Commerce Platform API", version="1.0.0")
 
-register_exception_handlers(app)  # Register exception handlers
+# Register CORS Middleware FIRST so headers are always attached
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],
+    allow_origins=[
+        "http://localhost:4200",
+        "http://127.0.0.1:4200",
+        "http://localhost:8000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+register_exception_handlers(app)
+
 app.include_router(auth_router)
 app.include_router(product_router)
-app.include_router(customer_router)
+app.include_router(order_router)
 app.include_router(admin_order_router)
-app.include_router(order_router)  # Include the order_router for customer orders
+app.include_router(dashboard_router)
 
 
 @app.get("/")
@@ -37,7 +44,6 @@ def root():
 
 @app.get("/health")
 def health_check():
-
     postgres_status = "DOWN"
     redis_status = "DOWN"
 
@@ -56,5 +62,4 @@ def health_check():
         "api": "UP",
         "postgres": postgres_status,
         "redis": redis_status,
-        ##,"postgres_error": postgres_error
     }

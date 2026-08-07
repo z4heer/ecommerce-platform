@@ -1,3 +1,10 @@
 <div class="auth-container">
+  <div class="auth-header-bar">
+    <button mat-icon-button type="button" class="theme-toggle-floating-btn"
+      [matTooltip]="themeService.currentTheme() === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+      (click)="themeService.toggleTheme()" aria-label="Toggle Theme">
+      <mat-icon>{{ themeService.currentTheme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+  </div>
   <router-outlet />
 </div>

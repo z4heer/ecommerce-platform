@@ -48,7 +48,15 @@
           </div>
 
           <ng-template #imagePlaceholder>
-            <div class="image-placeholder" aria-hidden="true"></div>
+            <div class="image-placeholder" aria-hidden="true">
+              <svg class="placeholder-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+                <rect x="8" y="14" width="48" height="40" rx="6" fill="var(--sys-surface, #ffffff)" stroke="var(--sys-outline-variant, #d0d7de)" stroke-width="2" />
+                <path d="M8 24H56" stroke="var(--sys-outline-variant, #d0d7de)" stroke-width="2" />
+                <path d="M22 14V10C22 7.79086 23.7909 6 26 6H38C40.2091 6 42 7.79086 42 10V14" stroke="var(--sys-primary, #0061a4)" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M24 34L30 40L40 30" stroke="var(--sys-primary, #0061a4)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="placeholder-text">No Image</span>
+            </div>
           </ng-template>
 
           <div class="product-details">

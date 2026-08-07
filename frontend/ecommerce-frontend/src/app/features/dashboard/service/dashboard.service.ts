@@ -1,6 +1,7 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { delay, catchError, of, finalize, tap } from 'rxjs';
+import { API_CONSTANTS } from '../../../core/constants/api.constants';
 
 // Strict Enterprise Type Definitions
 export interface MetricItem {
@@ -16,6 +17,11 @@ export interface SystemOrder {
   amount: number;
   status: 'pending' | 'completed' | 'cancelled';
   canCancel: boolean;
+}
+
+export interface DashboardApiResponse {
+  metrics: MetricItem[];
+  orders: SystemOrder[];
 }
 
 @Injectable({
@@ -63,56 +69,20 @@ export class DashboardService {
     this._isLoading.set(true);
     this._error.set(null);
 
-    // Simulated API payload pipeline maintaining strict architectural types
-    of({
-      metrics: [
-        { id: 'm1', label: 'Quarterly Revenue', value: '$1,248,900', trend: 'up' },
-        { id: 'm2', label: 'Active Sessions', value: '3,842', trend: 'stable' },
-        { id: 'm3', label: 'System Error Rate', value: '0.04%', trend: 'down' },
-        { id: 'm4', label: 'Pending Fulfillments', value: '142', trend: 'up' },
-      ] as MetricItem[],
-      orders: [
-        {
-          id: 'ORD-8492',
-          customerName: 'Acme Corp Logistics',
-          amount: 12450.0,
-          status: 'pending',
-          canCancel: true,
-        },
-        {
-          id: 'ORD-7721',
-          customerName: 'Global Retail Systems',
-          amount: 3400.5,
-          status: 'completed',
-          canCancel: false,
-        },
-        {
-          id: 'ORD-6109',
-          customerName: 'Nexa Industries Ltd',
-          amount: 450.0,
-          status: 'cancelled',
-          canCancel: false,
-        },
-        {
-          id: 'ORD-5541',
-          customerName: 'Apex Development Corp',
-          amount: 8910.0,
-          status: 'pending',
-          canCancel: true,
-        },
-      ] as SystemOrder[],
-    })
+    this.http
+      .get<DashboardApiResponse>(API_CONSTANTS.ADMIN.DASHBOARD)
       .pipe(
-        delay(800), // Simulate network threshold latency
         catchError(err => {
-          this._error.set(err?.message || 'Failed to sync with upstream dashboard services.');
+          this._error.set(
+            err?.error?.detail || err?.message || 'Failed to sync with upstream dashboard services.',
+          );
           return of({ metrics: [], orders: [] });
         }),
         finalize(() => this._isLoading.set(false)),
       )
       .subscribe(data => {
-        this._metrics.set(data.metrics);
-        this._orders.set(data.orders);
+        this._metrics.set(data.metrics || []);
+        this._orders.set(data.orders || []);
       });
   }
 

@@ -167,23 +167,15 @@ export class CheckoutComponent {
   // -------------------------------------------------------------------------
 
   placeOrder(): void {
-
-    /*  if (this.checkoutForm.invalid) {
-  
-        this.checkoutForm.markAllAsTouched();
-  
-        return;
-  
-      } */
+    if (this.checkoutForm.controls.shipping.invalid) {
+      this.checkoutForm.controls.shipping.markAllAsTouched();
+      this.notification.warning('Please fill in all required shipping address fields.');
+      return;
+    }
 
     if (this.isEmpty()) {
-
-      this.notification.warning(
-        'Your cart is empty.'
-      );
-
+      this.notification.warning('Your cart is empty.');
       return;
-
     }
 
     if (this.isSubmitting()) {
@@ -253,6 +245,18 @@ export class CheckoutComponent {
   }
 
   private buildOrderRequest(): CreateOrderRequest {
+    const shipping = this.checkoutForm.controls.shipping.getRawValue();
+
+    const addressParts = [
+      shipping.addressLine1,
+      shipping.addressLine2,
+      shipping.city,
+      shipping.state
+    ].filter(part => Boolean(part && part.trim())).join(', ');
+
+    const shipping_address = shipping.pinCode && shipping.pinCode.trim()
+      ? `${addressParts} - ${shipping.pinCode.trim()}`
+      : addressParts;
 
     return {
 
@@ -262,7 +266,9 @@ export class CheckoutComponent {
 
         quantity: item.quantity
 
-      }))
+      })),
+
+      shipping_address
 
     };
 

@@ -466,9 +466,9 @@ describe('CheckoutComponent', () => {
 
           }
 
-        ]
-
-      });
+        ],
+        shipping_address: jasmine.any(String)
+      } as any);
 
   });
 });
