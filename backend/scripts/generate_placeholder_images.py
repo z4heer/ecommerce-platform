@@ -36,82 +36,113 @@ CATEGORY_STYLE = {
 }
 DEFAULT_STYLE = {"bg": "#F3F4F6", "card": "#6B7280", "accent": "#374151", "text": "#1E293B"}
 
-# Detailed vector artwork per category
+# Detailed vector artwork per category, calibrated for 320x200 viewBox
 CATEGORY_ICONS = {
     "Electronics": """
-        <!-- Smartphone / Device Graphics -->
-        <rect x="110" y="55" width="80" height="135" rx="14" fill="{card}" stroke="{accent}" stroke-width="4"/>
-        <rect x="118" y="68" width="64" height="100" rx="4" fill="#FFFFFF"/>
-        <circle cx="150" cy="178" r="5" fill="#FFFFFF" opacity="0.8"/>
-        <!-- Screen Content Lines -->
-        <rect x="126" y="80" width="48" height="8" rx="4" fill="{card}" opacity="0.4"/>
-        <rect x="126" y="95" width="36" height="6" rx="3" fill="{accent}" opacity="0.6"/>
-        <circle cx="150" cy="125" r="16" fill="{card}" opacity="0.3"/>
-        <path d="M144 125 L156 125 M150 119 L150 131" stroke="{accent}" stroke-width="3" stroke-linecap="round"/>
+        <!-- Smartphone / Device Vector -->
+        <rect x="125" y="25" width="70" height="135" rx="12" fill="{card}" stroke="{accent}" stroke-width="3"/>
+        <rect x="131" y="36" width="58" height="100" rx="3" fill="#FFFFFF"/>
+        <circle cx="160" cy="148" r="4" fill="{card}" opacity="0.8"/>
+        <!-- Screen UI Details -->
+        <rect x="139" y="48" width="42" height="6" rx="3" fill="{card}" opacity="0.4"/>
+        <rect x="139" y="60" width="30" height="5" rx="2" fill="{accent}" opacity="0.6"/>
+        <circle cx="160" cy="90" r="14" fill="{card}" opacity="0.25"/>
+        <path d="M155 90 L165 90 M160 85 L160 95" stroke="{accent}" stroke-width="2.5" stroke-linecap="round"/>
+    """,
+    "Smartphones": """
+        <!-- Smartphone / Device Vector -->
+        <rect x="125" y="25" width="70" height="135" rx="12" fill="{card}" stroke="{accent}" stroke-width="3"/>
+        <rect x="131" y="36" width="58" height="100" rx="3" fill="#FFFFFF"/>
+        <circle cx="160" cy="148" r="4" fill="{card}" opacity="0.8"/>
+        <!-- Screen UI Details -->
+        <rect x="139" y="48" width="42" height="6" rx="3" fill="{card}" opacity="0.4"/>
+        <rect x="139" y="60" width="30" height="5" rx="2" fill="{accent}" opacity="0.6"/>
+        <circle cx="160" cy="90" r="14" fill="{card}" opacity="0.25"/>
+        <path d="M155 90 L165 90 M160 85 L160 95" stroke="{accent}" stroke-width="2.5" stroke-linecap="round"/>
     """,
     "Computers": """
-        <!-- Monitor & Desk Graphics -->
-        <rect x="80" y="55" width="140" height="90" rx="8" fill="{card}" stroke="{accent}" stroke-width="4"/>
-        <rect x="88" y="63" width="124" height="74" rx="4" fill="#FFFFFF"/>
-        <path d="M135 145 L165 145 L170 170 L130 170 Z" fill="{accent}"/>
-        <rect x="115" y="170" width="70" height="8" rx="4" fill="{card}"/>
+        <!-- Desktop / Monitor Vector -->
+        <rect x="85" y="30" width="150" height="100" rx="8" fill="{card}" stroke="{accent}" stroke-width="3.5"/>
+        <rect x="93" y="38" width="134" height="84" rx="4" fill="#FFFFFF"/>
+        <path d="M142 130 L178 130 L184 158 L136 158 Z" fill="{accent}"/>
+        <rect x="120" y="158" width="80" height="8" rx="4" fill="{card}"/>
         <!-- Code Window UI -->
-        <rect x="96" y="73" width="108" height="12" rx="3" fill="{bg}"/>
-        <circle cx="104" cy="79" r="2.5" fill="#EF4444"/>
-        <circle cx="111" cy="79" r="2.5" fill="#F59E0B"/>
-        <circle cx="118" cy="79" r="2.5" fill="#10B981"/>
-        <rect x="96" y="92" width="60" height="6" rx="3" fill="{card}" opacity="0.5"/>
-        <rect x="96" y="103" width="80" height="6" rx="3" fill="{accent}" opacity="0.4"/>
-        <rect x="96" y="114" width="45" height="6" rx="3" fill="{card}" opacity="0.6"/>
+        <rect x="101" y="48" width="118" height="12" rx="3" fill="{bg}"/>
+        <circle cx="109" cy="54" r="2.5" fill="#EF4444"/>
+        <circle cx="116" cy="54" r="2.5" fill="#F59E0B"/>
+        <circle cx="123" cy="54" r="2.5" fill="#10B981"/>
+        <rect x="101" y="68" width="65" height="6" rx="3" fill="{card}" opacity="0.5"/>
+        <rect x="101" y="79" width="88" height="6" rx="3" fill="{accent}" opacity="0.4"/>
+        <rect x="101" y="90" width="50" height="6" rx="3" fill="{card}" opacity="0.6"/>
+    """,
+    "Laptops": """
+        <!-- Laptop Graphic -->
+        <rect x="95" y="40" width="130" height="85" rx="6" fill="{card}" stroke="{accent}" stroke-width="3"/>
+        <rect x="102" y="47" width="116" height="71" rx="3" fill="#FFFFFF"/>
+        <path d="M70 130 L250 130 L240 145 L80 145 Z" fill="{accent}"/>
+        <rect x="135" y="132" width="50" height="4" rx="2" fill="{card}"/>
     """,
     "Footwear": """
-        <!-- Sneaker / Shoe Silhouette -->
-        <path d="M80 155 Q85 110 120 100 L160 115 Q195 125 215 145 L225 155 Q230 170 220 175 L80 175 Z" fill="{card}" stroke="{accent}" stroke-width="4"/>
-        <path d="M75 175 L230 175 Q235 175 235 185 L70 185 Q65 175 75 175 Z" fill="#FFFFFF" stroke="{accent}" stroke-width="3"/>
-        <path d="M125 105 L155 120 M135 115 L165 130 M145 125 L175 140" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="105" cy="140" r="12" fill="{accent}" opacity="0.3"/>
+        <!-- Athletic Sneaker Vector -->
+        <path d="M80 120 Q85 75 125 65 L170 80 Q210 90 235 110 L245 120 Q250 135 240 140 L80 140 Z" fill="{card}" stroke="{accent}" stroke-width="3.5"/>
+        <path d="M75 140 L250 140 Q255 140 255 152 L70 152 Q65 140 75 140 Z" fill="#FFFFFF" stroke="{accent}" stroke-width="3"/>
+        <path d="M130 70 L162 88 M142 82 L174 100 M154 94 L186 112" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="105" cy="105" r="14" fill="{accent}" opacity="0.3"/>
     """,
     "Home": """
-        <!-- Home / Appliances Icon -->
-        <path d="M150 50 L220 105 L205 105 L205 170 Q205 175 200 175 L100 175 Q95 175 95 170 L95 105 L80 105 Z" fill="{card}" stroke="{accent}" stroke-width="4"/>
-        <rect x="125" y="115" width="50" height="60" rx="6" fill="#FFFFFF"/>
-        <circle cx="150" cy="135" r="6" fill="{accent}"/>
-        <path d="M150 145 L150 165" stroke="{accent}" stroke-width="3" stroke-linecap="round"/>
+        <!-- Coffee Maker / Home Appliance -->
+        <path d="M110 35 L210 35 L210 150 Q210 160 200 160 L120 160 Q110 160 110 150 Z" fill="{card}" stroke="{accent}" stroke-width="3.5"/>
+        <rect x="130" y="50" width="60" height="20" rx="4" fill="#FFFFFF" opacity="0.9"/>
+        <path d="M125 90 L195 90 L185 140 Q185 145 180 145 L140 145 Q135 145 135 140 Z" fill="#FFFFFF" stroke="{accent}" stroke-width="2.5"/>
+        <circle cx="160" cy="115" r="8" fill="{accent}" opacity="0.4"/>
+    """,
+    "Home Office": """
+        <!-- Desk Monitor Vector -->
+        <rect x="85" y="30" width="150" height="100" rx="8" fill="{card}" stroke="{accent}" stroke-width="3.5"/>
+        <rect x="93" y="38" width="134" height="84" rx="4" fill="#FFFFFF"/>
+        <path d="M142 130 L178 130 L184 158 L136 158 Z" fill="{accent}"/>
+        <rect x="120" y="158" width="80" height="8" rx="4" fill="{card}"/>
+    """,
+    "Smart Home": """
+        <!-- Smart Home Hub Vector -->
+        <path d="M160 30 L225 80 L210 80 L210 155 Q210 160 205 160 L115 160 Q110 160 110 155 L110 80 L95 80 Z" fill="{card}" stroke="{accent}" stroke-width="3.5"/>
+        <circle cx="160" cy="110" r="22" fill="#FFFFFF"/>
+        <circle cx="160" cy="110" r="10" fill="{accent}"/>
     """,
     "Audio": """
-        <!-- Headphones / Speaker Vector -->
-        <path d="M90 125 C90 75 210 75 210 125" fill="none" stroke="{accent}" stroke-width="10" stroke-linecap="round"/>
-        <rect x="75" y="115" width="32" height="55" rx="12" fill="{card}" stroke="{accent}" stroke-width="3"/>
-        <rect x="193" y="115" width="32" height="55" rx="12" fill="{card}" stroke="{accent}" stroke-width="3"/>
-        <rect x="85" y="125" width="12" height="35" rx="6" fill="#FFFFFF" opacity="0.8"/>
-        <rect x="203" y="125" width="12" height="35" rx="6" fill="#FFFFFF" opacity="0.8"/>
+        <!-- Over-Ear Headphones Vector -->
+        <path d="M95 105 C95 50 225 50 225 105" fill="none" stroke="{accent}" stroke-width="9" stroke-linecap="round"/>
+        <rect x="80" y="95" width="34" height="60" rx="14" fill="{card}" stroke="{accent}" stroke-width="3"/>
+        <rect x="206" y="95" width="34" height="60" rx="14" fill="{card}" stroke="{accent}" stroke-width="3"/>
+        <rect x="90" y="105" width="14" height="40" rx="7" fill="#FFFFFF" opacity="0.85"/>
+        <rect x="216" y="105" width="14" height="40" rx="7" fill="#FFFFFF" opacity="0.85"/>
     """,
     "Wearables": """
-        <!-- Smartwatch Graphics -->
-        <rect x="125" y="45" width="50" height="145" rx="10" fill="{accent}" opacity="0.7"/>
-        <rect x="110" y="80" width="80" height="80" rx="20" fill="{card}" stroke="{accent}" stroke-width="4"/>
-        <rect x="120" y="90" width="60" height="60" rx="12" fill="#FFFFFF"/>
-        <circle cx="150" cy="120" r="18" fill="{bg}"/>
-        <path d="M150 110 L150 120 L160 125" stroke="{accent}" stroke-width="3" stroke-linecap="round"/>
+        <!-- Smartwatch Vector -->
+        <rect x="135" y="20" width="50" height="160" rx="10" fill="{accent}" opacity="0.75"/>
+        <rect x="118" y="55" width="84" height="84" rx="22" fill="{card}" stroke="{accent}" stroke-width="3.5"/>
+        <rect x="128" y="65" width="64" height="64" rx="14" fill="#FFFFFF"/>
+        <circle cx="160" cy="97" r="18" fill="{bg}"/>
+        <path d="M160 86 L160 97 L171 102" stroke="{accent}" stroke-width="3" stroke-linecap="round"/>
     """,
     "Accessories": """
-        <!-- Tech Dock / Adapter Graphic -->
-        <rect x="85" y="85" width="130" height="70" rx="12" fill="{card}" stroke="{accent}" stroke-width="4"/>
-        <rect x="100" y="110" width="22" height="10" rx="3" fill="#FFFFFF"/>
-        <rect x="130" y="110" width="22" height="10" rx="3" fill="#FFFFFF"/>
-        <rect x="160" y="110" width="40" height="10" rx="3" fill="#FFFFFF"/>
-        <circle cx="110" cy="135" r="4" fill="#10B981"/>
+        <!-- Multi-Port Work Dock Vector -->
+        <rect x="90" y="60" width="140" height="75" rx="14" fill="{card}" stroke="{accent}" stroke-width="3.5"/>
+        <rect x="108" y="85" width="24" height="12" rx="3" fill="#FFFFFF"/>
+        <rect x="140" y="85" width="24" height="12" rx="3" fill="#FFFFFF"/>
+        <rect x="172" y="85" width="42" height="12" rx="3" fill="#FFFFFF"/>
+        <circle cx="118" cy="112" r="4.5" fill="#10B981"/>
     """,
     "Gaming": """
         <!-- Game Controller Vector -->
-        <path d="M90 95 C110 90 190 90 210 95 C230 100 235 155 215 170 C200 180 180 155 165 145 L135 145 C120 155 100 180 85 170 C65 155 70 100 90 95 Z" fill="{card}" stroke="{accent}" stroke-width="4"/>
+        <path d="M95 70 C118 65 202 65 225 70 C245 75 250 135 230 150 C215 160 195 135 178 125 L142 125 C125 135 105 160 90 150 C70 135 75 75 95 70 Z" fill="{card}" stroke="{accent}" stroke-width="3.5"/>
         <!-- D-Pad -->
-        <path d="M105 115 H125 M115 105 V125" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
+        <path d="M110 97 H130 M120 87 V107" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
         <!-- Action Buttons -->
-        <circle cx="180" cy="110" r="5" fill="#EF4444"/>
-        <circle cx="195" cy="120" r="5" fill="#3B82F6"/>
-        <circle cx="180" cy="130" r="5" fill="#10B981"/>
-        <circle cx="165" cy="120" r="5" fill="#F59E0B"/>
+        <circle cx="192" cy="90" r="5" fill="#EF4444"/>
+        <circle cx="206" cy="100" r="5" fill="#3B82F6"/>
+        <circle cx="192" cy="110" r="5" fill="#10B981"/>
+        <circle cx="178" cy="100" r="5" fill="#F59E0B"/>
     """,
 }
 DEFAULT_ICON = CATEGORY_ICONS["Accessories"]
@@ -121,62 +152,29 @@ def _slugify(name: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
-def _wrap_label(name: str, max_chars: int = 22) -> list[str]:
-    """Greedy word-wrap for caption pill (max 2 lines)."""
-    words = name.split()
-    lines: list[str] = []
-    current = ""
-    for word in words:
-        candidate = f"{current} {word}".strip()
-        if len(candidate) > max_chars and current:
-            lines.append(current)
-            current = word
-        else:
-            current = candidate
-    if current:
-        lines.append(current)
-    return lines[:2]
-
-
 def build_svg(name: str, category: str) -> str:
     style = CATEGORY_STYLE.get(category, DEFAULT_STYLE)
     icon_tmpl = CATEGORY_ICONS.get(category, CATEGORY_ICONS.get(category.split()[0], DEFAULT_ICON))
     icon = icon_tmpl.format(**style)
-    lines = _wrap_label(name)
-
-    line_height = 16
-    pill_height = 32 + (len(lines) - 1) * line_height
-    pill_y = 300 - pill_height - 14
-    start_text_y = pill_y + pill_height / 2 - (len(lines) - 1) * line_height / 2 + 5
-
-    text_elements = "".join(
-        f'<text x="150" y="{start_text_y + i * line_height:.0f}" '
-        f'font-family="system-ui, -apple-system, sans-serif" font-size="13" '
-        f'font-weight="700" fill="{style["text"]}" text-anchor="middle">{line}</text>'
-        for i, line in enumerate(lines)
-    )
 
     return (
-        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">\n'
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">\n'
         f'  <defs>\n'
         f'    <linearGradient id="bg-grad-{_slugify(category)}" x1="0%" y1="0%" x2="100%" y2="100%">\n'
         f'      <stop offset="0%" stop-color="{style["bg"]}"/>\n'
         f'      <stop offset="100%" stop-color="#FFFFFF"/>\n'
         f'    </linearGradient>\n'
         f'    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">\n'
-        f'      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.08"/>\n'
+        f'      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.07"/>\n'
         f'    </filter>\n'
         f'  </defs>\n'
-        f'  <rect width="300" height="300" rx="20" fill="url(#bg-grad-{_slugify(category)})"/>\n'
+        f'  <rect width="320" height="200" rx="14" fill="url(#bg-grad-{_slugify(category)})"/>\n'
         f'  <g filter="url(#shadow)">\n'
         f'    {icon}\n'
         f'  </g>\n'
-        f'  <g filter="url(#shadow)">\n'
-        f'    <rect x="18" y="{pill_y}" width="264" height="{pill_height}" rx="{pill_height/2}" fill="#FFFFFF" fill-opacity="0.95" stroke="{style["card"]}" stroke-opacity="0.2" stroke-width="1"/>\n'
-        f'    {text_elements}\n'
-        f'  </g>\n'
         f'</svg>'
     )
+
 
 
 def generate_product_svgs(

@@ -1,25 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="100%" height="100%" preserveAspectRatio="xMidYMid meet">
   <defs>
     <linearGradient id="bg-grad-footwear" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FFF7ED"/>
       <stop offset="100%" stop-color="#FFFFFF"/>
     </linearGradient>
     <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-opacity="0.08"/>
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.07"/>
     </filter>
   </defs>
-  <rect width="300" height="300" rx="20" fill="url(#bg-grad-footwear)"/>
+  <rect width="320" height="200" rx="14" fill="url(#bg-grad-footwear)"/>
   <g filter="url(#shadow)">
     
-        <!-- Sneaker / Shoe Silhouette -->
-        <path d="M80 155 Q85 110 120 100 L160 115 Q195 125 215 145 L225 155 Q230 170 220 175 L80 175 Z" fill="#F97316" stroke="#C2410C" stroke-width="4"/>
-        <path d="M75 175 L230 175 Q235 175 235 185 L70 185 Q65 175 75 175 Z" fill="#FFFFFF" stroke="#C2410C" stroke-width="3"/>
-        <path d="M125 105 L155 120 M135 115 L165 130 M145 125 L175 140" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="105" cy="140" r="12" fill="#C2410C" opacity="0.3"/>
+        <!-- Athletic Sneaker Vector -->
+        <path d="M80 120 Q85 75 125 65 L170 80 Q210 90 235 110 L245 120 Q250 135 240 140 L80 140 Z" fill="#F97316" stroke="#C2410C" stroke-width="3.5"/>
+        <path d="M75 140 L250 140 Q255 140 255 152 L70 152 Q65 140 75 140 Z" fill="#FFFFFF" stroke="#C2410C" stroke-width="3"/>
+        <path d="M130 70 L162 88 M142 82 L174 100 M154 94 L186 112" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round"/>
+        <circle cx="105" cy="105" r="14" fill="#C2410C" opacity="0.3"/>
     
-  </g>
-  <g filter="url(#shadow)">
-    <rect x="18" y="238" width="264" height="48" rx="24.0" fill="#FFFFFF" fill-opacity="0.95" stroke="#F97316" stroke-opacity="0.2" stroke-width="1"/>
-    <text x="150" y="259" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#1E293B" text-anchor="middle">CourtSide Basketball</text><text x="150" y="275" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#1E293B" text-anchor="middle">Shoes</text>
   </g>
 </svg>
