@@ -167,23 +167,15 @@ export class CheckoutComponent {
   // -------------------------------------------------------------------------
 
   placeOrder(): void {
-
-    /*  if (this.checkoutForm.invalid) {
-  
-        this.checkoutForm.markAllAsTouched();
-  
-        return;
-  
-      } */
+    if (this.checkoutForm.invalid) {
+      this.checkoutForm.markAllAsTouched();
+      this.notification.warning('Please fill in all required shipping address fields.');
+      return;
+    }
 
     if (this.isEmpty()) {
-
-      this.notification.warning(
-        'Your cart is empty.'
-      );
-
+      this.notification.warning('Your cart is empty.');
       return;
-
     }
 
     if (this.isSubmitting()) {
