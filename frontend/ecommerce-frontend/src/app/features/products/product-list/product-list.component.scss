@@ -157,26 +157,38 @@
 }
 
 .image-placeholder {
+  position: relative;
   width: 100%;
   padding-top: 66.67%;
-  background-color: var(--sys-surface-variant, #f0f0f0);
-  border-radius: 4px;
+  background: linear-gradient(135deg, var(--sys-surface-variant, #f4f6f8) 0%, var(--sys-surface, #e9ecef) 100%);
+  border-radius: 6px;
   margin-bottom: 1rem;
-  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-}
 
-.placeholder-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: var(--sys-on-surface-variant, #9e9e9e);
-  width: 20%;
-  height: auto;
-  max-width: 48px;
+  .placeholder-svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    width: 48px;
+    height: 48px;
+    opacity: 0.85;
+  }
+
+  .placeholder-text {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--sys-on-surface-variant, #718096);
+  }
 }
 
 .product-category {

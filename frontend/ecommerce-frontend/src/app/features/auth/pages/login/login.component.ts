@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
@@ -49,7 +49,7 @@ import { ErrorStateComponent } from '../../../../shared/components/error-state/e
 
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
 
   private readonly authService = inject(AuthService);
@@ -63,6 +63,12 @@ export class LoginComponent {
   // Presentation-only signals
   readonly loading = signal(false);
   readonly error = signal<string | null>(null);
+
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/products']);
+    }
+  }
 
   readonly loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],

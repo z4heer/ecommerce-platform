@@ -19,6 +19,7 @@ export interface CreateOrderRequest {
         product_id: string;
         quantity: number;
     }[];
+    readonly shipping_address: string;
 }
 
 export interface OrderResponse {

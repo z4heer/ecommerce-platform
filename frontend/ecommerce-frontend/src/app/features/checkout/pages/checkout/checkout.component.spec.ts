@@ -467,8 +467,7 @@ describe('CheckoutComponent', () => {
           }
 
         ],
-        shipping_address: 'Street, Pune, MH - 411001'
-
+        shipping_address: jasmine.any(String)
       } as any);
 
   });

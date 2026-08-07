@@ -262,6 +262,19 @@ export class CheckoutComponent {
 
     const shipping_address = shipping?.pinCode ? `${addressParts} - ${shipping.pinCode}` : addressParts;
 
+    const shipping = this.checkoutForm.controls.shipping.getRawValue();
+
+    const addressParts = [
+      shipping.addressLine1,
+      shipping.addressLine2,
+      shipping.city,
+      shipping.state
+    ].filter(part => Boolean(part && part.trim())).join(', ');
+
+    const shipping_address = shipping.pinCode && shipping.pinCode.trim()
+      ? `${addressParts} - ${shipping.pinCode.trim()}`
+      : addressParts;
+
     return {
 
       items: this.cartItems().map(item => ({
@@ -274,7 +287,7 @@ export class CheckoutComponent {
 
       shipping_address
 
-    } as CreateOrderRequest;
+    };
 
   }
 }

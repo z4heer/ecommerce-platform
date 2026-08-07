@@ -1,35 +1,125 @@
-/* You can add global styles to this file, and also import other style files */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+:root {
+  /* Light Theme Tokens */
+  --sys-background: #f8fafc;
+  --sys-on-background: #0f172a;
+  --sys-surface: #ffffff;
+  --sys-surface-variant: #f1f5f9;
+  --sys-on-surface: #1e293b;
+  --sys-on-surface-variant: #64748b;
+  --sys-primary: #4f46e5;
+  --sys-on-primary: #ffffff;
+  --sys-primary-container: #e0e7ff;
+  --sys-outline: #cbd5e1;
+  --sys-outline-variant: #e2e8f0;
+  --sys-card-bg: rgba(255, 255, 255, 0.9);
+  --sys-card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+  --sys-navbar-bg: rgba(255, 255, 255, 0.85);
+  --sys-navbar-border: rgba(226, 232, 240, 0.8);
+}
+
+.dark-theme {
+  /* Dark Theme Tokens */
+  --sys-background: #0b0f19;
+  --sys-on-background: #f8fafc;
+  --sys-surface: #111827;
+  --sys-surface-variant: #1f2937;
+  --sys-on-surface: #f3f4f6;
+  --sys-on-surface-variant: #9ca3af;
+  --sys-primary: #6366f1;
+  --sys-on-primary: #ffffff;
+  --sys-primary-container: #312e81;
+  --sys-outline: #374151;
+  --sys-outline-variant: #1f2937;
+  --sys-card-bg: rgba(17, 24, 39, 0.85);
+  --sys-card-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.4), 0 2px 10px 0 rgba(0, 0, 0, 0.3);
+  --sys-navbar-bg: rgba(17, 24, 39, 0.85);
+  --sys-navbar-border: rgba(31, 41, 55, 0.8);
+}
 
 html,
 body {
   height: 100%;
-}
-
-body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  padding: 0;
+  font-family: Inter, Roboto, 'Helvetica Neue', sans-serif;
+  background-color: var(--sys-background);
+  color: var(--sys-on-background);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Material overrides for dark mode parity */
+.dark-theme {
+  .mat-mdc-card,
+  .mat-elevation-z2,
+  .mat-elevation-z4,
+  .mat-elevation-z8 {
+    background-color: var(--sys-surface) !important;
+    color: var(--sys-on-surface) !important;
+    border-color: var(--sys-outline-variant) !important;
+  }
+
+  .mat-mdc-text-field-wrapper {
+    background-color: var(--sys-surface-variant) !important;
+  }
+
+  .mat-mdc-select-value,
+  .mat-mdc-select-arrow,
+  .mdc-floating-label,
+  .mdc-text-field__input {
+    color: var(--sys-on-surface) !important;
+  }
+
+  .mat-mdc-menu-panel {
+    background-color: var(--sys-surface) !important;
+    border: 1px solid var(--sys-outline-variant);
+  }
+
+  .mat-mdc-menu-item {
+    color: var(--sys-on-surface) !important;
+    &:hover {
+      background-color: var(--sys-surface-variant) !important;
+    }
+  }
+
+  .mat-mdc-table {
+    background-color: var(--sys-surface) !important;
+    color: var(--sys-on-surface) !important;
+  }
+
+  .mat-mdc-header-cell {
+    color: var(--sys-on-surface-variant) !important;
+    border-bottom-color: var(--sys-outline-variant) !important;
+  }
+
+  .mat-mdc-cell {
+    color: var(--sys-on-surface) !important;
+    border-bottom-color: var(--sys-outline-variant) !important;
+  }
+}
+
+/* Global Snackbar Styling */
 .snackbar-success {
-  --mdc-snackbar-container-color: #2e7d32;
+  --mdc-snackbar-container-color: #059669;
   --mdc-snackbar-supporting-text-color: #ffffff;
   --mat-snack-bar-button-color: #ffffff;
 }
 
 .snackbar-error {
-  --mdc-snackbar-container-color: #c62828;
+  --mdc-snackbar-container-color: #dc2626;
   --mdc-snackbar-supporting-text-color: #ffffff;
   --mat-snack-bar-button-color: #ffffff;
 }
 
 .snackbar-warning {
-  --mdc-snackbar-container-color: #ef6c00;
+  --mdc-snackbar-container-color: #d97706;
   --mdc-snackbar-supporting-text-color: #ffffff;
   --mat-snack-bar-button-color: #ffffff;
 }
 
 .snackbar-info {
-  --mdc-snackbar-container-color: #1565c0;
+  --mdc-snackbar-container-color: #2563eb;
   --mdc-snackbar-supporting-text-color: #ffffff;
   --mat-snack-bar-button-color: #ffffff;
 }
