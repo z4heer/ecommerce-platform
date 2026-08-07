@@ -11,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AuthService } from '../../../../core/auth/services/auth.service';
 import { LoggerService } from '../../../../core/services/logger.service';
@@ -20,7 +21,6 @@ import { PageContainerComponent } from '../../../../layout/page-container/page-c
 import { PageHeaderComponent } from '../../../../layout/page-header/page-header.component';
 import { AppCardComponent } from '../../../../shared/components/app-card/app-card.component';
 import { LoadingSkeletonComponent } from '../../../../shared/components/loading-skeleton/loading-skeleton.component';
-import { ErrorStateComponent } from '../../../../shared/components/error-state/error-state.component';
 
 @Component({
   selector: 'app-login',
@@ -34,13 +34,13 @@ import { ErrorStateComponent } from '../../../../shared/components/error-state/e
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
+    MatIconModule,
 
     // Design System
     PageContainerComponent,
     PageHeaderComponent,
     AppCardComponent,
     LoadingSkeletonComponent,
-    ErrorStateComponent,
   ],
 
   templateUrl: './login.component.html',
