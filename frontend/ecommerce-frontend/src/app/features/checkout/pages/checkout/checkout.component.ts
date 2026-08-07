@@ -253,15 +253,6 @@ export class CheckoutComponent {
   }
 
   private buildOrderRequest(): CreateOrderRequest {
-    const shipping = this.checkoutForm.value.shipping;
-    const addressParts = [
-      shipping?.addressLine1,
-      shipping?.city,
-      shipping?.state
-    ].filter(p => !!p).join(', ');
-
-    const shipping_address = shipping?.pinCode ? `${addressParts} - ${shipping.pinCode}` : addressParts;
-
     const shipping = this.checkoutForm.controls.shipping.getRawValue();
 
     const addressParts = [
