@@ -8,6 +8,8 @@
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+  background-color: var(--sys-surface);
+  color: var(--sys-on-surface);
 }
 
 mat-nav-list {
@@ -25,12 +27,17 @@ mat-nav-list {
   height: 48px !important;
   margin: 0.25rem 0.75rem;
   border-radius: 8px;
+  color: var(--sys-on-surface-variant, #64748b) !important;
   transition:
     background-color 200ms ease,
     color 200ms ease;
 
   text-decoration: none;
   cursor: pointer;
+
+  mat-icon {
+    color: var(--sys-on-surface-variant, #64748b);
+  }
 }
 
 /* ----------------------------------------------------
@@ -38,7 +45,12 @@ mat-nav-list {
 ----------------------------------------------------- */
 
 a.nav-item:hover:not(.active) {
-  background-color: rgba(0, 0, 0, 0.04);
+  background-color: var(--sys-surface-variant, rgba(0, 0, 0, 0.04));
+  color: var(--sys-on-surface, #0f172a) !important;
+
+  mat-icon {
+    color: var(--sys-on-surface, #0f172a);
+  }
 }
 
 /* ----------------------------------------------------
@@ -47,11 +59,13 @@ a.nav-item:hover:not(.active) {
 
 a.active {
   font-weight: 600;
-  background-color: rgba(25, 118, 210, 0.12);
-}
+  background-color: var(--sys-primary-container, #e0e7ff) !important;
+  color: var(--sys-primary, #4f46e5) !important;
 
-a.active mat-icon {
-  font-weight: 600;
+  mat-icon {
+    font-weight: 600;
+    color: var(--sys-primary, #4f46e5) !important;
+  }
 }
 
 /* ----------------------------------------------------
@@ -92,6 +106,7 @@ mat-icon {
   font-size: 0.75rem;
   font-style: italic;
   white-space: nowrap;
+  color: var(--sys-on-surface-variant, #94a3b8);
 }
 
 /* ----------------------------------------------------
@@ -133,7 +148,6 @@ mat-nav-list::-webkit-scrollbar-thumb {
 @media (max-width: 768px) {
   .nav-item {
     height: 52px !important;
-
     margin-inline: 0.5rem;
   }
 }
