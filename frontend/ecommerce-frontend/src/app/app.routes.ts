@@ -3,23 +3,27 @@ import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
 import { authGuard } from './core/guards/auth.guard';
+import { guestGuard } from './core/guards/guest.guard';
+import { rootGuard } from './core/guards/root.guard';
 
 export const routes: Routes = [
   //-------------------------------------------------------
-  // Default Root Redirect (Fix for http://localhost:4200)
+  // Root URL Dynamic Redirect (http://localhost:4200/)
   //-------------------------------------------------------
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'login',
+    canActivate: [rootGuard],
+    children: [],
   },
 
   //-------------------------------------------------------
-  // Authentication Area
+  // Authentication Area (Guest Only: /login, /register)
   //-------------------------------------------------------
   {
     path: '',
     component: AuthLayoutComponent,
+    canActivate: [guestGuard],
     children: [
       {
         path: '',
@@ -29,7 +33,7 @@ export const routes: Routes = [
   },
 
   //-------------------------------------------------------
-  // Protected Area
+  // Protected Area (Auth Only: /products, /dashboard, etc.)
   //-------------------------------------------------------
   {
     path: '',
@@ -40,33 +44,26 @@ export const routes: Routes = [
         path: 'dashboard',
         loadChildren: () =>
           import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES),
-        canActivate: [authGuard],
       },
       {
         path: 'products',
         loadChildren: () =>
           import('./features/products/product.routes').then(m => m.PRODUCT_ROUTES),
-        canActivate: [authGuard],
       },
       {
         path: 'cart',
         loadChildren: () => import('./features/cart/cart.routes').then(m => m.CART_ROUTES),
-        canActivate: [authGuard]
       },
       {
         path: 'orders',
         loadChildren: () =>
-          import('./features/orders/orders.routes')
-            .then(m => m.ORDERS_ROUTES),
-        canActivate: [authGuard]
+          import('./features/orders/orders.routes').then(m => m.ORDERS_ROUTES),
       },
       {
         path: 'checkout',
         loadChildren: () =>
-          import('./features/checkout/checkout.routes')
-            .then(m => m.CHECKOUT_ROUTES),
-        canActivate: [authGuard]
-      }
+          import('./features/checkout/checkout.routes').then(m => m.CHECKOUT_ROUTES),
+      },
     ],
   },
 
@@ -75,6 +72,7 @@ export const routes: Routes = [
   //-------------------------------------------------------
   {
     path: '**',
-    redirectTo: 'login',
+    canActivate: [rootGuard],
+    children: [],
   },
 ];

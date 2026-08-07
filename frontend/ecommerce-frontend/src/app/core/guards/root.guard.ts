@@ -4,12 +4,13 @@ import { AuthService } from '../auth/services/auth.service';
 
 /**
  * ============================================================
- * Enterprise Guest Guard
+ * Enterprise Root Navigation Guard
  * ============================================================
- * Prevents authenticated users from accessing guest routes
- * like /login and /register, redirecting them to /products.
+ * Handles root URL (http://localhost:4200/) routing:
+ * - Authenticated users -> Redirects to /products
+ * - Unauthenticated users -> Redirects to /login
  */
-export const guestGuard: CanActivateFn = (): boolean | UrlTree => {
+export const rootGuard: CanActivateFn = (): UrlTree => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -17,5 +18,5 @@ export const guestGuard: CanActivateFn = (): boolean | UrlTree => {
     return router.createUrlTree(['/products']);
   }
 
-  return true;
+  return router.createUrlTree(['/login']);
 };
