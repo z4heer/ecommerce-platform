@@ -32,10 +32,10 @@
   --sys-primary-container: #312e81;
   --sys-outline: #374151;
   --sys-outline-variant: #1f2937;
-  --sys-card-bg: rgba(17, 24, 39, 0.85);
+  --sys-card-bg: #111827;
   --sys-card-shadow: 0 4px 25px 0 rgba(0, 0, 0, 0.4), 0 2px 10px 0 rgba(0, 0, 0, 0.3);
-  --sys-navbar-bg: rgba(17, 24, 39, 0.85);
-  --sys-navbar-border: rgba(31, 41, 55, 0.8);
+  --sys-navbar-bg: #111827;
+  --sys-navbar-border: #1f2937;
 }
 
 html,
@@ -49,18 +49,56 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Material overrides for dark mode parity */
+/* Material & Enterprise Layout Overrides for Dark Mode Parity */
 .dark-theme {
+  mat-sidenav-container,
+  mat-sidenav,
+  mat-sidenav-content,
+  .layout-container,
+  .layout-drawer,
+  .app-sidenav,
+  .page-container,
+  .page-header,
+  .page-content,
+  .main-layout,
+  main {
+    background-color: var(--sys-background) !important;
+    color: var(--sys-on-background) !important;
+  }
+
+  .layout-drawer,
+  .app-sidenav,
+  mat-sidenav {
+    background-color: var(--sys-surface) !important;
+    border-right: 1px solid var(--sys-outline-variant) !important;
+  }
+
+  .nav-item {
+    color: var(--sys-on-surface-variant) !important;
+    &:hover:not(.active) {
+      background-color: var(--sys-surface-variant) !important;
+      color: var(--sys-on-surface) !important;
+    }
+    &.active {
+      background-color: var(--sys-primary-container) !important;
+      color: var(--sys-primary) !important;
+    }
+  }
+
   .mat-mdc-card,
   .mat-elevation-z2,
   .mat-elevation-z4,
-  .mat-elevation-z8 {
+  .mat-elevation-z8,
+  .product-card,
+  .app-card {
     background-color: var(--sys-surface) !important;
     color: var(--sys-on-surface) !important;
-    border-color: var(--sys-outline-variant) !important;
+    border: 1px solid var(--sys-outline-variant) !important;
+    box-shadow: var(--sys-card-shadow) !important;
   }
 
-  .mat-mdc-text-field-wrapper {
+  .mat-mdc-text-field-wrapper,
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
     background-color: var(--sys-surface-variant) !important;
   }
 
@@ -71,8 +109,10 @@ body {
     color: var(--sys-on-surface) !important;
   }
 
-  .mat-mdc-menu-panel {
+  .mat-mdc-menu-panel,
+  .mat-mdc-dialog-container {
     background-color: var(--sys-surface) !important;
+    color: var(--sys-on-surface) !important;
     border: 1px solid var(--sys-outline-variant);
   }
 
