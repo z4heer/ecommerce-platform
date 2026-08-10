@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session, joinedload
 from app.database.session import get_db
 from app.core.security import decode_token
 from app.modules.auth.models.user import User
+from app.modules.auth.models.roles import SystemRole
 
 # Links security to your actual login route
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
@@ -37,7 +38,7 @@ def get_current_user(
 
 
 def require_admin(current_user=Depends(get_current_user)):
-    if current_user.role.name.upper() != "ADMIN":
+    if current_user.role.name.upper() != SystemRole.ADMIN.value:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Admin access required"
         )
@@ -45,7 +46,7 @@ def require_admin(current_user=Depends(get_current_user)):
 
 
 def require_customer(current_user=Depends(get_current_user)):
-    if current_user.role.name.upper() != "CUSTOMER":
+    if current_user.role.name.upper() != SystemRole.CUSTOMER.value:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN, detail="Customer access required"
         )

@@ -7,7 +7,7 @@ from app.modules.auth.dependencies import (
     require_customer,
 )
 from app.modules.orders.schemas.order_request import CreateOrderRequest
-from app.modules.orders.schemas.order_response import OrderResponse, OrderDetailResponse
+from app.modules.orders.schemas.order_response import OrderResponse, OrderDetailResponse, CheckoutSessionResponse
 from app.modules.orders.services.order_service import OrderService
 from app.modules.orders.repositories.order_repository import OrderRepository
 from app.modules.orders.services.inventory_service import InventoryService
@@ -69,3 +69,32 @@ def get_user_order_by_id(
     service: OrderService = Depends(get_order_service),
 ):
     return service.get_order_details(order_id=order_id, current_user_id=current_user.id)
+
+
+@router.post(
+    "/{order_id}/checkout-session",
+    response_model=CheckoutSessionResponse,
+    summary="Create Checkout Session",
+    description="Generates a sandbox payment checkout token for a pending order.",
+)
+def create_checkout_session(
+    order_id: UUID,
+    current_user=Depends(require_customer),
+    service: OrderService = Depends(get_order_service),
+):
+    token = service.create_checkout_session(order_id=order_id, current_user_id=current_user.id)
+    return {"token": token}
+
+
+@router.post(
+    "/{order_id}/confirm-payment",
+    response_model=OrderResponse,
+    summary="Confirm Payment",
+    description="Confirms payment and updates order status to PROCESSING.",
+)
+def confirm_payment(
+    order_id: UUID,
+    current_user=Depends(require_customer),
+    service: OrderService = Depends(get_order_service),
+):
+    return service.confirm_payment(order_id=order_id, current_user_id=current_user.id)

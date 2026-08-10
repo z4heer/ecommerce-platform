@@ -20,13 +20,17 @@
   }
 
   <!-- Projected Content Elements -->
-  <div class="app-search-toolbar__filters" *ngIf="hasFilters()">
+  @if (hasFilters()) {
+  <div class="app-search-toolbar__filters">
     <ng-content select="[toolbarFilters]"></ng-content>
   </div>
+  }
 
   <span class="app-search-toolbar__spacer"></span>
 
-  <div class="app-search-toolbar__actions" *ngIf="hasActions()">
+  @if (hasActions()) {
+  <div class="app-search-toolbar__actions">
     <ng-content select="[toolbarActions]"></ng-content>
   </div>
+  }
 </div>

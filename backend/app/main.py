@@ -13,6 +13,8 @@ from app.modules.orders.routers.admin_order_router import (
 )
 from app.modules.orders.routers.order_router import router as order_router
 from app.modules.orders.routers.dashboard_router import router as dashboard_router
+from app.modules.auth.routers.admin_user_router import admin_user_router
+from app.modules.catalog.routers.admin_report_router import admin_report_router
 from app.core.handlers import register_exception_handlers
 
 app = FastAPI(title="E-Commerce Platform API", version="1.0.0")
@@ -42,6 +44,8 @@ app.include_router(product_router)
 app.include_router(order_router)
 app.include_router(admin_order_router)
 app.include_router(dashboard_router)
+app.include_router(admin_user_router)
+app.include_router(admin_report_router)
 
 
 

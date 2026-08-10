@@ -20,6 +20,7 @@ from app.modules.orders.models.order import (
     Currency,
 )
 from datetime import UTC
+import uuid
 
 
 class OrderService:
@@ -58,7 +59,8 @@ class OrderService:
 
         # Finite State Machine Transitions Validation
         valid_transitions = {
-            OrderStatus.PENDING: [OrderStatus.SHIPPED, OrderStatus.CANCELLED],
+            OrderStatus.PENDING: [OrderStatus.SHIPPED, OrderStatus.CANCELLED, OrderStatus.PROCESSING],
+            OrderStatus.PROCESSING: [OrderStatus.SHIPPED, OrderStatus.CANCELLED],
             OrderStatus.SHIPPED: [OrderStatus.DELIVERED],
             OrderStatus.DELIVERED: [],
             OrderStatus.CANCELLED: [],
@@ -80,6 +82,43 @@ class OrderService:
         Later we can replace this with a sequence/table.
         """
         return f"ORD-{datetime.now(UTC):%Y%m%d}-" f"{random.randint(100000,999999)}"
+
+    def create_checkout_session(self, order_id: UUID, current_user_id: UUID) -> str:
+        order = self.order_repo.get_order_by_id(order_id)
+        if not order:
+            raise HTTPException(status_code=404, detail="Order not found")
+        if order.user_id != current_user_id:
+            raise HTTPException(
+                status_code=403, detail="Not authorized to checkout this order"
+            )
+        if order.status != OrderStatus.PENDING:
+            raise HTTPException(
+                status_code=400, detail="Only PENDING orders can be checked out"
+            )
+
+        # Simulate generating a checkout token
+        checkout_token = f"tok_sandbox_{uuid.uuid4().hex}"
+        return checkout_token
+
+    def confirm_payment(self, order_id: UUID, current_user_id: UUID) -> Order:
+        order = self.order_repo.get_order_by_id(order_id)
+        if not order:
+            raise HTTPException(status_code=404, detail="Order not found")
+        if order.user_id != current_user_id:
+            raise HTTPException(
+                status_code=403, detail="Not authorized to confirm this order"
+            )
+        if order.status != OrderStatus.PENDING:
+            raise HTTPException(
+                status_code=400, detail="Only PENDING orders can be confirmed"
+            )
+
+        # Atomically transition order status from Pending to Processing
+        # (Assuming payment simulation succeeds)
+        order.payment_status = PaymentStatus.PAID
+        order.payment_date = datetime.now(UTC)
+        updated_order = self.update_order_status(order_id, OrderStatus.PROCESSING)
+        return updated_order
 
     def create_order(
         self,
