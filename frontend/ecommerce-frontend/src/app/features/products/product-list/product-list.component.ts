@@ -1,74 +1,160 @@
 import {
   Component,
-  DestroyRef,
+  ChangeDetectionStrategy,
   inject,
-  OnInit
+  signal,
+  computed,
+  OnInit,
 } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+import { ProductService } from '../services/product.service';
+import { Product, ProductStatus } from '../../../core/models/product.model';
 
-import { MatCardModule } from '@angular/material/card';
-import { MatGridListModule } from '@angular/material/grid-list';
+// Layout Components
+import { PageContainerComponent } from '../../../layout/page-container/page-container.component';
+import { PageHeaderComponent } from '../../../layout/page-header/page-header.component';
+
+// Shared Components
+import { AppCardComponent } from '../../../shared/components/app-card/app-card.component';
+import { SearchToolbarComponent } from '../../../shared/components/search-toolbar/search-toolbar.component';
+import { StatusChipComponent } from '../../../shared/components/status-chip/status-chip.component';
+import { LoadingSkeletonComponent } from '../../../shared/components/loading-skeleton/loading-skeleton.component';
+import { EmptyStateComponent } from '../../../shared/components/empty-state/empty-state.component';
+import { ErrorStateComponent } from '../../../shared/components/error-state/error-state.component';
+import { ProductCategoryFilterComponent } from '../product-category-filter/product-category-filter.component';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-
-import { Observable } from 'rxjs';
-
-import { Product } from '../../../core/models/product.model';
-import { ProductService } from '../../../core/services/product.service';
-import { ProductSearchComponent } from '../product-search/product-search.component';
-import { ProductCategoryFilterComponent }
-  from '../product-category-filter/product-category-filter.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { LoggerService } from '../../../core/services/logger.service';
-import { AuthService } from '../../../core/auth/services/auth.service';
+import { CartService } from '../../cart/services/cart.service';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,
-    MatCardModule,
-    MatGridListModule,
-    MatButtonModule,
-    ProductSearchComponent,
-    ProductCategoryFilterComponent
+    PageContainerComponent,
+    PageHeaderComponent,
+    AppCardComponent,
+    SearchToolbarComponent,
+    ProductCategoryFilterComponent,
+    StatusChipComponent,
+    LoadingSkeletonComponent,
+    EmptyStateComponent,
+    ErrorStateComponent,
+    MatIconModule,
+    MatButtonModule
   ],
-  templateUrl: './product-list.component.html'
+  templateUrl: './product-list.component.html',
+  styleUrls: ['./product-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductListComponent implements OnInit {
+  private readonly productService = inject(ProductService);
+  private readonly router = inject(Router);
 
-  products$!: Observable<Product[]>;
-  private destroyRef = inject(DestroyRef);
-  private readonly logger = inject(LoggerService);
+  // Core State Signals
+  public readonly productsQuery = this.productService.productsQuery;
+  public readonly searchTerm = signal<string>('');
+  public readonly selectedCategory = signal<string>('All');
 
-  constructor(
-    private productService: ProductService,
-    private router: Router,
-    private authService: AuthService
-  ) { }
+  // Look how simple your component's computed signals become:
+  public readonly isLoading = computed(() => this.productsQuery().loading);
+  public readonly error = computed(() => this.productsQuery().error);
+  private readonly cartService = inject(CartService);
+  private readonly notificationService = inject(NotificationService);
 
-  ngOnInit(): void {
-    this.logger.info(
-      `RetryInterceptor: url`
+  public readonly filteredProducts = computed(() => {
+    const data = this.productsQuery().data;
+    return data.filter(product => {
+      const matchesSearch = product.name.toLowerCase().includes(this.searchTerm().toLowerCase());
+      const matchesCategory =
+        this.selectedCategory() === 'All' || product.category === this.selectedCategory();
+      return matchesSearch && matchesCategory;
+    });
+  }); // Category compilation loop with fallback array check
+  public readonly categories = computed(() => {
+    const queryResult = this.productsQuery();
+    const rawData =
+      queryResult && typeof queryResult === 'object' && 'data' in queryResult
+        ? (queryResult as any).data
+        : queryResult;
+
+    if (!Array.isArray(rawData)) return ['All'];
+    const uniqueCategories = Array.from(
+      new Set(rawData.map((p: Product) => p.category).filter(Boolean)),
     );
-    this.productService
-      .getProducts()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
-
-    this.products$ =
-      this.productService.products$;
+    return ['All', ...uniqueCategories];
+  });
+  public ngOnInit(): void {
+    this.productService.getProducts().subscribe({
+      next: data => {
+        // Signals are automatically handled inside the service's tap operator!
+        console.log('Catalog successfully loaded:', data);
+      },
+      error: err => {
+        console.error('Catalog fetch stream failed:', err);
+      },
+    });
   }
-  logout() {
-    console.log('Logged out successfully');
-    this.authService.logout();
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
+  public onSearch(term: string): void {
+    this.searchTerm.set(term || '');
+  }
 
-    //this.currentUserSubject.next(false);
-    //this.router.navigate(['/login']);
+  public onCategorySelect(category: string): void {
+    this.selectedCategory.set(category);
+  }
 
+  public onAddToCart(product: Product): void {
+    this.cartService.addToCart(product);
+  }
+
+  public navigateToDetail(productId: string): void {
+    if (productId) {
+      this.router.navigate(['/products', productId]);
+    }
+  }
+
+  public mapStatusType(status: string | undefined): 'success' | 'warning' | 'error' | 'neutral' {
+    switch (status as ProductStatus) {
+      case 'In Stock':
+        return 'success';
+      case 'Low Stock':
+        return 'warning';
+      case 'Out of Stock':
+        return 'error';
+      default:
+        return 'neutral';
+    }
+  }
+
+  public resolveStatusLabel(status: string | undefined): string {
+    if (!status || status.trim().toLowerCase() === 'unknown') {
+      return 'Not Available';
+    }
+    return status;
+  }
+
+  public resolveText(value: string | undefined, fallback = 'Not Available'): string {
+    return value && value.trim() ? value : fallback;
+  }
+
+  public resolveNumeric(value: number | undefined, fallback = 'N/A'): string {
+    return value !== undefined && value !== null ? `${value}` : fallback;
+  }
+
+  public resolveImageUrl(product: Product): string | null {
+    if (!product) return null;
+    const rawUrl = product.imageUrl || product.image_url;
+    if (!rawUrl) return null;
+    if (rawUrl.startsWith('http://') || rawUrl.startsWith('https://') || rawUrl.startsWith('data:')) {
+      return rawUrl;
+    }
+    if (rawUrl.startsWith('/static/product_images/')) {
+      const filename = rawUrl.split('/').pop();
+      return `/assets/product_images/${filename}`;
+    }
+    return rawUrl;
   }
 }
+

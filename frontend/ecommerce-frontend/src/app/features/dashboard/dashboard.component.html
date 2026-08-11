@@ -1,0 +1,75 @@
+<div class="page-container">
+  <!-- Clean Integrated Header Shell -->
+  <header class="dashboard-header">
+    <div class="header-main-row">
+      <div class="title-block">
+        <h1 class="page-title">Enterprise Dashboard</h1>
+        <p class="page-subtitle">Real-time overview of your shopping profile and actions</p>
+      </div>
+
+    </div>
+  </header>
+
+  <hr class="section-divider" />
+
+  <!-- Main Content Body with restricted structural spacing -->
+  <main class="dashboard-content">
+
+    <!-- Section 1: Dashboard Overview -->
+    <section class="dashboard-section">
+      <h2 class="section-heading">Dashboard Overview</h2>
+
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="card-body">
+            <span class="metric-label">Total Products</span>
+            <div class="metric-value-row">
+              <span class="metric-number">{{totalProductsCount()}}</span>
+              <span class="metric-badge status-catalog">CATALOG</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="card-body">
+            <span class="metric-label">Cart Items</span>
+            <div class="metric-value-row">
+              <span class="metric-number highlight-purple">{{cartItemsCount()}}</span>
+              <span class="metric-badge status-active">ACTIVE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="card-body">
+            <span class="metric-label">My Orders</span>
+            <div class="metric-value-row">
+              <span class="metric-number highlight-purple">{{myOrdersCount()}}</span>
+              <span class="metric-badge status-fulfilled">FULFILLED</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="card-body">
+            <span class="metric-label">Current Cart Total</span>
+            <div class="metric-value-row">
+              <span class="metric-number">₹{{currentCartTotal() | currency:'INR'}}</span>
+              <span class="metric-badge status-valuation">VALUATION</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Quick Actions Section immediately following -->
+    <section class="dashboard-section">
+      <h2 class="section-heading">Quick Actions</h2>
+      <div class="quick-actions-bar">
+        <button class="action-btn outline-btn" routerLink="/products">Browse Products</button>
+        <button class="action-btn outline-btn" routerLink="/cart">View Cart</button>
+        <button class="action-btn solid-btn" routerLink="/orders">Track Orders</button>
+      </div>
+    </section>
+  </main>
+</div>

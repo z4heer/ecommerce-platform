@@ -1,0 +1,5 @@
+export const UI_CONSTANTS = {
+  SIDENAV_WIDTH: 260,
+  MOBILE_BREAKPOINT: 768,
+  TABLET_BREAKPOINT: 1024,
+} as const;

@@ -1,0 +1,153 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.app-sidenav {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--sys-surface);
+  color: var(--sys-on-surface);
+}
+
+mat-nav-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0.5rem 0;
+}
+
+/* ----------------------------------------------------
+   Navigation Item
+----------------------------------------------------- */
+
+.nav-item {
+  height: 48px !important;
+  margin: 0.25rem 0.75rem;
+  border-radius: 8px;
+  color: var(--sys-on-surface-variant, #64748b) !important;
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+
+  text-decoration: none;
+  cursor: pointer;
+
+  mat-icon {
+    color: var(--sys-on-surface-variant, #64748b);
+  }
+}
+
+/* ----------------------------------------------------
+   Hover
+----------------------------------------------------- */
+
+a.nav-item:hover:not(.active) {
+  background-color: var(--sys-surface-variant, rgba(0, 0, 0, 0.04));
+  color: var(--sys-on-surface, #0f172a) !important;
+
+  mat-icon {
+    color: var(--sys-on-surface, #0f172a);
+  }
+}
+
+/* ----------------------------------------------------
+   Active Route
+----------------------------------------------------- */
+
+a.active {
+  font-weight: 600;
+  background-color: var(--sys-primary-container, #e0e7ff) !important;
+  color: var(--sys-primary, #4f46e5) !important;
+
+  mat-icon {
+    font-weight: 600;
+    color: var(--sys-primary, #4f46e5) !important;
+  }
+}
+
+/* ----------------------------------------------------
+   Icons
+----------------------------------------------------- */
+
+mat-icon {
+  flex-shrink: 0;
+}
+
+/* ----------------------------------------------------
+   Badge
+----------------------------------------------------- */
+
+.menu-badge {
+  min-width: 24px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ----------------------------------------------------
+   Disabled Items
+----------------------------------------------------- */
+
+.nav-item.disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.nav-item.disabled:hover {
+  background: transparent;
+}
+
+.coming-soon {
+  font-size: 0.75rem;
+  font-style: italic;
+  white-space: nowrap;
+  color: var(--sys-on-surface-variant, #94a3b8);
+}
+
+/* ----------------------------------------------------
+   Focus
+----------------------------------------------------- */
+
+.nav-item:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+/* ----------------------------------------------------
+   Scrollbar
+----------------------------------------------------- */
+
+mat-nav-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+mat-nav-list::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+/* ----------------------------------------------------
+   Tablet
+----------------------------------------------------- */
+
+@media (max-width: 1024px) {
+  .nav-item {
+    margin-inline: 0.5rem;
+  }
+}
+
+/* ----------------------------------------------------
+   Mobile
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .nav-item {
+    height: 52px !important;
+    margin-inline: 0.5rem;
+  }
+}

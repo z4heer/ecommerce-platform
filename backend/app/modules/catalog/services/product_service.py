@@ -5,57 +5,44 @@ from app.core.cache import redis_client
 from app.modules.catalog.models.product import Product
 from app.modules.catalog.models.inventory import Inventory
 
-from app.modules.catalog.repositories.product_repository import (
-    ProductRepository
-)
+from app.modules.catalog.repositories.product_repository import ProductRepository
 
-from app.modules.catalog.repositories.inventory_repository import (
-    InventoryRepository
-)
+from app.modules.catalog.repositories.inventory_repository import InventoryRepository
 
 
 class ProductService:
 
     CACHE_KEY = "all_products"
 
-    def __init__(self,product_repo: ProductRepository, inventory_repo: InventoryRepository):
+    def __init__(
+        self, product_repo: ProductRepository, inventory_repo: InventoryRepository
+    ):
         self.product_repo = product_repo
         self.inventory_repo = inventory_repo
 
-    def create_product(
-        self,
-        db,
-        payload
-    ):
+    def create_product(self, db, payload):
 
         product = Product(
             name=payload.name,
             description=payload.description,
             category=payload.category,
-            price=payload.price
+            price=payload.price,
+            sku=payload.sku,
+            image_url=payload.image_url,
         )
 
-        self.product_repo.create(
-            db,
-            product
-        )
+        self.product_repo.create(db, product)
 
         inventory = Inventory(
-            product_id=product.id,
-            stock_quantity=payload.stock_quantity
+            product_id=product.id, stock_quantity=payload.stock_quantity
         )
 
-        self.inventory_repo.create(
-            db,
-            inventory
-        )
+        self.inventory_repo.create(db, inventory)
 
         db.commit()
+        db.refresh(product)
 
-        redis_client.delete(
-            self.CACHE_KEY
-        )
-
+        redis_client.delete(self.CACHE_KEY)
         return product
 
     def get_products(
@@ -66,15 +53,13 @@ class ProductService:
         max_price=None,
         search=None,
         page=1,
-        size=20
+        size=20,
     ):
 
-        cached = redis_client.get(
-            self.CACHE_KEY
-        )
+        cached = redis_client.get(self.CACHE_KEY)
 
         if cached:
-            #print("CACHE HIT")
+            # print("CACHE HIT")
             return json.loads(cached)
         products = self.product_repo.get_products(
             db=db,
@@ -83,44 +68,59 @@ class ProductService:
             max_price=max_price,
             search=search,
             page=page,
-            size=size
+            size=size,
         )
-
         serialized = [
             {
                 "id": str(p.id),
                 "name": p.name,
                 "description": p.description,
                 "category": p.category,
-                "price": float(p.price)
+                "price": float(p.price),
+                "stock_quantity": p.inventory.stock_quantity if p.inventory else 0,
+                "status": (
+                    "Out of Stock"
+                    if p.inventory.stock_quantity == 0
+                    else "Low Stock" if p.inventory.stock_quantity < 10 else "In Stock"
+                ),
+                "sku": p.sku,
+                "image_url": p.image_url,
             }
             for p in products
         ]
 
-        redis_client.set(
-            self.CACHE_KEY,
-            json.dumps(serialized),
-            ex=300
+        redis_client.set(self.CACHE_KEY, json.dumps(serialized), ex=300)
+
+        return serialized
+
+    def get_product(self, db, product_id):
+        product = self.product_repo.get_by_id(db, product_id)
+
+        if not product:
+            return None
+
+        stock = product.inventory.stock_quantity if product.inventory else 0
+
+        status = (
+            "Out of Stock" if stock == 0 else "Low Stock" if stock < 10 else "In Stock"
         )
 
-        return products
+        return {
+            "id": str(product.id),
+            "name": product.name,
+            "description": product.description,
+            "category": product.category,
+            "price": float(product.price),
+            "stock_quantity": stock,
+            "status": status,
+            "sku": product.sku,
+            "image_url": product.image_url,
+        }
 
-    def get_product(
-        self,
-        db,
-        product_id
-    ):
-        return self.product_repo.get_by_id(
-            db,
-            product_id
-        )
+    def get_product_entity(self, db, product_id):
+        return self.product_repo.get_by_id(db, product_id)
 
-    def update_product(
-        self,
-        db,
-        product,
-        payload
-    ):
+    def update_product(self, db, product, payload):
 
         if payload.name:
             product.name = payload.name
@@ -134,32 +134,29 @@ class ProductService:
         if payload.price:
             product.price = payload.price
 
-        self.product_repo.update(
-            db,
-            product
-        )
+        if payload.sku is not None:
+            product.sku = payload.sku
+
+        if payload.image_url is not None:
+            product.image_url = payload.image_url
+
+        if payload.stock_quantity is not None and product.inventory:
+            product.inventory.stock_quantity = payload.stock_quantity
+
+        self.product_repo.update(db, product)
 
         db.commit()
 
-        redis_client.delete(
-            self.CACHE_KEY
-        )
+        db.refresh(product)
+
+        redis_client.delete(self.CACHE_KEY)
 
         return product
 
-    def delete_product(
-        self,
-        db,
-        product
-    ):
+    def delete_product(self, db, product):
 
-        self.product_repo.soft_delete(
-            db,
-            product
-        )
+        self.product_repo.soft_delete(db, product)
 
         db.commit()
 
-        redis_client.delete(
-            self.CACHE_KEY
-        )
+        redis_client.delete(self.CACHE_KEY)

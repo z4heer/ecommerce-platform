@@ -1,0 +1,8 @@
+<div class="app-status-chip-container" matRipple [matRippleDisabled]="!isInteractive()">
+
+  @if (icon()) {
+  <mat-icon class="app-status-chip-icon">{{ icon() }}</mat-icon>
+  }
+  <span class="app-status-chip-label">{{ label() }}</span>
+
+</div>

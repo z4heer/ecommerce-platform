@@ -9,43 +9,40 @@ import { PaginationMetadata } from './pagination.model';
  * Generic wrapper for successful API responses.
  */
 export interface ApiResponse<T> {
+  /**
+   * Indicates whether the request was successful.
+   */
+  success: boolean;
 
-    /**
-     * Indicates whether the request was successful.
-     */
-    success: boolean;
+  /**
+   * Human-readable message returned by the API.
+   */
+  message: string;
 
-    /**
-     * Human-readable message returned by the API.
-     */
-    message: string;
+  /**
+   * Payload returned by the server.
+   */
+  data: T;
 
-    /**
-     * Payload returned by the server.
-     */
-    data: T;
+  pagination: PaginationMetadata;
 
-    pagination: PaginationMetadata;
-
-    /**
-     * Optional server timestamp.
-     */
-    timestamp?: string;
+  /**
+   * Optional server timestamp.
+   */
+  timestamp?: string;
 }
-
 
 /**
  * Generic paginated response.
  */
 export interface PaginatedResponse<T> {
+  success: boolean;
 
-    success: boolean;
+  message: string;
 
-    message: string;
+  data: T[];
 
-    data: T[];
+  pagination: PaginationMetadata;
 
-    pagination: PaginationMetadata;
-
-    timestamp?: string;
+  timestamp?: string;
 }

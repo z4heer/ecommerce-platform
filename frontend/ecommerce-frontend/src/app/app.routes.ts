@@ -1,45 +1,93 @@
 import { Routes } from '@angular/router';
 
-import { LoginComponent } from './features/auth/pages/login/login.component';
-import { RegisterComponent } from './features/auth/pages/register/register.component';
-import { DashboardComponent } from './features/dashboard/dashboard/dashboard.component';
+import { MainLayoutComponent } from './layout/main-layout/main-layout.component';
+import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
 import { authGuard } from './core/guards/auth.guard';
-import { ProductListComponent } from './features/products/product-list/product-list.component';
-import { ProductDetailComponent } from './features/products/product-detail/product-detail.component';
-
 
 export const routes: Routes = [
-    {
-        path: 'login',
-        component: LoginComponent
-    },
-    {
-        path: 'register',
-        component: RegisterComponent
-    },
-    {
-        path: 'dashboard',
-        component: DashboardComponent,
-        canActivate: [authGuard]
-    },
-    {
-        path: 'products',
-        component: ProductListComponent,
-        canActivate: [authGuard]
-    },
+  //-------------------------------------------------------
+  // Root URL Redirect (http://localhost:4200/ -> /login)
+  //-------------------------------------------------------
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'login',
+  },
 
-    {
-        path: 'products/:id',
-        component: ProductDetailComponent,
-        canActivate: [authGuard]
-    },
-    {
+  //-------------------------------------------------------
+  // Authentication Area (/login, /register)
+  //-------------------------------------------------------
+  {
+    path: '',
+    component: AuthLayoutComponent,
+    children: [
+      {
         path: '',
-        redirectTo: 'login',
-        pathMatch: 'full'
-    },
-    {
-        path: '**',
-        redirectTo: 'login'
-    }
+        loadChildren: () => import('./features/auth/auth.routes').then(m => m.AUTH_ROUTES),
+      },
+    ],
+  },
+
+  //-------------------------------------------------------
+  // Protected Area (Auth Guard Protected)
+  //-------------------------------------------------------
+  {
+    path: '',
+    component: MainLayoutComponent,
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'dashboard',
+        loadChildren: () =>
+          import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES),
+      },
+      {
+        path: 'products',
+        loadChildren: () =>
+          import('./features/products/product.routes').then(m => m.PRODUCT_ROUTES),
+      },
+      {
+        path: 'cart',
+        loadChildren: () => import('./features/cart/cart.routes').then(m => m.CART_ROUTES),
+      },
+      {
+        path: 'orders',
+        loadChildren: () =>
+          import('./features/orders/orders.routes').then(m => m.ORDERS_ROUTES),
+      },
+      {
+        path: 'checkout',
+        loadChildren: () =>
+          import('./features/checkout/checkout.routes').then(m => m.CHECKOUT_ROUTES),
+      },
+      {
+        path: 'profile',
+        loadChildren: () =>
+          import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES),
+      },
+      {
+        path: 'admin',
+        loadChildren: () =>
+          import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES),
+      },
+      {
+        path: 'customers',
+        loadChildren: () =>
+          import('./features/customers/customers.routes').then(m => m.CUSTOMERS_ROUTES),
+      },
+      {
+        path: 'reports',
+        loadChildren: () =>
+          import('./features/reports/reports.routes').then(m => m.REPORTS_ROUTES),
+      },
+    ],
+  },
+
+  //-------------------------------------------------------
+  // Wildcard Fallback
+  //-------------------------------------------------------
+  {
+    path: '**',
+    redirectTo: 'login',
+  },
 ];

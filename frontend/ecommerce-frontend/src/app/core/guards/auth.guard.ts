@@ -1,12 +1,7 @@
 import { inject } from '@angular/core';
-import {
-    CanActivateFn,
-    Router,
-    UrlTree
-} from '@angular/router';
+import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { AuthService } from '../auth/services/auth.service';
 import { LoggerService } from '../services/logger.service';
-
 
 /**
  * ============================================================
@@ -17,22 +12,16 @@ import { LoggerService } from '../services/logger.service';
  * protected routes.
  */
 export const authGuard: CanActivateFn = (): boolean | UrlTree => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  const logger = inject(LoggerService);
 
-    const authService = inject(AuthService);
-    const router = inject(Router);
-    const logger = inject(LoggerService);
+  if (authService.isAuthenticated()) {
+    logger.debug('Authentication successful.');
+    return true;
+  }
 
-    if (authService.isAuthenticated()) {
-        logger.debug(
-            'Authentication successful.'
-        );
-        return true;
-    }
+  logger.warn('Unauthorized access. Redirecting to login.');
 
-    logger.warn(
-        'Unauthorized access. Redirecting to login.'
-    );
-
-    return router.createUrlTree(['/login']);
-
+  return router.createUrlTree(['/login']);
 };

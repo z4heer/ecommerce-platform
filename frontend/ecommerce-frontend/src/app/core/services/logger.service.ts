@@ -12,77 +12,57 @@ import { ConfigService } from './config.service';
  * All application logging should go through this service.
  */
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoggerService {
+  constructor(private readonly configService: ConfigService) {}
 
-    constructor(
-        private readonly configService: ConfigService
-    ) { }
-
-    /**
-     * Logs informational messages.
-     */
-    info(message: string, data?: unknown): void {
-
-        if (!this.configService.enableConsoleLogging) {
-            return;
-        }
-
-        console.info(
-            `[INFO] ${message}`,
-            data ?? ''
-        );
+  /**
+   * Logs informational messages.
+   */
+  info(message: string, data?: unknown): void {
+    if (!this.configService.enableConsoleLogging) {
+      return;
     }
 
-    /**
-     * Logs warning messages.
-     */
-    warn(message: string, data?: unknown): void {
+    console.info(`[INFO] ${message}`, data ?? '');
+  }
 
-        if (!this.configService.enableConsoleLogging) {
-            return;
-        }
-
-        console.warn(
-            `[WARN] ${message}`,
-            data ?? ''
-        );
+  /**
+   * Logs warning messages.
+   */
+  warn(message: string, data?: unknown): void {
+    if (!this.configService.enableConsoleLogging) {
+      return;
     }
 
-    /**
-     * Logs error messages.
-     */
-    error(message: string, error?: unknown): void {
+    console.warn(`[WARN] ${message}`, data ?? '');
+  }
 
-        if (!this.configService.enableConsoleLogging) {
-            return;
-        }
-
-        console.error(
-            `[ERROR] ${message}`,
-            error ?? ''
-        );
+  /**
+   * Logs error messages.
+   */
+  error(message: string, error?: unknown): void {
+    if (!this.configService.enableConsoleLogging) {
+      return;
     }
 
-    /**
-     * Logs debug messages.
-     * Visible only in development mode.
-     */
-    debug(message: string, data?: unknown): void {
+    console.error(`[ERROR] ${message}`, error ?? '');
+  }
 
-        if (!this.configService.enableConsoleLogging) {
-            return;
-        }
-
-        if (this.configService.isProduction) {
-            return;
-        }
-
-        console.debug(
-            `[DEBUG] ${message}`,
-            data ?? ''
-        );
+  /**
+   * Logs debug messages.
+   * Visible only in development mode.
+   */
+  debug(message: string, data?: unknown): void {
+    if (!this.configService.enableConsoleLogging) {
+      return;
     }
 
+    if (this.configService.isProduction) {
+      return;
+    }
+
+    console.debug(`[DEBUG] ${message}`, data ?? '');
+  }
 }

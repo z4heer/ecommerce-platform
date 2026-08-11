@@ -1,0 +1,62 @@
+:host {
+  display: block;
+}
+
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  min-height: 56px;
+
+  padding: 0.75rem 1.5rem;
+
+  border-top: 1px solid var(--mat-sys-outline-variant, #dcdcdc);
+
+  background-color: var(--mat-sys-surface, #ffffff);
+
+  color: var(--mat-sys-on-surface, #555);
+
+  font-size: 0.875rem;
+}
+
+.footer-left,
+.footer-center,
+.footer-right {
+  display: flex;
+  align-items: center;
+}
+
+.footer-center {
+  justify-content: center;
+  flex: 1;
+}
+
+.footer-right {
+  justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .app-footer {
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    gap: 0.5rem;
+
+    padding: 1rem;
+  }
+
+  .footer-left,
+  .footer-center,
+  .footer-right {
+    justify-content: center;
+
+    width: 100%;
+  }
+}

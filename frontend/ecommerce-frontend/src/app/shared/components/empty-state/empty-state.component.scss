@@ -1,0 +1,141 @@
+@use '@angular/material' as mat;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--mat-sys-spacing-xl, 32px);
+  font-family: var(--mat-sys-typography-body-large-font);
+
+  // High Contrast Theme Support
+  @media (forced-colors: active) {
+    border: 1px dashed CanvasText;
+  }
+}
+
+// Layout Alignments
+.app-empty-state--centered {
+  align-items: center;
+  text-align: center;
+
+  .app-empty-state__actions {
+    justify-content: center;
+  }
+}
+
+.app-empty-state--left-aligned {
+  align-items: flex-start;
+  text-align: left;
+
+  .app-empty-state__actions {
+    justify-content: flex-start;
+  }
+}
+
+// Size Variants Mapping Material 3 design tokens safely
+.app-empty-state--small {
+  gap: var(--mat-sys-spacing-small, 12px);
+
+  .app-empty-state__title {
+    font: var(--mat-sys-typography-title-small-font);
+  }
+
+  .app-empty-state__description {
+    font: var(--mat-sys-typography-body-small-font);
+  }
+
+  .app-empty-state__icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .app-empty-state__illustration {
+    max-height: 120px;
+  }
+}
+
+.app-empty-state--medium {
+  gap: var(--mat-sys-spacing-medium, 20px);
+
+  .app-empty-state__title {
+    font: var(--mat-sys-typography-title-medium-font);
+  }
+
+  .app-empty-state__description {
+    font: var(--mat-sys-typography-body-medium-font);
+  }
+
+  .app-empty-state__icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+
+  .app-empty-state__illustration {
+    max-height: 200px;
+  }
+}
+
+.app-empty-state--large {
+  gap: var(--mat-sys-spacing-large, 32px);
+
+  .app-empty-state__title {
+    font: var(--mat-sys-typography-headline-small-font);
+  }
+
+  .app-empty-state__description {
+    font: var(--mat-sys-typography-body-large-font);
+  }
+
+  .app-empty-state__icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+  }
+
+  .app-empty-state__illustration {
+    max-height: 320px;
+  }
+}
+
+// Layout Substructures
+.app-empty-state__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--mat-sys-color-outline, #79747e);
+}
+
+.app-empty-state__illustration {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.app-empty-state__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mat-sys-spacing-xs, 8px);
+  max-width: 600px;
+}
+
+.app-empty-state__title {
+  margin: 0;
+  color: var(--mat-sys-color-on-surface, #1d1b20);
+}
+
+.app-empty-state__description {
+  margin: 0;
+  color: var(--mat-sys-color-on-surface-variant, #49454f);
+}
+
+.app-empty-state__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mat-sys-spacing-small, 12px);
+  width: 100%;
+  margin-top: var(--mat-sys-spacing-xs, 4px);
+}

@@ -1,44 +1,106 @@
-<div class="filters">
+<app-page-container>
+  <app-page-header title="Product Catalog" subtitle="Manage and view enterprise inventory items."></app-page-header>
 
-    <app-product-search />
+  <section class="controls-section" aria-label="Catalog filters and search">
+    <div class="search-filter-grid">
+      <app-search-toolbar [placeholder]="'Search products by name or description...'" (searchChange)="onSearch($event)">
+      </app-search-toolbar>
 
-    <app-product-category-filter />
+      <div class="filter-column" aria-label="Product category filter">
+        <app-product-category-filter [categories]="categories()" (categoryChange)="onCategorySelect($event)">
+        </app-product-category-filter>
+      </div>
+    </div>
+  </section>
 
-</div>
-<div class="logout-button">
-    <button mat-raised-button color="warn" (click)="logout()">
-        Logout
-    </button>
-</div>
-<div class="grid-container">
+  <hr class="section-divider" />
 
-    @for (
-    product of products$ | async;
-    track product.id
-    ) {
+  <!-- Loading View Wrapper -->
+  <app-loading-skeleton *ngIf="isLoading()" [variant]="'card'" [count]="6" class="grid-container" aria-live="polite"
+    aria-busy="true">
+  </app-loading-skeleton>
 
-    <mat-card>
+  <!-- Error View Wrapper -->
+  <app-error-state *ngIf="!isLoading() && error()" title="Data Retrieval Error"
+    [description]="error()?.message || 'Failed to retrieve product data. Please try again later.'">
+  </app-error-state>
 
-        <mat-card-title>
-            {{ product.name }}
-        </mat-card-title>
+  <!-- Content State Grid Frame -->
+  <ng-container *ngIf="!isLoading() && !error()">
+    <!-- Empty State Fallback -->
+    <app-empty-state *ngIf="filteredProducts().length === 0" title="No Products Found"
+      description="We couldn't find any items matching your selected criteria or search terms. Try adjusting your filters.">
+    </app-empty-state>
 
-        <mat-card-content>
+    <!-- Active Grid View: Flattened structure to guarantee rendering visibility when elements populate -->
+    <div *ngIf="filteredProducts().length > 0" class="grid-container">
+      <app-card *ngFor="let product of filteredProducts()" (click)="navigateToDetail(product.id)" [clickable]="true"
+        [attr.aria-label]="
+          product.name +
+          ', stock ' +
+          resolveNumeric(product.stock_quantity) +
+          ', ' +
+          resolveStatusLabel(product.status)
+        ">
+        <div class="product-card-content">
+          <div class="image-wrapper" *ngIf="resolveImageUrl(product); else imagePlaceholder">
+            <img [src]="resolveImageUrl(product)" [alt]="'Image representation of ' + product.name" class="product-image" />
+          </div>
 
-            <p>{{ product.category }}</p>
+          <ng-template #imagePlaceholder>
+            <div class="image-placeholder" aria-hidden="true">
+              <svg class="placeholder-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+                <rect x="8" y="14" width="48" height="40" rx="6" fill="var(--sys-surface, #ffffff)" stroke="var(--sys-outline-variant, #d0d7de)" stroke-width="2" />
+                <path d="M8 24H56" stroke="var(--sys-outline-variant, #d0d7de)" stroke-width="2" />
+                <path d="M22 14V10C22 7.79086 23.7909 6 26 6H38C40.2091 6 42 7.79086 42 10V14" stroke="var(--sys-primary, #0061a4)" stroke-width="2.5" stroke-linecap="round" />
+                <path d="M24 34L30 40L40 30" stroke="var(--sys-primary, #0061a4)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="placeholder-text">No Image</span>
+            </div>
+          </ng-template>
 
-            <p>₹ {{ product.price }}</p>
+          <div class="product-details">
+            <span class="product-category">{{
+              resolveText(product.category, 'Uncategorized')
+              }}</span>
+            <h3 class="product-title">{{ product.name || 'Untitled Product' }}</h3>
+            <p class="product-description">
+              {{ resolveText(product.description, 'No description available.') }}
+            </p>
+            <div class="product-meta">
+              <div class="meta-item">
+                <span class="meta-label">Stock</span>
+                <span class="meta-value">{{ resolveNumeric(product.stock_quantity) }}</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Updated</span>
+                <span class="meta-value">{{
+                  resolveText(product.created_at, 'Not Available')
+                  }}</span>
+              </div>
+            </div>
+          </div>
 
-        </mat-card-content>
+          <div class="product-footer">
+            <span class="product-price">{{
+              product.price !== undefined && product.price !== null
+              ? (product.price | currency:'INR')
+              : 'N/A'
+              }}</span>
+            <app-status-chip [status]="mapStatusType(product.status)" [label]="resolveStatusLabel(product.status)"
+              ariaLabel="Inventory status for {{ product.name }}">
+            </app-status-chip>
+          </div>
+        </div>
 
-        <button mat-raised-button color="primary" [routerLink]="['/products', product.id]">
-
-            View Details
-
-        </button>
-
-    </mat-card>
-
-    }
-
-</div>
+        <div appCardActions class="product-card-action">
+          <button mat-flat-button type="button" color="primary" (click)="$event.stopPropagation(); onAddToCart(product)"
+            [disabled]="product.stock_quantity <= 0" [attr.aria-label]="'Add ' + product.name + ' to cart'">
+            <mat-icon>shopping_cart</mat-icon>
+            Add to Cart
+          </button>
+        </div>
+      </app-card>
+    </div>
+  </ng-container>
+</app-page-container>

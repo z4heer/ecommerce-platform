@@ -40,3 +40,42 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# 13 Jul
+# -----------------------------
+# Python
+# -----------------------------
+venv/
+.venv/
+env/
+ENV/
+__pycache__/
+*.py[cod]
+
+# -----------------------------
+# Database backups
+# -----------------------------
+*.sql
+*.dump
+*.backup
+
+# Python test/cache
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Docker overrides
+docker-compose.override.yml
+
+# OS
+Thumbs.db
+.DS_Store

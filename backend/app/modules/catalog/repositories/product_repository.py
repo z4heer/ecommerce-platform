@@ -1,40 +1,27 @@
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 from app.modules.catalog.models.product import Product
 from app.core.logger import logger
+from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import Session
+
 
 class ProductRepository:
-    def __init__(
-        self,
-        db: AsyncSession
-    ):
+    def __init__(self, db: Session):
         self.db = db
 
-    def create(
-        self,
-        db,
-        product: Product
-    ):
+    def create(self, db, product: Product):
         db.add(product)
         db.flush()
         db.refresh(product)
         return product
 
-    def get_by_id(
-        self,
-        db,
-        product_id
-    ):
-        logger.info(f"Fetching product with ID: {product_id}")    
+    def get_by_id(self, db, product_id):
+        logger.info(f"Fetching product with ID: {product_id}")
         return (
             db.query(Product)
-            .filter(
-                Product.id == product_id,
-                Product.is_active.is_(True)
-            )
+            .options(joinedload(Product.inventory))
+            .filter(Product.id == product_id, Product.is_active.is_(True))
             .first()
         )
-        logger.info(f"Product fetched: {product}")  # Log the fetched product
 
     def get_products(
         self,
@@ -44,61 +31,36 @@ class ProductRepository:
         max_price=None,
         search=None,
         page=1,
-        size=20
+        size=20,
     ):
 
-        query = db.query(Product)
+        query = db.query(Product).options(joinedload(Product.inventory))
 
-        query = query.filter(
-            Product.is_active.is_(True)
-        )
+        query = query.filter(Product.is_active.is_(True))
 
         if category:
-            query = query.filter(
-                Product.category == category
-            )
+            query = query.filter(Product.category == category)
 
         if search:
-            query = query.filter(
-                Product.name.ilike(
-                    f"%{search}%"
-                )
-            )
+            query = query.filter(Product.name.ilike(f"%{search}%"))
 
         if min_price is not None:
-            query = query.filter(
-                Product.price >= min_price
-            )
+            query = query.filter(Product.price >= min_price)
 
         if max_price is not None:
-            query = query.filter(
-                Product.price <= max_price
-            )
+            query = query.filter(Product.price <= max_price)
 
         offset = (page - 1) * size
 
-        return (
-            query
-            .offset(offset)
-            .limit(size)
-            .all()
-        )
+        return query.offset(offset).limit(size).all()
 
-    def update(
-        self,
-        db,
-        product
-    ):
+    def update(self, db, product):
         db.add(product)
         db.flush()
         db.refresh(product)
         return product
 
-    def soft_delete(
-        self,
-        db,
-        product
-    ):
+    def soft_delete(self, db, product):
         product.is_active = False
 
         db.add(product)

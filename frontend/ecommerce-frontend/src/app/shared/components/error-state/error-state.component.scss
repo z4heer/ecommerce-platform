@@ -1,0 +1,180 @@
+:host {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--mat-sys-typography-body-large-font, inherit);
+  padding: var(--mat-sys-spacing-medium, 24px);
+  background-color: transparent;
+  transition: all 0.2s ease-in-out;
+
+  // Base Alignments
+  &.app-error-state-centered {
+    text-align: center;
+
+    .error-state-container {
+      align-items: center;
+      margin: 0 auto;
+    }
+
+    .error-state-actions {
+      justify-content: center;
+    }
+  }
+
+  &.app-error-state-left {
+    text-align: left;
+
+    .error-state-container {
+      align-items: flex-start;
+    }
+
+    .error-state-actions {
+      justify-content: flex-start;
+    }
+  }
+
+  // Token Mappings per Severity Layer
+  &.severity-warning {
+    --severity-color: var(--mat-sys-warning, #e67e22);
+    --severity-container: var(--mat-sys-warning-container, #fdf2e9);
+  }
+
+  &.severity-error {
+    --severity-color: var(--mat-sys-error, #b3261e);
+    --severity-container: var(--mat-sys-error-container, #f9dedc);
+  }
+
+  &.severity-critical {
+    --severity-color: var(--mat-sys-error, #8c1d18);
+    --severity-container: var(--mat-sys-error-container, #f2b8b5);
+    background-color: rgba(140, 29, 24, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(140, 29, 24, 0.1);
+  }
+}
+
+.error-state-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 560px;
+  width: 100%;
+}
+
+.error-state-visual-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+}
+
+.error-state-icon {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  color: var(--severity-color);
+}
+
+.error-state-illustration {
+  max-width: 100%;
+  height: auto;
+  max-height: 220px;
+  object-fit: contain;
+}
+
+.error-state-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.error-state-title {
+  margin: 0;
+  color: var(--mat-sys-on-surface, #1d1b20);
+  font-size: var(--mat-sys-typography-headline-small-size, 24px);
+  font-weight: var(--mat-sys-typography-headline-small-weight, 400);
+  line-height: var(--mat-sys-typography-headline-small-line-height, 32px);
+}
+
+.error-state-description {
+  margin: 0;
+  color: var(--mat-sys-on-surface-variant, #49454f);
+  font-size: var(--mat-sys-typography-body-medium-size, 14px);
+  line-height: var(--mat-sys-typography-body-medium-line-height, 20px);
+}
+
+.error-state-code-badge {
+  display: inline-flex;
+  align-self: center;
+  margin-top: 4px;
+
+  :host.app-error-state-left & {
+    align-self: flex-start;
+  }
+
+  code {
+    font-family: var(--mat-sys-typography-body-small-font, monospace);
+    background-color: var(--severity-container);
+    color: var(--severity-color);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+}
+
+.error-state-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+// Media Queries for Cross-Device Responsive Constraints
+@media (max-width: 600px) {
+  :host {
+    padding: 16px;
+  }
+
+  .error-state-icon {
+    font-size: 40px;
+    height: 40px;
+    width: 40px;
+  }
+
+  .error-state-illustration {
+    max-height: 160px;
+  }
+
+  .error-state-title {
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  .error-state-actions {
+    flex-direction: column;
+    align-items: stretch;
+
+    ::ng-deep button,
+    ::ng-deep a {
+      width: 100% !important;
+      text-align: center;
+    }
+  }
+}
+
+// High Contrast Accessibility Strategy overrides
+@media (forced-colors: active) {
+  .error-state-icon {
+    color: CanvasText;
+  }
+
+  .error-state-code-badge code {
+    border: 1px solid CanvasText;
+    background: transparent;
+    color: CanvasText;
+  }
+}

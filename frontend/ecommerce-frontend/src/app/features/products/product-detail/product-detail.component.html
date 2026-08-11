@@ -1,32 +1,87 @@
-@if(product){
+<app-page-container>
+  <app-page-header title="Product Details"
+    subtitle="Inspect inventory item information and stock availability."></app-page-header>
 
-<mat-card>
+  <section class="detail-content" aria-label="Product detail content">
+    <div class="action-row">
+      <button mat-stroked-button color="primary" class="back-btn" (click)="goBack()" aria-label="Back to products">
+        <mat-icon aria-hidden="true">arrow_back</mat-icon>
+        Back to Products
+      </button>
+    </div>
 
-    <mat-card-title>
-        {{ product.name }}
-    </mat-card-title>
+    <app-loading-skeleton *ngIf="isLoading()" variant="card" [count]="1" class="detail-loading" aria-live="polite"
+      aria-busy="true">
+    </app-loading-skeleton>
 
-    <mat-card-content>
+    <app-error-state *ngIf="!isLoading() && error()" title="Unable to load product details"
+      [description]="error()?.message || 'Please try again later.'">
+    </app-error-state>
 
-        <p>{{ product.description }}</p>
+    <ng-container *ngIf="!isLoading() && !error()">
+      <app-empty-state *ngIf="!product()" title="Product Not Found"
+        description="The requested inventory item could not be located. Please return to the product catalog.">
+      </app-empty-state>
 
-        <p>
-            Category:
-            {{ product.category }}
-        </p>
+      <app-card *ngIf="product() as currentProduct" [title]="currentProduct.name"
+        [subtitle]="currentProduct.description" [ariaLabel]="currentProduct.name + ' details'">
+        <div class="detail-grid">
+          <div class="detail-summary">
+            <div class="detail-field">
+              <span class="detail-label">Product ID</span>
+              <span class="detail-value">{{
+                resolveText(currentProduct.id, 'Not Available')
+                }}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Category</span>
+              <span class="detail-value">{{
+                resolveText(currentProduct.category, 'Uncategorized')
+                }}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Stock Quantity</span>
+              <span class="detail-value">{{ resolveNumeric(currentProduct.stock_quantity) }}</span>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Last Updated</span>
+              <span class="detail-value">{{
+                currentProduct.created_at
+                ? (currentProduct.created_at | date: 'medium')
+                : 'Not Available'
+                }}</span>
+            </div>
+          </div>
 
-        <p>
-            Price:
-            ₹ {{ product.price }}
-        </p>
-
-        <p>
-            Stock:
-            {{ product.stock_quantity }}
-        </p>
-
-    </mat-card-content>
-
-</mat-card>
-
-}
+          <div class="detail-status-panel">
+            <div class="detail-field">
+              <span class="detail-label">Inventory Status</span>
+              <app-status-chip [status]="mapStatusType(currentProduct.status)"
+                [label]="resolveStatusLabel(currentProduct.status)" size="medium"
+                ariaLabel="Inventory status for {{ currentProduct.name }}">
+              </app-status-chip>
+            </div>
+            <div class="detail-field">
+              <span class="detail-label">Price</span>
+              <span class="detail-value">{{ currentProduct.price | currency:'INR' }}</span>
+            </div>
+            <div class="product-actions">
+              @if (!isInCart()) {
+              <button mat-flat-button color="primary" (click)="addToCart()" [disabled]="isOutOfStock()">
+                Add to Cart
+              </button>
+              } @else {
+              <button mat-flat-button color="primary" (click)="goToCart()">
+                Go to Cart
+              </button>
+              }
+              <button mat-stroked-button (click)="goToCart()">
+                View Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </app-card>
+    </ng-container>
+  </section>
+</app-page-container>

@@ -1,0 +1,43 @@
+.reports-container {
+  padding: 24px;
+
+  h2 {
+    margin-bottom: 24px;
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+
+    .metric-card {
+      .metric-value {
+        font-size: 3rem;
+        margin: 16px 0 8px;
+        color: #3f51b5;
+      }
+      .metric-subtitle {
+        color: #666;
+        margin: 0;
+      }
+    }
+  }
+
+  .table-title {
+    margin-bottom: 16px;
+    color: #f44336; // Red for alert
+  }
+
+  .low-stock-table {
+    width: 100%;
+
+    .stock-alert {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #f44336;
+      font-weight: bold;
+    }
+  }
+}

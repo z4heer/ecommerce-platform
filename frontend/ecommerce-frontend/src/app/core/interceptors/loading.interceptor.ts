@@ -12,19 +12,13 @@ import { LoadingService } from '../services/loading.service';
  * ============================================================
  */
 export const LoadingInterceptor: HttpInterceptorFn = (request, next) => {
+  const loadingService = inject(LoadingService);
 
-    const loadingService = inject(LoadingService);
+  loadingService.show();
 
-    loadingService.show();
-
-    return next(request).pipe(
-
-        finalize(() => {
-
-            loadingService.hide();
-
-        })
-
-    );
-
+  return next(request).pipe(
+    finalize(() => {
+      loadingService.hide();
+    }),
+  );
 };

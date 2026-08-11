@@ -1,0 +1,58 @@
+<header class="toolbar-header">
+  <mat-toolbar color="surface" class="enterprise-navbar">
+    <nav class="toolbar-navigation" aria-label="Primary Navigation">
+
+      <section class="toolbar-section left">
+        <button mat-icon-button type="button" class="brand-icon-btn" aria-label="Home">
+          <mat-icon>shopping_cart</mat-icon>
+        </button>
+        <span class="application-title">
+          {{ appTitle }}
+        </span>
+      </section>
+
+      <section class="toolbar-section center"></section>
+
+      <section class="toolbar-section right">
+        <!-- Theme Toggle Button -->
+        <button mat-icon-button type="button" class="action-utility-btn theme-toggle-btn"
+          [matTooltip]="themeService.currentTheme() === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'"
+          (click)="themeService.toggleTheme()" aria-label="Toggle Theme">
+          <mat-icon class="theme-icon">{{ themeService.currentTheme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+
+        <button mat-icon-button type="button" class="action-utility-btn" aria-label="View Notifications"
+          (click)="onMenuClick()">
+          <mat-icon>notifications_none</mat-icon>
+        </button>
+
+        <button mat-icon-button type="button" class="action-utility-btn profile-trigger" [matMenuTriggerFor]="userMenu"
+          aria-label="User Account Menu" (click)="onMenuClick()">
+          <mat-icon>account_circle</mat-icon>
+        </button>
+
+        <mat-menu #userMenu="matMenu" xPosition="before" class="enterprise-profile-menu">
+          <button mat-menu-item (click)="themeService.toggleTheme()">
+            <mat-icon>{{ themeService.currentTheme() === 'dark' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+            <span>{{ themeService.currentTheme() === 'dark' ? 'Light Mode' : 'Dark Mode' }}</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item>
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()" aria-label="Logout">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </section>
+
+    </nav>
+  </mat-toolbar>
+</header>

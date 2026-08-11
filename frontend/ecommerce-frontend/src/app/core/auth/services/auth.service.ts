@@ -1,154 +1,122 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
-import {
-    BehaviorSubject,
-    Observable,
-    tap
-} from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 import { RegisterRequest } from '../models/register-request.model';
 import { AuthResponse } from '../models/auth.model';
 
-import { API_ENDPOINTS } from '../../../core/constants/api-endpoints';
-import { LoginRequest } from '../models/auth.model';
-import { StorageService } from '../../../core/services/storage.service';
+import { API_CONSTANTS } from '../../constants/api.constants';
+import { LoginRequest, User } from '../models/auth.model';
+import { StorageService } from '../../services/storage.service';
 import { LoggerService } from '../../../core/services/logger.service';
 
-
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  private readonly http = inject(HttpClient);
 
-    private readonly http = inject(HttpClient);
+  private readonly storage = inject(StorageService);
 
-    private readonly storage = inject(StorageService);
+  private readonly logger = inject(LoggerService);
 
-    private readonly logger = inject(LoggerService);
+  private readonly router = inject(Router);
 
-    /**
-     * ===================================================
-     * Authentication State
-     * ===================================================
-     */
+  /**
+   * ===================================================
+   * Authentication State
+   * ===================================================
+   */
 
-    private readonly authenticatedSubject =
-        new BehaviorSubject<boolean>(
-            this.storage.isAuthenticated()
-        );
+  private readonly authenticatedSubject = new BehaviorSubject<boolean>(
+    this.storage.isAuthenticated(),
+  );
 
-    readonly isAuthenticated$ =
-        this.authenticatedSubject.asObservable();
+  readonly isAuthenticated$ = this.authenticatedSubject.asObservable();
 
-    /**
-     * ===================================================
-     * Register
-     * ===================================================
-     */
+  private readonly currentUserSubject = new BehaviorSubject<User | null>(null);
+  readonly currentUser$ = this.currentUserSubject.asObservable();
 
-    register(
-        request: RegisterRequest
-    ): Observable<AuthResponse> {
-
-        this.logger.info(
-            'Register request started.'
-        );
-
-        return this.http.post<AuthResponse>(
-            API_ENDPOINTS.AUTH.REGISTER,
-            request
-        );
-
+  constructor() {
+    if (this.storage.isAuthenticated()) {
+      this.fetchProfile().subscribe();
     }
+  }
 
-    /**
-     * ===================================================
-     * Login
-     * ===================================================
-     */
+  fetchProfile(): Observable<User> {
+    return this.http.get<User>(API_CONSTANTS.AUTH.PROFILE).pipe(
+      tap(user => this.currentUserSubject.next(user))
+    );
+  }
 
-    login(
-        request: LoginRequest
-    ): Observable<AuthResponse> {
+  /**
+   * ===================================================
+   * Register
+   * ===================================================
+   */
 
-        this.logger.info(
-            'Login request started.'
-        );
+  register(request: RegisterRequest): Observable<AuthResponse> {
+    this.logger.info('Register request started.');
 
-        return this.http
-            .post<AuthResponse>(
-                API_ENDPOINTS.AUTH.LOGIN,
-                request
-            )
-            .pipe(
+    return this.http.post<AuthResponse>(API_CONSTANTS.AUTH.REGISTER, request);
+  }
 
-                tap(response => {
+  /**
+   * ===================================================
+   * Login
+   * ===================================================
+   */
 
-                    this.storage.setAccessToken(
-                        response.access_token
-                    );
+  login(request: LoginRequest): Observable<AuthResponse> {
+    this.logger.info('Login request started.');
 
-                    if (response.refresh_token) {
+    return this.http.post<AuthResponse>(API_CONSTANTS.AUTH.LOGIN, request).pipe(
+      tap(response => {
+        this.storage.setAccessToken(response.access_token);
 
-                        this.storage.setRefreshToken(
-                            response.refresh_token
-                        );
+        if (response.refresh_token) {
+          this.storage.setRefreshToken(response.refresh_token);
+        }
 
-                    }
+        this.authenticatedSubject.next(true);
 
-                    this.authenticatedSubject.next(true);
+        this.logger.info('Login successful.');
+      }),
+    );
+  }
 
-                    this.logger.info(
-                        'Login successful.'
-                    );
+  /**
+   * ===================================================
+   * Logout
+   * ===================================================
+   */
 
-                })
+  logout(): void {
+    this.storage.clearAuthentication();
+    this.authenticatedSubject.next(false);
+    this.logger.info('User logged out.');
+    this.router.navigate(['/login']);
+  }
 
-            );
+  /**
+   * ===================================================
+   * Access Token
+   * ===================================================
+   */
 
-    }
+  getAccessToken(): string | null {
+    return this.storage.getAccessToken();
+  }
 
-    /**
-     * ===================================================
-     * Logout
-     * ===================================================
-     */
+  /**
+   * ===================================================
+   * Current Authentication State
+   * ===================================================
+   */
 
-    logout(): void {
-
-        this.logger.info(
-            'User logged out.'
-        );
-
-        this.storage.clearAuthentication();
-
-        this.authenticatedSubject.next(false);
-
-    }
-
-    /**
-     * ===================================================
-     * Access Token
-     * ===================================================
-     */
-
-    getAccessToken(): string | null {
-
-        return this.storage.getAccessToken();
-
-    }
-
-    /**
-     * ===================================================
-     * Current Authentication State
-     * ===================================================
-     */
-
-    isAuthenticated(): boolean {
-
-        return this.storage.isAuthenticated();
-
-    }
-
+  isAuthenticated(): boolean {
+    return this.storage.isAuthenticated();
+  }
 }
