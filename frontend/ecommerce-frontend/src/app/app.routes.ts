@@ -60,6 +60,26 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/checkout/checkout.routes').then(m => m.CHECKOUT_ROUTES),
       },
+      {
+        path: 'profile',
+        loadChildren: () =>
+          import('./features/profile/profile.routes').then(m => m.PROFILE_ROUTES),
+      },
+      {
+        path: 'admin',
+        loadChildren: () =>
+          import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES),
+      },
+      {
+        path: 'customers',
+        loadChildren: () =>
+          import('./features/customers/customers.routes').then(m => m.CUSTOMERS_ROUTES),
+      },
+      {
+        path: 'reports',
+        loadChildren: () =>
+          import('./features/reports/reports.routes').then(m => m.REPORTS_ROUTES),
+      },
     ],
   },
 

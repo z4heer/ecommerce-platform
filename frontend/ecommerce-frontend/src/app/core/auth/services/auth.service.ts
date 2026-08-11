@@ -8,7 +8,7 @@ import { RegisterRequest } from '../models/register-request.model';
 import { AuthResponse } from '../models/auth.model';
 
 import { API_CONSTANTS } from '../../constants/api.constants';
-import { LoginRequest } from '../models/auth.model';
+import { LoginRequest, User } from '../models/auth.model';
 import { StorageService } from '../../services/storage.service';
 import { LoggerService } from '../../../core/services/logger.service';
 
@@ -35,6 +35,21 @@ export class AuthService {
   );
 
   readonly isAuthenticated$ = this.authenticatedSubject.asObservable();
+
+  private readonly currentUserSubject = new BehaviorSubject<User | null>(null);
+  readonly currentUser$ = this.currentUserSubject.asObservable();
+
+  constructor() {
+    if (this.storage.isAuthenticated()) {
+      this.fetchProfile().subscribe();
+    }
+  }
+
+  fetchProfile(): Observable<User> {
+    return this.http.get<User>(API_CONSTANTS.AUTH.PROFILE).pipe(
+      tap(user => this.currentUserSubject.next(user))
+    );
+  }
 
   /**
    * ===================================================

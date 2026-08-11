@@ -13,6 +13,7 @@ from app.modules.auth.models.roles import Role
 # Catalog
 from app.modules.catalog.models.category import Category
 from app.modules.catalog.models.product import Product
+from app.modules.catalog.models.inventory import Inventory
 
 # Orders
 from app.modules.orders.models.order import Order
@@ -23,6 +24,7 @@ __all__ = [
     "Role",
     "Category",
     "Product",
+    "Inventory",
     "Order",
     "OrderItem",
 ]

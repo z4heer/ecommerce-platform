@@ -33,6 +33,9 @@ class OrderResponse(BaseModel):
         from_attributes = True
 
 
+class CheckoutSessionResponse(BaseModel):
+    token: str
+
 class OrderDetailResponse(BaseModel):
     id: UUID
     status: OrderStatus

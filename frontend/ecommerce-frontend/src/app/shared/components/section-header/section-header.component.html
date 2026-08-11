@@ -6,21 +6,15 @@
     }
   </div>
 
-  @if (hasMeta()) {
-    <div class="app-section-header__meta-block">
-      <ng-content select="[section-meta]"></ng-content>
-    </div>
-  }
+  <div class="app-section-header__meta-block">
+    <ng-content select="[section-meta]"></ng-content>
+  </div>
 
-  @if (hasActions() || hasMeta()) {
-    <div class="app-section-header__spacer"></div>
-  }
+  <div class="app-section-header__spacer"></div>
 
-  @if (hasActions()) {
-    <div class="app-section-header__actions-block">
-      <ng-content select="[section-actions]"></ng-content>
-    </div>
-  }
+  <div class="app-section-header__actions-block">
+    <ng-content select="[section-actions]"></ng-content>
+  </div>
 </div>
 
 @if (showDivider()) {

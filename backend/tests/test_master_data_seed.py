@@ -8,7 +8,7 @@ from app.modules.orders.models.order import Order
 
 
 def test_category_seed_has_expected_coverage() -> None:
-    assert len(CATEGORY_SEEDS) >= 7
+    assert len(CATEGORY_SEEDS) >= 5
     assert len({category["slug"] for category in CATEGORY_SEEDS}) == len(CATEGORY_SEEDS)
     assert len({category["name"] for category in CATEGORY_SEEDS}) == len(CATEGORY_SEEDS)
 

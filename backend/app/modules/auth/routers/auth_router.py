@@ -62,6 +62,14 @@ def who_am_i(current_user=Depends(get_current_user)):
         "role": current_user.role.name,
     }
 
+@router.get("/me")
+def get_me(current_user=Depends(get_current_user)):
+    return {
+        "id": str(current_user.id),
+        "email": current_user.email,
+        "role": current_user.role.name,
+    }
+
 
 @router.get("/admin-only")
 def admin_only(current_user=Depends(require_admin)):

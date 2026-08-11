@@ -1,0 +1,17 @@
+.profile-container {
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+
+  mat-card {
+    margin-top: 16px;
+  }
+
+  .profile-details {
+    margin-top: 16px;
+
+    p {
+      margin-bottom: 8px;
+    }
+  }
+}

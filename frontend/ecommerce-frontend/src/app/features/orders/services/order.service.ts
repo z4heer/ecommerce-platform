@@ -60,6 +60,20 @@ export class OrderService {
 
     }
 
+    createCheckoutSession(orderId: string): Observable<{ token: string }> {
+        return this.http.post<{ token: string }>(
+            `${this.apiUrl}/${orderId}/checkout-session`,
+            {}
+        );
+    }
+
+    confirmPayment(orderId: string): Observable<OrderResponseApi> {
+        return this.http.post<OrderResponseApi>(
+            `${this.apiUrl}/${orderId}/confirm-payment`,
+            {}
+        );
+    }
+
     getOrderById(
         orderId: string
     ): Observable<OrderResponse> {

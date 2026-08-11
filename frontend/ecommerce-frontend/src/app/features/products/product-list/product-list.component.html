@@ -93,7 +93,7 @@
           </div>
         </div>
 
-        <div card-actions class="product-card-action">
+        <div appCardActions class="product-card-action">
           <button mat-flat-button type="button" color="primary" (click)="$event.stopPropagation(); onAddToCart(product)"
             [disabled]="product.stock_quantity <= 0" [attr.aria-label]="'Add ' + product.name + ' to cart'">
             <mat-icon>shopping_cart</mat-icon>

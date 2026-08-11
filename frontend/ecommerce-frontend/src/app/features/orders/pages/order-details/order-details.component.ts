@@ -56,6 +56,7 @@ export class OrderDetailsComponent {
   readonly isLoading = signal(true);
 
   readonly order = signal<OrderResponse | null>(null);
+  readonly isProcessingPayment = signal(false);
 
   constructor() {
 
@@ -116,6 +117,37 @@ export class OrderDetailsComponent {
       '/orders'
     ]);
 
+  }
+
+  proceedToPayment(): void {
+    const currentOrder = this.order();
+    if (!currentOrder || currentOrder.status !== 'PENDING') return;
+
+    this.isProcessingPayment.set(true);
+
+    this.orderService.createCheckoutSession(currentOrder.id).subscribe({
+      next: (res) => {
+        this.logger.info('[Order Details] Sandbox Checkout Session token generated', res);
+        // Simulate redirect to payment gateway and return
+        setTimeout(() => {
+          this.orderService.confirmPayment(currentOrder.id).subscribe({
+            next: (updatedOrder: any) => {
+               this.logger.info('[Order Details] Payment confirmed, updating order details.');
+               this.loadOrder(currentOrder.id);
+               this.isProcessingPayment.set(false);
+            },
+            error: err => {
+              this.logger.error('[Order Details] Confirm payment failed.', err);
+              this.isProcessingPayment.set(false);
+            }
+          });
+        }, 1500);
+      },
+      error: err => {
+        this.logger.error('[Order Details] Create checkout session failed.', err);
+        this.isProcessingPayment.set(false);
+      }
+    });
   }
 
 }

@@ -8,6 +8,12 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     enabled: true,
   },
   {
+    label: 'Profile',
+    icon: 'person',
+    route: '/profile',
+    enabled: true,
+  },
+  {
     label: 'Products',
     icon: 'inventory_2',
     route: '/products',
@@ -29,18 +35,18 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
     label: 'Customers',
     icon: 'groups',
     route: '/customers',
-    enabled: false,
+    enabled: true,
   },
   {
     label: 'Reports',
     icon: 'analytics',
     route: '/reports',
-    enabled: false,
+    enabled: true,
   },
   {
-    label: 'Administration',
+    label: 'Admin Operations',
     icon: 'admin_panel_settings',
-    route: '/admin',
-    enabled: false,
+    route: '/admin/orders',
+    enabled: true,
   },
 ];

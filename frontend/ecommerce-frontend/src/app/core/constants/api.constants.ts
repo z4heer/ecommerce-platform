@@ -45,4 +45,5 @@ export const API_CONSTANTS = {
     PRODUCTS: `${BASE_API_URL}/admin/products`,
     ORDERS: `${BASE_API_URL}/admin/orders`,
   },
+  BASE_URL: BASE_API_URL,
 } as const;
