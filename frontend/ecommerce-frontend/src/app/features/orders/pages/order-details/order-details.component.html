@@ -19,11 +19,6 @@
 
             </button>
 
-            @if (order()!.status === 'PENDING') {
-                <button mat-flat-button color="primary" (click)="proceedToPayment()" [disabled]="isProcessingPayment()">
-                    {{ isProcessingPayment() ? 'Processing...' : 'Proceed to Payment' }}
-                </button>
-            }
         </div>
 
     </app-empty-state>
@@ -167,6 +162,11 @@
 
             </button>
 
+            @if (order()!.status === 'PENDING') {
+                <button mat-flat-button color="primary" (click)="proceedToPayment()" [disabled]="isProcessingPayment()">
+                    {{ isProcessingPayment() ? 'Processing...' : 'Proceed to Payment' }}
+                </button>
+            }
         </div>
 
     </div>
