@@ -48,36 +48,20 @@ jobs:
         run: |
           cd frontend/ecommerce-frontend
           npm install
-
       - name: Create Environment File
         run: |
-          cd frontend/ecommerce-frontend
-          mkdir -p src/environments
-          cat << 'EOF' > src/environments/environment.development.ts
-          export const environment = {
-              production: false,
-              apiUrl: 'http://localhost:8000/api',
-              razorpayKeyId: 'ci_dummy_key',
-              customerRoleId: 'dummy_customer_role_id',
-              app: {
-              name: 'Ecommerce CI',
-              version: '1.0.0'
-              },
-              api: {
-              baseUrl: 'http://localhost:8000/api',
-              timeout: 30000
-              },
-              logging: {
-              enableConsole: false,
-              enableHttpLogs: false
-              },
-              features: {
-              enableCaching: false,
-              enableNotifications: false,
-              enableDarkTheme: false
-              }
-          };
-          EOF          
+            cd frontend/ecommerce-frontend
+            mkdir -p src/environments
+            echo "export const environment = {
+            production: false,
+            apiUrl: 'http://localhost:8000/api',
+            razorpayKeyId: 'ci_dummy_key',
+            customerRoleId: 'dummy_customer_role_id',
+            app: { name: 'Ecommerce CI', version: '1.0.0' },
+            api: { baseUrl: 'http://localhost:8000/api', timeout: 30000 },
+            logging: { enableConsole: false, enableHttpLogs: false },
+            features: { enableCaching: false, enableNotifications: false, enableDarkTheme: false }
+            };" > src/environments/environment.development.ts          
       - name: Build Angular App
         run: |
           cd frontend/ecommerce-frontend
