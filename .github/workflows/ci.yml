@@ -48,6 +48,18 @@ jobs:
         run: |
           cd frontend/ecommerce-frontend
           npm install
+
+      - name: Create Environment File
+        run: |
+          cd frontend/ecommerce-frontend
+          mkdir -p src/environments
+          cat << 'EOF' > src/environments/environment.development.ts
+          export const environment = {
+            production: false,
+            apiUrl: 'http://localhost:8000/api',
+            razorpayKeyId: 'ci_dummy_key'
+          };
+          EOF
           
       - name: Build Angular App
         run: |
@@ -57,4 +69,4 @@ jobs:
       - name: Run Frontend Tests
         run: |
           cd frontend/ecommerce-frontend
-          npm run test -- --watch=false
+          npm run test -- --watch=false --browsers=ChromeHeadless
