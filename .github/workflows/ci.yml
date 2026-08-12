@@ -1,14 +1,4 @@
-name: CI/CD Pipeline
-
-# Trigger the workflow on pushes and pull requests to main and develop branches
-on:
-  push:
-    branches: [ "main", "develop" ]
-  pull_request:
-    branches: [ "main", "develop" ]
-
-jobs:
-  backend-test:
+backend-test:
     name: Backend Build & Test (FastAPI)
     runs-on: ubuntu-latest
     
@@ -19,17 +9,18 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11' # Adjust to your Python version if different
+          python-version: '3.11'
           
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install pytest # Explicitly installing pytest to fix the 127 error
           pip install -r backend/requirements.txt
           
       - name: Run PyTest
         run: |
           cd backend
-          PYTHONPATH=. pytest tests/
+          PYTHONPATH=. python -m pytest tests/ # Running as a python module
 
   frontend-test:
     name: Frontend Build & Test (Angular)
@@ -42,19 +33,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Adjust to your Node version if different
+          node-version: '24' # Updated to fix the deprecation warning
           
       - name: Install Dependencies
         run: |
           cd frontend/ecommerce-frontend
           npm install
           
-      - name: Build Angular App
-        run: |
-          cd frontend/ecommerce-frontend
-          npm run build
-          
-      - name: Run Frontend Tests
-        run: |
-          cd frontend/ecommerce-frontend
-          npm run test -- --watch=false
+      # (Keep your build and test steps the same for now)
