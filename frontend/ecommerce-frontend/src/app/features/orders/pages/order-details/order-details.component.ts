@@ -23,7 +23,6 @@ import { EmptyStateComponent } from '../../../../shared/components/empty-state/e
 import { MatChipsModule } from '@angular/material/chips';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
-import { environment } from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-order-details',
@@ -128,44 +127,21 @@ export class OrderDetailsComponent {
 
     this.orderService.createCheckoutSession(currentOrder.id).subscribe({
       next: (res) => {
-        this.logger.info('[Order Details] Razorpay order created', res);
-
-        const options = {
-          key: environment.api.razorpayKeyId,
-          amount: currentOrder.totalAmount * 100,
-          currency: 'INR',
-          name: environment.app.name,
-          description: `Order ${currentOrder.id}`,
-          order_id: res.token,
-          handler: (response: { razorpay_payment_id: string, razorpay_order_id: string, razorpay_signature: string }) => {
-            const payload = {
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature
-            };
-
-            this.orderService.confirmPayment(currentOrder.id, payload).subscribe({
-              next: () => {
-                this.logger.info('[Order Details] Payment confirmed, updating order details.');
-                this.loadOrder(currentOrder.id);
-                this.isProcessingPayment.set(false);
-              },
-              error: err => {
-                this.logger.error('[Order Details] Confirm payment failed.', err);
-                this.isProcessingPayment.set(false);
-              }
-            });
-          },
-          modal: {
-            ondismiss: () => {
-              this.logger.info('[Order Details] Razorpay checkout modal closed by user.');
+        this.logger.info('[Order Details] Sandbox Checkout Session token generated', res);
+        // Simulate redirect to payment gateway and return
+        setTimeout(() => {
+          this.orderService.confirmPayment(currentOrder.id).subscribe({
+            next: (updatedOrder: any) => {
+               this.logger.info('[Order Details] Payment confirmed, updating order details.');
+               this.loadOrder(currentOrder.id);
+               this.isProcessingPayment.set(false);
+            },
+            error: err => {
+              this.logger.error('[Order Details] Confirm payment failed.', err);
               this.isProcessingPayment.set(false);
             }
-          }
-        };
-
-        const rzp = new (window as unknown as { Razorpay: new (options: unknown) => { open: () => void } }).Razorpay(options);
-        rzp.open();
+          });
+        }, 1500);
       },
       error: err => {
         this.logger.error('[Order Details] Create checkout session failed.', err);
