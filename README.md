@@ -1,3 +1,5 @@
+[![CI Pipeline](https://github.com/zahiruddinsayed99-sys/ecommerce-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/zahiruddinsayed99-sys/ecommerce-platform/actions/workflows/ci.yml)
+
 This **README.md** is designed to serve as the primary "Showcase" document for your GitHub repository. It focuses on your strategic positioning as a **Python Automation & AI Solutions Specialist** while highlighting the enterprise-grade technical foundation you established in Sprint 1.
 
 ***
