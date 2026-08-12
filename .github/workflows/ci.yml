@@ -1,4 +1,13 @@
-backend-test:
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  backend-test:
     name: Backend Build & Test (FastAPI)
     runs-on: ubuntu-latest
     
@@ -14,13 +23,13 @@ backend-test:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest # Explicitly installing pytest to fix the 127 error
+          pip install pytest
           pip install -r backend/requirements.txt
           
       - name: Run PyTest
         run: |
           cd backend
-          PYTHONPATH=. python -m pytest tests/ # Running as a python module
+          PYTHONPATH=. python -m pytest tests/
 
   frontend-test:
     name: Frontend Build & Test (Angular)
@@ -33,11 +42,19 @@ backend-test:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24' # Updated to fix the deprecation warning
+          node-version: '24'
           
       - name: Install Dependencies
         run: |
           cd frontend/ecommerce-frontend
           npm install
           
-      # (Keep your build and test steps the same for now)
+      - name: Build Angular App
+        run: |
+          cd frontend/ecommerce-frontend
+          npm run build
+          
+      - name: Run Frontend Tests
+        run: |
+          cd frontend/ecommerce-frontend
+          npm run test -- --watch=false
