@@ -77,7 +77,7 @@ jobs:
               enableDarkTheme: false
               }
           };
-            EOF          
+          EOF          
       - name: Build Angular App
         run: |
           cd frontend/ecommerce-frontend
