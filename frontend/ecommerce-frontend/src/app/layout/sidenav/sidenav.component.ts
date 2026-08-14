@@ -33,7 +33,8 @@ export class SidenavComponent {
     if (!item.requiredRole) {
       return true;
     }
-    return this.storageService.getRole() === item.requiredRole;
+    const role = this.storageService.getRole();
+    return !!role && role.toUpperCase() === item.requiredRole.toUpperCase();
   }
 
   trackByItem(index: number, item: NavigationItem): string {
