@@ -40,6 +40,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
+        canActivate: [customerGuard],
         loadChildren: () =>
           import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES),
       },
