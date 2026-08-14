@@ -55,13 +55,12 @@ jobs:
             echo "export const environment = {
             production: false,
             apiUrl: 'http://localhost:8000/api',
-            razorpayKeyId: 'ci_dummy_key',
             customerRoleId: 'dummy_customer_role_id',
             app: { name: 'Ecommerce CI', version: '1.0.0' },
-            api: { baseUrl: 'http://localhost:8000/api', timeout: 30000 },
+            api: { baseUrl: 'http://localhost:8000/api', timeout: 30000, razorpayKeyId: 'ci_dummy_key' },
             logging: { enableConsole: false, enableHttpLogs: false },
             features: { enableCaching: false, enableNotifications: false, enableDarkTheme: false }
-            };" > src/environments/environment.development.ts          
+            };" > src/environments/environment.development.ts         
       - name: Build Angular App
         run: |
           cd frontend/ecommerce-frontend
